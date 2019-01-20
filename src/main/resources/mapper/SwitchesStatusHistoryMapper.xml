@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.SwitchesStatusHistoryMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.SwitchesStatusHistory">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="cpu_load" property="cpuLoad" jdbcType="INTEGER"/>
+        <result column="memory_used" property="memoryUsed" jdbcType="INTEGER"/>
+        <result column="temp" property="temp" jdbcType="INTEGER"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        switch_id,
+        cpu_load,
+        memory_used,
+        temp,
+        time_stamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="switchesStatusHistory.id">
+        INSERT INTO switches_status_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesStatusHistory.id!=null"> id,</if>
+            <if test="switchesStatusHistory.switchId!=null"> switch_id,</if>
+            <if test="switchesStatusHistory.cpuLoad!=null"> cpu_load,</if>
+            <if test="switchesStatusHistory.memoryUsed!=null"> memory_used,</if>
+            <if test="switchesStatusHistory.temp!=null"> temp,</if>
+            <if test="switchesStatusHistory.timeStamp!=null"> time_stamp,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesStatusHistory.id!=null">#{switchesStatusHistory.id,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatusHistory.switchId!=null">#{switchesStatusHistory.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatusHistory.cpuLoad!=null">#{switchesStatusHistory.cpuLoad,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatusHistory.memoryUsed!=null">#{switchesStatusHistory.memoryUsed,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatusHistory.temp!=null">#{switchesStatusHistory.temp,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatusHistory.timeStamp!=null">#{switchesStatusHistory.timeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO switches_status_history (
+            id,
+            switch_id,
+            cpu_load,
+            memory_used,
+            temp,
+            time_stamp
+        )VALUES
+        <foreach collection="switchesStatusHistorys" item="switchesStatusHistory" index="index" separator=",">
+            (
+            #{switchesStatusHistory.id,jdbcType=VARCHAR},
+            #{switchesStatusHistory.switchId,jdbcType=INTEGER},
+            #{switchesStatusHistory.cpuLoad,jdbcType=INTEGER},
+            #{switchesStatusHistory.memoryUsed,jdbcType=INTEGER},
+            #{switchesStatusHistory.temp,jdbcType=INTEGER},
+            #{switchesStatusHistory.timeStamp,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT  id,
+                switch_id,
+                cpu_load,
+                memory_used,
+                temp,
+                time_stamp
+        FROM switches_status_history
+    </select>
+
+
+    <select id="selectBySwitch" resultMap="BaseResultMap">
+        SELECT
+            switches_status_history.cpu_load,
+            switches_status_history.memory_used,
+            switches_status_history.temp,
+            switches_status_history.time_stamp
+        FROM
+            switches_list
+                INNER JOIN switches_status_history ON switches_list.id = switches_status_history.switch_id
+        WHERE
+            switches_list.ip = #{ip}
+        ORDER BY
+            switches_status_history.time_stamp ASC
+    </select>
+
+    <delete id="delete">
+        DELETE FROM switches_status_history
+        WHERE time_stamp &lt;= #{switchesStatusHistory.timeStamp,jdbcType=TIMESTAMP}
+    </delete>
+</mapper>
+

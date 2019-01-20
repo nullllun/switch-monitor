@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.PortSpeedHistoryMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.PortSpeedHistory">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="port_index" property="portIndex" jdbcType="INTEGER"/>
+        <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
+        <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="FlowResultMap" type="cn.albumenj.switchmonitor.dto.PortFlowOriginDto">
+        <result column="time_stamp" property="timestamp" jdbcType="TIMESTAMP"/>
+        <result column="in_speed" property="in" jdbcType="VARCHAR"/>
+        <result column="out_speed" property="out" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        switch_id,
+        port_index,
+        in_speed,
+        out_speed,
+        time_stamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeedHistory.id">
+        INSERT INTO port_speed_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portSpeedHistory.switchId!=null"> switch_id,</if>
+            <if test="portSpeedHistory.portIndex!=null"> port_index,</if>
+            <if test="portSpeedHistory.inSpeed!=null"> in_speed,</if>
+            <if test="portSpeedHistory.outSpeed!=null"> out_speed,</if>
+            <if test="portSpeedHistory.timeStamp!=null"> time_stamp,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portSpeedHistory.switchId!=null">#{portSpeedHistory.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="portSpeedHistory.portIndex!=null">#{portSpeedHistory.portIndex,jdbcType=INTEGER},
+            </if>
+            <if test="portSpeedHistory.inSpeed!=null">#{portSpeedHistory.inSpeed,jdbcType=BIGINT},
+            </if>
+            <if test="portSpeedHistory.outSpeed!=null">#{portSpeedHistory.outSpeed,jdbcType=BIGINT},
+            </if>
+            <if test="portSpeedHistory.timeStamp!=null">#{portSpeedHistory.timeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO port_speed_history (
+            switch_id,
+            port_index,
+            in_speed,
+            out_speed,
+            time_stamp
+        )VALUES
+        <foreach collection="portSpeedHistorys" item="portSpeedHistory" index="index" separator=",">
+            (
+            #{portSpeedHistory.switchId,jdbcType=INTEGER},
+            #{portSpeedHistory.portIndex,jdbcType=INTEGER},
+            #{portSpeedHistory.inSpeed,jdbcType=BIGINT},
+            #{portSpeedHistory.outSpeed,jdbcType=BIGINT},
+            #{portSpeedHistory.timeStamp,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectFlow" resultMap="FlowResultMap">
+        SELECT
+            port_speed_history.in_speed,
+            port_speed_history.out_speed,
+            port_speed_history.time_stamp
+        FROM
+            switches_list
+                INNER JOIN port_status ON switches_list.id = port_status.switch_id
+                INNER JOIN port_speed_history ON port_status.switch_id = port_speed_history.switch_id
+                          AND port_status.port_index = port_speed_history.port_index
+        WHERE
+            switches_list.ip = #{ip}  AND
+            port_status.`name` = #{name}
+        ORDER BY
+            port_speed_history.time_stamp ASC
+    </select>
+
+
+    <delete id="delete">
+        DELETE FROM port_speed_history
+        WHERE time_stamp &lt;= #{portSpeedHistory.timeStamp,jdbcType=TIMESTAMP}
+    </delete>
+</mapper>
+

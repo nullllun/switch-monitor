@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="/static/global.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            //获取楼栋列表
+            $.getJSON("/api/buildings_list", function (data) {
+                options_html = ""
+                for (var a in data) {
+                    options_html += "<option value=" + data[a] + ">" + data[a] + "</option>\n"
+                }
+                $("#building_selected").html(options_html);
+                refresh()
+            });
+
+            $("#refresh").click(function () {
+                refresh()
+            });
+
+            $("#select_ip").click(function () {
+                //获取选择的IP
+                ip = $("#ip_selected").val();
+                //打开页面
+                window.location.href = "/devices.html?ip=" + ip;
+            });
+
+            setInterval(refresh, 60000);//60秒刷新一次
+        });
+
+        function refresh() {
+            //获取选择的楼栋
+            building_name = $("#building_selected option:selected").val();
+            //获取楼栋数据并输出一个表格
+            $.getJSON("/api/building/" + building_name, function (data) {
+                table_html = "";
+                console.log(data);
+                for (var sw in data) {
+                    if (data[sw].downTime != 0 && data[sw].downTime != -1) {
+                        data[sw].downTime = "掉线时间 " + getLocalTime(data[sw].downTime);
+                    }
+                    if (data[sw].downTime == 0) {
+                        data[sw].downTime = "在线";
+                    }
+                    if (data[sw].infoTime != -1) {
+                        data[sw].infoTime = getLocalTime(data[sw].infoTime);
+                    }
+                    if (data[sw].infoTime == -1) {
+                        data[sw].infoTime = "设备不支持";
+                    }
+                    if (data[sw].ip == "-1") {
+                        data[sw].ip = "设备不支持";
+                    }
+                    if (data[sw].name == "-1") {
+                        data[sw].name = "设备不支持";
+                    }
+                    if (data[sw].downTime == -1) {
+                        data[sw].downTime = "设备不支持";
+                    }
+                    if (data[sw].upTime == "-1") {
+                        data[sw].upTime = "设备不支持";
+                    }
+                    if (data[sw].model == "-1") {
+                        data[sw].model = "设备不支持";
+                    }
+                    if (data[sw].cpuLoad == -1) {
+                        data[sw].cpuLoad = "设备不支持";
+                    }
+                    if (data[sw].memUsed == -1) {
+                        data[sw].memUsed = "设备不支持";
+                    }
+                    if (data[sw].temp == -1) {
+                        data[sw].temp = "设备不支持";
+                    }
+                    if (data[sw].desc == "-1") {
+                        data[sw].desc = "设备不支持";
+                    }
+                    //if(data[sw].upTime!= -1 && data[sw].upTime!= -2){
+                    //up_time_string=data[sw].up_time.split(':');
+                    //data[sw].up_time=up_time_string[0]+"天"+up_time_string[1]+"小时"+up_time_string[2]+"分"+parseInt(up_time_string[3])+"秒";
+                    //    data[sw].upTime=formatSeconds(data[sw].upTime);
+                    //}
+                    table_html += "<tr><td><a href='/devices.html?ip=" + data[sw].ip + "' target='_blank'>" + data[sw].ip +
+                        "</a></td><td>" + data[sw].name + "</td><td>" + data[sw].downTime + "</td><td>" + data[sw].upTime +
+                        "</td><td>" + data[sw].model + "</td><td>" + data[sw].cpuLoad + "</td><td>" + data[sw].memUsed +
+                        "</td><td>" + data[sw].temp + "</td><td>" + data[sw].desc + "</td><td>" + data[sw].infoTime + "</td></tr>";
+                }
+                $("#switch_info_tbody").html(table_html);
+            });
+        }
+
+        function getLocalTime(t) {
+            var date = new Date((t + 28800)*1000); //东八区
+            Y = date.getFullYear() + '-';
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+            D = date.getDate() + ' ';
+            h = date.getHours() + ':';
+            m = date.getMinutes() + ':';
+            s = date.getSeconds();
+            return Y + M + D + h + m + s;
+        }
+
+        function formatSeconds(value) {
+            var theTime = parseInt(value) / 100;// 秒
+            var theTime1 = 0;// 分
+            var theTime2 = 0;// 小时
+            var theTime3 = 0;// 天
+            if (theTime >= 60) {
+                theTime1 = parseInt(theTime / 60);
+                theTime = parseInt(theTime % 60);
+                if (theTime1 >= 60) {
+                    theTime2 = parseInt(theTime1 / 60);
+                    theTime1 = parseInt(theTime1 % 60);
+                    if (theTime2 >= 24) {
+                        theTime3 = parseInt(theTime2 / 24);
+                        theTime2 = parseInt(theTime2 % 24);
+                    }
+                }
+            }
+            var result = "" + parseInt(theTime) + "秒";
+            result = "" + parseInt(theTime1) + "分" + result;
+            result = "" + parseInt(theTime2) + "小时" + result;
+            result = "" + parseInt(theTime3) + "天" + result;
+            return result;
+        }
+
+    </script>
+
+    <title>广工大交换机监控</title>
+
+</head>
+
+<body background="/static/bg.jpg">
+
+<div class="container-fluid panel panel-default panel-body">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li><a href="/">首页</a></li>
+                <li class="active"><a href="/buildings.html">设备</a></li>
+                <li><a href="/ports.html">端口</a></li>
+                <li><a href="/settings.html">设置</a></li>
+                <!--<li><a href="#">帮助</a></li>-->
+                <li><a href="/logout">注销</a></li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">广工大交换机监控</h3>
+    </div>
+
+    <h2 class="page-header">设备</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <h3>
+                    <label class="label label-default">区域选择</label>
+                    <select name="building" class="input-sm" id="building_selected" onchange="refresh()"></select>
+                    <button class="btn btn-sm btn-primary" id="refresh">刷新</button>
+                    <label class="label label-default">直接选择设备IP</label>
+                    <input type="text" id="ip_selected" style="width:120px;" class=""></input>
+                    <button class="btn btn-sm btn-default" id="select_ip">确定</button>
+                    <span> 页面自动更新间隔：1分钟</span>
+                </h3>
+            </div>
+
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>交换机IP</th>
+                            <th>交换机名字</th>
+                            <th>状态</th>
+                            <th>在线时长</th>
+                            <th>型号</th>
+                            <th>CPU使用率</th>
+                            <th>内存使用率</th>
+                            <th>温度</th>
+                            <th>描述</th>
+                            <th>数据获取时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id="switch_info_tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script src="/static/jquery.min.js"></script>
+    <script src="/static/bootstrap.min.js"></script>
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/echarts.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link href="/static/global.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function(){
+            /*$.getJSON("/api/settings/helpdesk_time",function(data){
+                $("#time_setting").val(data.time);
+            });*/
+            $.getJSON("/api/settings/weixin_stat_time",function(data){
+                $("#time_h").val(data.time_h);
+                $("#time_m").val(data.time_m);
+            });
+            $.getJSON("/api/settings/sw_reboot_time",function(data){
+                $("#sw_time_h").val(data.time_h);
+                $("#sw_time_m").val(data.time_m);
+            });
+            $("#update_weixin_stat_time").click(function(){
+                weixin_stat_time_h=$("#time_h").val();
+                weixin_stat_time_m=$("#time_m").val();
+                $.post("/api/settings/weixin_stat_time",{time_h:weixin_stat_time_h,time_m:weixin_stat_time_m},function(data){
+                    data=JSON.parse(data)
+                    if(data.error_code==0){
+                        alert("将于每天"+data.time_h+"时"+data.time_m+"分发送微信统计信息。");
+                    }else{
+                        alert(data.description);
+                    }
+                });
+            });
+            $("#update_sw_time").click(function(){
+                sw_time_h=$("#sw_time_h").val();
+                sw_time_m=$("#sw_time_m").val();
+                $.post("/api/settings/sw_reboot_time",{time_h:sw_time_h,time_m:sw_time_m},function(data){
+                    data=JSON.parse(data)
+                    if(data.error_code==0){
+                        alert("将于每天"+data.time_h+"时"+data.time_m+"分重启过载交换机。");
+                    }else{
+                        alert(data.description);
+                    }
+                });
+            });
+            $("#send_wx_stat").click(function(){
+                $.get("/api/tools/send_wx_stat",function(data){
+                    alert(data);
+                });
+            });
+            $("#reboot_sw").click(function(){
+                ip=$("#ip").val();
+                alert("正在重启交换机"+ip+"，请稍等……")
+                $.post("/api/tools/reboot_switches",{ip:ip},function(data){
+                    alert(data);
+                });
+            });
+            $("#reboot_scan_process").click(function(){
+                alert("请求已发送，请等待大约1分钟……完成后会弹窗提示。")
+                $('#reboot_scan_process').attr('disabled',"true");
+                $.get("/api/reboot_scan_process",function(data){
+                    alert(data);
+                    $('#reboot_scan_process').removeAttr("disabled");
+                });
+            });
+            $("#clean_log").click(function(){
+                $.get("/api/clean_log",function(data){
+                    alert(data);
+                });
+            });
+            $("#send_weixin_msg").click(function(){
+                msg=$("#weixin_msg").val();
+                $("#weixin_msg").val("");
+                $.post("/api/send_weixin_msg",{msg:msg},function(data){
+                    alert(data);
+                });
+            });
+
+            $.getJSON("/api/server_info",function(info){
+                $("#mem_info").html("total: "+info.mem_total+"MB&nbsp;&nbsp;&nbsp;used: "+info.mem_used+"MB ("+info.mem_used_2+"%)&nbsp;&nbsp;&nbsp;buffers: "+info.mem_buffers+"MB ("+info.mem_buffers_2+"%)&nbsp;&nbsp;&nbsp;cached: "+info.mem_cached+"MB ("+info.mem_cached_2+"%)&nbsp;&nbsp;&nbsp;free: "+info.mem_free+"MB ("+info.mem_free_2+"%)");
+                $("#mem_used_2").attr("style","width: "+info.mem_used_2+"%");
+                $("#mem_buffers_2").attr("style","width: "+info.mem_buffers_2+"%");
+                $("#mem_cached_2").attr("style","width: "+info.mem_cached_2+"%");
+                $("#swap_info").html("total: "+info.swap_total+"MB&nbsp;&nbsp;&nbsp;used: "+info.swap_used+"MB ("+info.swap_used_2+"%)");
+                $("#swap_used_2").attr("style","width: "+info.swap_used_2+"%");
+            });
+        });
+
+    </script>
+
+    <title>广工大交换机监控</title>
+
+</head>
+<body background="/static/bg.jpg">
+
+<div class="container-fluid panel panel-default panel-body">
+    <div class="header clearfix">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li><a href="/">首页</a></li>
+                <li><a href="/buildings.html">设备</a></li>
+                <li><a href="/ports.html">端口</a></li>
+                <li class="active"><a href="/settings.html">设置</a></li>
+                <!--<li><a href="#">帮助</a></li>-->
+                <li><a href="/logout">注销</a></li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">广工大交换机监控</h3>
+    </div>
+
+
+
+    <h2 class="page-header">服务器状态</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-1">
+                        <h4><span class="label label-info">物理内存</span></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4 id="mem_info" class="text-info"></h4>
+                        <h4 class="text-danger">注：红色部分(used)为真实内存使用量。Linux系统会把多余的内存用于缓存(buffers/cached)，当内存不足时会自动释放。</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
+                        <div class="progress">
+                            <div id="mem_used_2" class="progress-bar progress-bar-danger" role="progressbar" style="width: 0%"></div>
+                            <div id="mem_buffers_2" class="progress-bar progress-bar-warning" role="progressbar" style="width: 0%"></div>
+                            <div id="mem_cached_2" class="progress-bar progress-bar-info" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1">
+                        <h4><span class="label label-info">SWAP</span></h4>
+                    </div>
+                    <div class="col-md-11">
+                        <h4 id="swap_info" class="text-info"></h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
+                        <div class="progress">
+                            <div id="swap_used_2" class="progress-bar progress-bar-danger" role="progressbar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">微信通知设置</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <p><span>交换机状态统计微信通知设置：</span></p>
+                <p>于每天
+                    <span><input type="text" id="time_h" style="width:60px;" class=""></input></span> 时
+                    <span><input type="text" id="time_m" style="width:60px;" class=""></input></span> 分发送。
+                    <span><button class="btn btn-sm btn-primary" id="update_weixin_stat_time">确定</button></span>
+                    <span><button class="btn btn-sm btn-info" id="send_wx_stat">现在发送一次</button></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">交换机重启设置</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <p><span>过载交换机自动重启设置：</span></p>
+                <p>于每天
+                    <span><input type="text" id="sw_time_h" style="width:60px;" class=""></input></span> 时
+                    <span><input type="text" id="sw_time_m" style="width:60px;" class=""></input></span> 分重启。
+                    <span><button class="btn btn-sm btn-primary" id="update_sw_time">确定</button></span>
+                </p>
+                <p>
+                    <span>手动重启交换机：</span>
+                    <span><input type="text" id="ip" style="width:180px;" placeholder="请输入IP，如172.16.101.1"></input></span>
+                    <span><button class="btn btn-sm btn-danger" id="reboot_sw">现在重启</button></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">扫描设置</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <p>
+                    <span>Debug：手动重启扫描进程（大约需要1分钟）</span>
+                    <span><button class="btn btn-sm btn-warning" id="reboot_scan_process">点击立即重启</button></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">日志</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <p>
+                    <span><a class="btn btn-sm btn-primary" id="read_log" href="/api/log" target="_blank">查看日志</a></span>
+                    <span><button class="btn btn-sm btn-warning" id="clean_log">清除日志</button></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">微信全体消息</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <p>
+                    可以在这里发送微信消息，所有人都会收到，就像每日统计那样。</br><strong>为了避免扰民，请谨慎使用！</strong>
+                </p>
+                <p>
+                    <span><input type="text" id="weixin_msg" style="width:240px;" class=""></input></span>
+                    <span><button class="btn btn-sm btn-warning" id="send_weixin_msg">发送</button></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!--
+        <h2 class="page-header">概况</h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+
+                </div>
+                <div class="row">
+
+                </div>
+            </div>
+        </div>
+    -->
+</div>
+
+</body>
+</html>

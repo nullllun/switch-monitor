@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.SwitchesReachableMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.SwitchesReachable">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="reachable" property="reachable" jdbcType="INTEGER"/>
+        <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        switch_id,
+        reachable,
+        down_time,
+        time_stamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="switchesReachable.id">
+        INSERT INTO switches_reachable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesReachable.id!=null"> id,</if>
+            <if test="switchesReachable.switchId!=null"> switch_id,</if>
+            <if test="switchesReachable.reachable!=null"> reachable,</if>
+            <if test="switchesReachable.downTime!=null"> down_time,</if>
+            <if test="switchesReachable.timeStamp!=null"> time_stamp,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesReachable.id!=null">#{switchesReachable.id,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesReachable.switchId!=null">#{switchesReachable.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachable.reachable!=null">#{switchesReachable.reachable,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachable.downTime!=null">#{switchesReachable.downTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="switchesReachable.timeStamp!=null">#{switchesReachable.timeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO switches_reachable (
+            id,
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
+        )VALUES
+        <foreach collection="switchesReachables" item="switchesReachable" index="index" separator=",">
+            (
+            #{switchesReachable.id,jdbcType=VARCHAR},
+            #{switchesReachable.switchId,jdbcType=INTEGER},
+            #{switchesReachable.reachable,jdbcType=INTEGER},
+            #{switchesReachable.downTime,jdbcType=TIMESTAMP},
+            #{switchesReachable.timeStamp,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE switches_reachable
+        <set>
+            <if test="switchesReachable.id!=null">id=#{switchesReachable.id,jdbcType=VARCHAR},</if>
+            <if test="switchesReachable.switchId != null"> switch_id= #{switchesReachable.switchId,jdbcType=INTEGER},</if>
+            <if test="switchesReachable.reachable != null"> reachable= #{switchesReachable.reachable,jdbcType=INTEGER},</if>
+            <if test="switchesReachable.downTime != null"> down_time= #{switchesReachable.downTime,jdbcType=TIMESTAMP},</if>
+            <if test="switchesReachable.timeStamp != null"> time_stamp= #{switchesReachable.timeStamp,jdbcType=TIMESTAMP}</if>
+        </set>
+        WHERE switch_id= #{switchesReachable.switchId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateList">
+        UPDATE switches_reachable
+        SET
+        id = CASE switch_id
+        <foreach collection="switchesReachables" item="switchesReachable" index="index">
+            WHEN #{switchesReachable.switchId,jdbcType=INTEGER} THEN #{switchesReachable.id,jdbcType = VARCHAR}
+        </foreach>
+        END,
+        reachable = CASE switch_id
+        <foreach collection="switchesReachables" item="switchesReachable" index="index">
+            WHEN #{switchesReachable.switchId,jdbcType=INTEGER} THEN #{switchesReachable.reachable,jdbcType = INTEGER}
+        </foreach>
+        END,
+        down_time = CASE switch_id
+        <foreach collection="switchesReachables" item="switchesReachable" index="index">
+            WHEN #{switchesReachable.switchId,jdbcType=INTEGER} THEN #{switchesReachable.downTime,jdbcType = TIMESTAMP}
+        </foreach>
+        END,
+        time_stamp = CASE switch_id
+        <foreach collection="switchesReachables" item="switchesReachable" index="index">
+            WHEN #{switchesReachable.switchId,jdbcType=INTEGER} THEN #{switchesReachable.timeStamp,jdbcType = TIMESTAMP}
+        </foreach>
+        END
+        WHERE switch_id
+        IN
+        <foreach collection="switchesReachables" item="switchesReachable" index="index" separator="," open="(" close=")">
+            #{switchesReachable.switchId,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <select id="selectBySwitch" resultMap="BaseResultMap">
+        select reachable from switches_reachable
+        where switch_id = #{switchesReachable.switchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="select" resultMap="BaseResultMap">
+        select
+            id,
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
+        from switches_reachable
+    </select>
+</mapper>
+

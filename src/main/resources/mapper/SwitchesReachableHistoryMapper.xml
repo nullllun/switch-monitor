@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.SwitchesReachableHistoryMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.SwitchesReachableHistory">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="reachable" property="reachable" jdbcType="INTEGER"/>
+        <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        switch_id,
+        reachable,
+        down_time,
+        time_stamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="switchesReachableHistory.id">
+        INSERT INTO switches_reachable_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesReachableHistory.id!=null"> id,</if>
+            <if test="switchesReachableHistory.switchId!=null"> switch_id,</if>
+            <if test="switchesReachableHistory.reachable!=null"> reachable,</if>
+            <if test="switchesReachableHistory.downTime!=null"> down_time,</if>
+            <if test="switchesReachableHistory.timeStamp!=null"> time_stamp,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesReachableHistory.id!=null">#{switchesReachableHistory.id,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesReachableHistory.switchId!=null">#{switchesReachableHistory.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachableHistory.reachable!=null">#{switchesReachableHistory.reachable,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachableHistory.downTime!=null">#{switchesReachableHistory.downTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="switchesReachableHistory.timeStamp!=null">#{switchesReachableHistory.timeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO switches_reachable_history (
+            id,
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
+        )VALUES
+        <foreach collection="switchesReachableHistorys" item="switchesReachableHistory" index="index" separator=",">
+            (
+            #{switchesReachableHistory.id,jdbcType=VARCHAR},
+            #{switchesReachableHistory.switchId,jdbcType=INTEGER},
+            #{switchesReachableHistory.reachable,jdbcType=INTEGER},
+            #{switchesReachableHistory.downTime,jdbcType=TIMESTAMP},
+            #{switchesReachableHistory.timeStamp,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE switches_reachable_history
+        <set>
+            <if test="switchesReachableHistory.switchId != null"> switch_id= #{switchesReachableHistory.switchId,jdbcType=INTEGER},</if>
+            <if test="switchesReachableHistory.reachable != null"> reachable= #{switchesReachableHistory.reachable,jdbcType=INTEGER},</if>
+            <if test="switchesReachableHistory.downTime != null"> down_time= #{switchesReachableHistory.downTime,jdbcType=TIMESTAMP},</if>
+            <if test="switchesReachableHistory.timeStamp != null"> time_stamp= #{switchesReachableHistory.timeStamp,jdbcType=TIMESTAMP}</if>
+        </set>
+        WHERE id = #{switchesReachableHistory.id,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectBySwitch" resultMap="BaseResultMap">
+        select
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
+        from switches_reachable_history
+        where switch_id = #{switchesReachableHistory.switchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="select" resultMap="BaseResultMap">
+        select
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
+        from switches_reachable_history
+    </select>
+
+    <delete id="delete">
+        DELETE FROM switches_reachable_history
+        WHERE time_stamp &lt;= #{switchesReachableHistory.timeStamp,jdbcType=TIMESTAMP}
+    </delete>
+</mapper>
+

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.SwitchesStatusMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.SwitchesStatus">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="up_time" property="upTime" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="ip_index" property="ipIndex" jdbcType="INTEGER"/>
+        <result column="ip_mask" property="ipMask" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cpu_load" property="cpuLoad" jdbcType="INTEGER"/>
+        <result column="memory_used" property="memoryUsed" jdbcType="INTEGER"/>
+        <result column="temp" property="temp" jdbcType="INTEGER"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="DetailResultMap" type="cn.albumenj.switchmonitor.dto.SwitchesDetailDto">
+        <result column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+        <result column="up_time" property="upTime" jdbcType="VARCHAR"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="ip_index" property="ipIndex" jdbcType="INTEGER"/>
+        <result column="ip_mask" property="ipMask" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cpu_load" property="cpuLoad" jdbcType="INTEGER"/>
+        <result column="memory_used" property="memoryUsed" jdbcType="INTEGER"/>
+        <result column="temp" property="temp" jdbcType="INTEGER"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
+        <result column="reachable" property="reachable" jdbcType="INTEGER"/>
+        <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
+        <result column="ip_origin" property="originIp" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <collection property="switchesPortDetailDto" ofType="cn.albumenj.switchmonitor.dto.SwitchesPortDetailDto">
+            <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
+            <result column="port_index" property="portIndex" jdbcType="INTEGER"/>
+            <result column="port_name" property="name" jdbcType="VARCHAR"/>
+            <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
+            <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
+            <result column="speed_max" property="speedMax" jdbcType="INTEGER"/>
+            <result column="speed_time" property="speedTime" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="BuildingResultMap" type="cn.albumenj.switchmonitor.dto.SwitchesStatusDto">
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cpu_load" property="cpuLoad" jdbcType="INTEGER"/>
+        <result column="memory_used" property="memUsed" jdbcType="INTEGER"/>
+        <result column="temp" property="temp" jdbcType="INTEGER"/>
+        <result column="info_time" property="infoTime" jdbcType="TIMESTAMP"/>
+        <result column="reachable" property="reachable" jdbcType="INTEGER"/>
+        <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
+        <result column="up_time" property="upTime" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="describe" property="desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        switch_id,
+        up_time,
+        ip,
+        ip_index,
+        ip_mask,
+        name,
+        cpu_load,
+        memory_used,
+        temp,
+        time_stamp
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="switchesStatus.id">
+        INSERT INTO switches_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesStatus.id!=null"> id,</if>
+            <if test="switchesStatus.switchId!=null"> switch_id,</if>
+            <if test="switchesStatus.upTime!=null"> up_time,</if>
+            <if test="switchesStatus.ip!=null"> ip,</if>
+            <if test="switchesStatus.ipIndex!=null"> ip_index,</if>
+            <if test="switchesStatus.ipMask!=null"> ip_mask,</if>
+            <if test="switchesStatus.name!=null"> name,</if>
+            <if test="switchesStatus.cpuLoad!=null"> cpu_load,</if>
+            <if test="switchesStatus.memoryUsed!=null"> memory_used,</if>
+            <if test="switchesStatus.temp!=null"> temp,</if>
+            <if test="switchesStatus.timeStamp!=null"> time_stamp,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="switchesStatus.id!=null">#{switchesStatus.id,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatus.switchId!=null">#{switchesStatus.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.upTime!=null">#{switchesStatus.upTime,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatus.ip!=null">#{switchesStatus.ip,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatus.ipIndex!=null">#{switchesStatus.ipIndex,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.ipMask!=null">#{switchesStatus.ipMask,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatus.name!=null">#{switchesStatus.name,jdbcType=VARCHAR},
+            </if>
+            <if test="switchesStatus.cpuLoad!=null">#{switchesStatus.cpuLoad,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.memoryUsed!=null">#{switchesStatus.memoryUsed,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.temp!=null">#{switchesStatus.temp,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.timeStamp!=null">#{switchesStatus.timeStamp,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO switches_status (
+            id,
+            switch_id,
+            up_time,
+            ip,
+            ip_index,
+            ip_mask,
+            name,
+            cpu_load,
+            memory_used,
+            temp,
+            time_stamp
+        )VALUES
+        <foreach collection="switchesStatuss" item="switchesStatus" index="index" separator=",">
+            (
+            #{switchesStatus.id,jdbcType=VARCHAR},
+            #{switchesStatus.switchId,jdbcType=INTEGER},
+            #{switchesStatus.upTime,jdbcType=VARCHAR},
+            #{switchesStatus.ip,jdbcType=VARCHAR},
+            #{switchesStatus.ipIndex,jdbcType=INTEGER},
+            #{switchesStatus.ipMask,jdbcType=VARCHAR},
+            #{switchesStatus.name,jdbcType=VARCHAR},
+            #{switchesStatus.cpuLoad,jdbcType=INTEGER},
+            #{switchesStatus.memoryUsed,jdbcType=INTEGER},
+            #{switchesStatus.temp,jdbcType=INTEGER},
+            #{switchesStatus.timeStamp,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE switches_status
+        <set>
+            <if test="switchesStatus.id != null"> id= #{switchesStatus.id,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.switchId != null"> switch_id= #{switchesStatus.switchId,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.upTime != null"> up_time= #{switchesStatus.upTime,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.ip != null"> ip= #{switchesStatus.ip,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.ipIndex != null"> ip_index= #{switchesStatus.ipIndex,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.ipMask != null"> ip_mask= #{switchesStatus.ipMask,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.name != null"> name= #{switchesStatus.name,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.cpuLoad != null"> cpu_load= #{switchesStatus.cpuLoad,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.memoryUsed != null"> memory_used= #{switchesStatus.memoryUsed,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.temp != null"> temp= #{switchesStatus.temp,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.timeStamp != null"> time_stamp= #{switchesStatus.timeStamp,jdbcType=TIMESTAMP}</if>
+        </set>
+        WHERE switch_id = #{switchesStatus.switchId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateList">
+        UPDATE switches_status
+        SET
+        id = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.id,jdbcType = VARCHAR}
+        </foreach>
+        END,
+        up_time = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.upTime,jdbcType=VARCHAR}
+        </foreach>
+        END,
+        ip = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.ip,jdbcType = VARCHAR}
+        </foreach>
+        END,
+        ip_index = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.ipIndex,jdbcType=VARCHAR}
+        </foreach>
+        END,
+        ip_mask = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.ipMask,jdbcType=VARCHAR}
+        </foreach>
+        END,
+        name = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.name,jdbcType=VARCHAR}
+        </foreach>
+        END,
+        cpu_load = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.cpuLoad,jdbcType=INTEGER}
+        </foreach>
+        END,
+        memory_used = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.memoryUsed,jdbcType=INTEGER}
+        </foreach>
+        END,
+        temp = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.temp,jdbcType=INTEGER}
+        </foreach>
+        END,
+        time_stamp = CASE switch_id
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index">
+            WHEN #{switchesStatus.switchId,jdbcType=INTEGER} THEN #{switchesStatus.timeStamp,jdbcType=TIMESTAMP}
+        </foreach>
+        END
+        WHERE switch_id
+        IN
+        <foreach collection="switchesStatuses" item="switchesStatus" index="index" separator="," open="(" close=")">
+            #{switchesStatus.switchId,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+    <select id="selectBySwitch" resultMap="BaseResultMap">
+        SELECT id,
+               switch_id,
+               up_time,
+               ip,
+               ip_index,
+               ip_mask,
+               name,
+               cpu_load,
+               memory_used,
+               temp,
+               time_stamp
+        FROM switches_status
+        WHERE switch_id = #{switchesStatus.switchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT id,
+               switch_id,
+               up_time,
+               ip,
+               ip_index,
+               ip_mask,
+               name,
+               cpu_load,
+               memory_used,
+               temp,
+               time_stamp
+        FROM switches_status_history
+    </select>
+
+    <delete id="delete">
+        DELETE FROM switches_status
+        WHERE switch_id = #{switchesStatus.switchId,jdbcType=INTEGER}
+    </delete>
+
+    <select id="selectSome" resultMap="BaseResultMap">
+        SELECT
+               id,switch_id
+                <if test="switchesStatus.cpuLoad != null"> ,cpu_load </if>
+                <if test="switchesStatus.memoryUsed != null"> ,memory_used </if>
+                <if test="switchesStatus.temp != null"> ,temp </if>
+        FROM switches_status
+    </select>
+
+    <select id="selectDetail" resultMap="DetailResultMap">
+        SELECT
+            switches_status.id,
+            switches_status.switch_id,
+            switches_status.`name`,
+            switches_status.cpu_load,
+            switches_status.memory_used,
+            switches_status.temp,
+            switches_status.time_stamp,
+            list.ip AS ip_origin,
+            list.model,
+            reach.reachable,
+            reach.down_time,
+            speed.in_speed,
+            speed.out_speed,
+            speed.time_stamp AS speed_time,
+            speed.port_index,
+            port_status.speed AS speed_max,
+            port_status.name AS port_name
+        FROM
+            switches_status
+                INNER JOIN switches_list AS list ON switches_status.switch_id = list.id
+                INNER JOIN switches_reachable AS reach ON switches_status.switch_id = reach.switch_id
+                LEFT JOIN port_speed AS speed ON switches_status.switch_id = speed.switch_id
+                LEFT JOIN port_status ON speed.switch_id = port_status.switch_id AND speed.port_index = port_status.port_index
+    </select>
+
+    <select id="selectByBuilding" resultMap="BuildingResultMap">
+        SELECT
+            switches_status.up_time,
+            unix_timestamp(switches_reachable.down_time),
+            switches_reachable.reachable,
+            switches_list.ip,
+            switches_list.model,
+            switches_status.cpu_load,
+            switches_status.memory_used,
+            switches_status.temp,
+            unix_timestamp(switches_status.time_stamp) AS info_time,
+            switches_status.`name`,
+            switches_list.description
+        FROM
+            switches_list
+                INNER JOIN switches_status ON switches_list.id = switches_status.switch_id
+                INNER JOIN switches_reachable ON switches_list.id = switches_reachable.switch_id
+
+        <if test="switchesList.building != null">
+        WHERE
+          switches_list.building = #{switchesList.building,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>
+
