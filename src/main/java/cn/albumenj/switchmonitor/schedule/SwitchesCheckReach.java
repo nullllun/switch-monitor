@@ -70,7 +70,7 @@ public class SwitchesCheckReach {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(0);
                 SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
-                if(switchesReachableOld.getReachable() == 1){
+                if (switchesReachableOld.getReachable() == null || switchesReachableOld.getReachable() == 1) {
                     switchesReachable.setDownTime(new Date());
                 }
 
@@ -88,7 +88,7 @@ public class SwitchesCheckReach {
             switchesReachables.clear();
         }
         if(switchesReachableHistories.size()>switchesReachableHistoriesLimit){
-            switchesReachableHistoryService.insertList(switchesReachableHistories);
+            //switchesReachableHistoryService.insertList(switchesReachableHistories);
             switchesReachableHistories.clear();
         }
     }

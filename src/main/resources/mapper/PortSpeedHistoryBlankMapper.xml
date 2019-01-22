@@ -115,7 +115,7 @@
         where switch_port = #{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectOld" resultMap="BaseResultMap">
+    <select id="select" resultMap="BaseResultMap">
         SELECT port_speed_history_blank.id,
                port_speed_history_blank.switch_port,
                port_speed_history_blank.time_start,
@@ -124,6 +124,35 @@
         FROM port_speed_history_blank
         WHERE port_speed_history_blank.latest = 1
     </select>
+
+    <delete id="deleteFirst">
+        DELETE
+        FROM port_speed_history_blank
+        WHERE time_end &lt;= #{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP}
+    </delete>
+
+    <select id="selectOld" resultMap="BaseResultMap">
+        SELECT port_speed_history_blank.id,
+               port_speed_history_blank.time_start
+        FROM port_speed_history_blank
+        WHERE time_start &lt;= #{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP}
+    </select>
+
+    <update id="updateHistory">
+        UPDATE port_speed_history_blank
+        SET
+        time_start = CASE id
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index">
+            WHEN #{portSpeedHistoryBlank.id,jdbcType=BIGINT} THEN #{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP}
+        </foreach>
+        END
+        WHERE id
+        IN
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index" separator="," open="("
+                 close=")">
+            #{portSpeedHistoryBlank.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
 
 </mapper>
 

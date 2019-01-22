@@ -3,16 +3,21 @@ package cn.albumenj.switchmonitor.service.impl;
 import cn.albumenj.switchmonitor.bean.PortSpeedHistoryBlank;
 import cn.albumenj.switchmonitor.dao.PortSpeedHistoryBlankMapper;
 import cn.albumenj.switchmonitor.service.PortSpeedHistoryBlankService;
+import cn.albumenj.switchmonitor.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankService {
 
-    @Resource
+    @Autowired
     private PortSpeedHistoryBlankMapper portSpeedHistoryBlankMapper;
+
+    @Value("${history.port-speed-saveTime}")
+    Integer portSpeedSaveTime;
 
     @Override
     public int insert(PortSpeedHistoryBlank portSpeedHistoryBlank) {
@@ -44,6 +49,15 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
 
     @Override
     public List<PortSpeedHistoryBlank> selectOld() {
-        return portSpeedHistoryBlankMapper.selectOld();
+        return portSpeedHistoryBlankMapper.select();
+    }
+
+    @Override
+    public int delete() {
+        PortSpeedHistoryBlank portSpeedHistoryBlank = new PortSpeedHistoryBlank();
+        portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
+        portSpeedHistoryBlank.setTimeEnd(DateUtil.beforeNow(portSpeedSaveTime));
+        int ret = portSpeedHistoryBlankMapper.deleteFirst(portSpeedHistoryBlank);
+        return ret;
     }
 }

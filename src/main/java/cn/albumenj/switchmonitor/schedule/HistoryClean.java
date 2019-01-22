@@ -1,9 +1,6 @@
 package cn.albumenj.switchmonitor.schedule;
 
-import cn.albumenj.switchmonitor.service.PortSpeedHistoryService;
-import cn.albumenj.switchmonitor.service.PortStatusHistoryService;
-import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
-import cn.albumenj.switchmonitor.service.SwitchesStatusHistoryService;
+import cn.albumenj.switchmonitor.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +8,8 @@ import org.springframework.stereotype.Component;
 public class HistoryClean {
     @Autowired
     SwitchesStatusHistoryService switchesStatusHistoryService;
+    @Autowired
+    PortSpeedHistoryBlankService portSpeedHistoryBlankService;
     @Autowired
     PortStatusHistoryService portStatusHistoryService;
     @Autowired
@@ -23,5 +22,6 @@ public class HistoryClean {
         portStatusHistoryService.delete();
         portSpeedHistoryService.delete();
         switchesReachableHistoryService.delete();
+        portSpeedHistoryBlankService.delete();
     }
 }

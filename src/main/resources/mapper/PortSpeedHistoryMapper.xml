@@ -3,8 +3,6 @@
 <mapper namespace="cn.albumenj.switchmonitor.dao.PortSpeedHistoryMapper">
     <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.PortSpeedHistory">
         <result column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
-        <result column="port_index" property="portIndex" jdbcType="INTEGER"/>
         <result column="switch_port" property="switchPort" jdbcType="VARCHAR"/>
         <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
         <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
@@ -19,8 +17,6 @@
 
     <sql id="Base_Column_List">
             id,
-        switch_id,
-        port_index,
             switch_port,
         in_speed,
         out_speed,
@@ -30,8 +26,6 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeedHistory.id">
         INSERT INTO port_speed_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="portSpeedHistory.switchId!=null"> switch_id,</if>
-            <if test="portSpeedHistory.portIndex!=null"> port_index,</if>
             <if test="portSpeedHistory.switchPort!=null">switch_port,</if>
             <if test="portSpeedHistory.inSpeed!=null"> in_speed,</if>
             <if test="portSpeedHistory.outSpeed!=null"> out_speed,</if>
@@ -40,10 +34,6 @@
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="portSpeedHistory.switchId!=null">#{portSpeedHistory.switchId,jdbcType=INTEGER},
-            </if>
-            <if test="portSpeedHistory.portIndex!=null">#{portSpeedHistory.portIndex,jdbcType=INTEGER},
-            </if>
-            <if test="portSpeedHistory.switchPort!=null">#{portSpeedHistory.switchPort,jdbcType=VARCHAR},
             </if>
             <if test="portSpeedHistory.inSpeed!=null">#{portSpeedHistory.inSpeed,jdbcType=BIGINT},
             </if>
@@ -56,8 +46,6 @@
 
     <insert id="insertList">
         INSERT INTO port_speed_history (
-            switch_id,
-            port_index,
         switch_port,
             in_speed,
             out_speed,
@@ -65,8 +53,6 @@
         )VALUES
         <foreach collection="portSpeedHistorys" item="portSpeedHistory" index="index" separator=",">
             (
-            #{portSpeedHistory.switchId,jdbcType=INTEGER},
-            #{portSpeedHistory.portIndex,jdbcType=INTEGER},
             #{portSpeedHistory.switchPort,jdbcType=VARCHAR},
             #{portSpeedHistory.inSpeed,jdbcType=BIGINT},
             #{portSpeedHistory.outSpeed,jdbcType=BIGINT},
@@ -85,7 +71,6 @@
         ORDER BY
             port_speed_history.time_stamp ASC
     </select>
-
 
     <delete id="delete">
         DELETE FROM port_speed_history

@@ -16,9 +16,13 @@ public interface PortSpeedHistoryBlankMapper {
 
     int updateList(@Param("portSpeedHistoryBlanks") List<PortSpeedHistoryBlank> portSpeedHistoryBlanks);
 
-    //TODO: 优化delete逻辑
+    int updateHistory(@Param("portSpeedHistoryBlanks") List<PortSpeedHistoryBlank> portSpeedHistoryBlanks);
+
+    int deleteFirst(@Param("portSpeedHistoryBlank") PortSpeedHistoryBlank portSpeedHistoryBlank);
 
     List<PortSpeedHistoryBlank> selectByPort(@Param("portSpeedHistoryBlank") PortSpeedHistoryBlank portSpeedHistoryBlank);
 
-    List<PortSpeedHistoryBlank> selectOld();
+    List<PortSpeedHistoryBlank> select();
+
+    List<PortSpeedHistoryBlank> selectOld(@Param("portSpeedHistoryBlank") PortSpeedHistoryBlank portSpeedHistoryBlank);
 }

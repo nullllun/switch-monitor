@@ -21,10 +21,10 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 history:
-  port-saveTime: 2
-  switch-saveTime: 2
-  port-speed-saveTime: 2
-  switch-reachable-saveTime: 2
+  port-saveTime: 7
+  switch-saveTime: 7
+  port-speed-saveTime: 7
+  switch-reachable-saveTime: 7
 
 commit:
   switchesStatusHistories-insert: 100

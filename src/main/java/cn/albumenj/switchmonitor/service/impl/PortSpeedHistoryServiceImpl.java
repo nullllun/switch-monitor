@@ -57,6 +57,9 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService{
         List<PortFlowDto> portFlowDtos = new LinkedList<>();
 
         for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlanks) {
+            if (portSpeedHistoryBlank.getTimeStart().getTime() < DateUtil.beforeNow(portSpeedSaveTime).getTime()) {
+                portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
+            }
             for (Long i = portSpeedHistoryBlank.getTimeStart().getTime(); i <= portSpeedHistoryBlank.getTimeEnd().getTime(); i += 60 * 1000) {
                 PortFlowDto portFlowDto = new PortFlowDto();
                 portFlowDto.setIn(0);

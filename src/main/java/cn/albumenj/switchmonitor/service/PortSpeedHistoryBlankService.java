@@ -17,4 +17,6 @@ public interface PortSpeedHistoryBlankService {
     List<PortSpeedHistoryBlank> selectByPort(String switchPort);
 
     List<PortSpeedHistoryBlank> selectOld();
+
+    int delete();
 }
