@@ -3,6 +3,11 @@ package cn.albumenj.switchmonitor.bean;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * 端口状态（当前）
+ *
+ * @author Albumen
+ */
 public class PortStatus {
     private String id;
     private Integer switchId;

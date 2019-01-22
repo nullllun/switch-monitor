@@ -1,5 +1,11 @@
 package cn.albumenj.switchmonitor.dto;
 
+/**
+ * 端口流量记录 传输至客户端
+ * 单条
+ *
+ * @author Albumen
+ */
 public class PortFlowDto {
     private Long timestamp;
     private Integer in;

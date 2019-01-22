@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 登陆错误
+ * 
  * @author Albumen
  */
 @Component
@@ -27,6 +29,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
      */
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        PageCodeUtil.printCode(response, PageCodeEnum.PERMISSION_DENIED);
+        PageCodeUtil.printCode(response, PageCodeEnum.PERMISSION_DENIED, 401);
     }
 }

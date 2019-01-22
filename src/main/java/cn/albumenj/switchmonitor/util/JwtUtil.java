@@ -14,6 +14,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
 /**
+ * JWT工具
+ *
  * @author Albumen
  */
 @Component

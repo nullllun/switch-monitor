@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHistoryService{
     @Value("${history.switch-reachable-saveTime}")
@@ -25,7 +28,13 @@ public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHis
 
     @Override
     public int insertList(List<SwitchesReachableHistory> switchesReachableHistorys){
-        return switchesReachableHistoryMapper.insertList(switchesReachableHistorys);
+        int ret = switchesReachableHistoryMapper.insertList(switchesReachableHistorys);
+        if (ret != switchesReachableHistorys.size()) {
+            for (SwitchesReachableHistory switchesReachableHistory : switchesReachableHistorys) {
+                ret += switchesReachableHistoryMapper.insert(switchesReachableHistory);
+            }
+        }
+        return ret;
     }
 
     @Override

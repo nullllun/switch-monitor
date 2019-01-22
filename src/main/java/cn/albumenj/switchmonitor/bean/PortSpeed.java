@@ -3,6 +3,11 @@ package cn.albumenj.switchmonitor.bean;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * 端口流量速率（当前数据）
+ *
+ * @author Albumen
+ */
 public class PortSpeed {
     private String id;
     private Integer switchId;

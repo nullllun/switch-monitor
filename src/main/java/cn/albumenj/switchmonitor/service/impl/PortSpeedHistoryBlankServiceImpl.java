@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankService {
 
@@ -37,7 +40,14 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
 
     @Override
     public int updateList(List<PortSpeedHistoryBlank> portSpeedHistoryBlanks) {
-        return portSpeedHistoryBlankMapper.updateList(portSpeedHistoryBlanks);
+        int ret = portSpeedHistoryBlankMapper.updateList(portSpeedHistoryBlanks);
+        if (ret != portSpeedHistoryBlanks.size()) {
+            ret = 0;
+            for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlanks) {
+                ret += portSpeedHistoryBlankMapper.update(portSpeedHistoryBlank);
+            }
+        }
+        return ret;
     }
 
     @Override
@@ -48,7 +58,7 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
     }
 
     @Override
-    public List<PortSpeedHistoryBlank> selectOld() {
+    public List<PortSpeedHistoryBlank> select() {
         return portSpeedHistoryBlankMapper.select();
     }
 
@@ -57,7 +67,7 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
         PortSpeedHistoryBlank portSpeedHistoryBlank = new PortSpeedHistoryBlank();
         portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
         portSpeedHistoryBlank.setTimeEnd(DateUtil.beforeNow(portSpeedSaveTime));
-        int ret = portSpeedHistoryBlankMapper.deleteFirst(portSpeedHistoryBlank);
+        int ret = portSpeedHistoryBlankMapper.deleteHistory(portSpeedHistoryBlank);
         return ret;
     }
 }

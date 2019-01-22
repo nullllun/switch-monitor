@@ -1,5 +1,8 @@
 package cn.albumenj.switchmonitor.dto;
 
+/**
+ * @author Albumen
+ */
 public class VlanDto {
     private String id;
     private String ip;

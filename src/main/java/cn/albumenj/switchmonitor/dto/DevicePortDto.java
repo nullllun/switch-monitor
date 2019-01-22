@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
+/**
+ * 端口状态数据
+ * 注意 list 数据对齐
+ *
+ * @author Albumen
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DevicePortDto {
     private List<String> ifDescr;

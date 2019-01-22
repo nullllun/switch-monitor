@@ -1,8 +1,9 @@
 package cn.albumenj.switchmonitor.bean;
 
 /**
+ * 交换机基本数据（数据库需预先填好）
+ *
  * @author Albumen
- * @date 2019.01.09
  */
 public class SwitchesList {
     private Integer id;

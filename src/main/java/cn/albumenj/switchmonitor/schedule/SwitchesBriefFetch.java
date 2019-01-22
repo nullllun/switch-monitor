@@ -12,6 +12,13 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 获取设备概况
+ * 获取时间较长，定为每分钟获取一次
+ * 在此方法调用前客户端无法正常获取到首页数据
+ *
+ * @author Albumen
+ */
 @Component
 public class SwitchesBriefFetch {
     @Value("${threshold.cpu}")
@@ -92,8 +99,7 @@ public class SwitchesBriefFetch {
             }
             if (switchesDetailDto.getReachable() == 1) {
                 status.add(1L);
-            }
-            else {
+            } else {
                 status.add(switchesDetailDto.getDownTime().getTime());
             }
         }

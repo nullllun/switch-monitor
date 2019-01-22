@@ -1,5 +1,10 @@
 package cn.albumenj.switchmonitor.bean;
 
+/**
+ * 权限用户表
+ *
+ * @author Albumen
+ */
 public class User {
     private String username;
     private String password;

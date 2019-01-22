@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 楼栋
+ *
+ * @author Albumen
+ */
 @RestController
 public class BuildingController {
     @Autowired

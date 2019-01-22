@@ -1,6 +1,8 @@
 package cn.albumenj.switchmonitor.constant;
 
 /**
+ * HTTP相关常量
+ *
  * @author Albumen
  */
 public class HttpConst {

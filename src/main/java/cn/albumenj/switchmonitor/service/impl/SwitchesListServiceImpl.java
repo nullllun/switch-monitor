@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class SwitchesListServiceImpl implements SwitchesListService{
 

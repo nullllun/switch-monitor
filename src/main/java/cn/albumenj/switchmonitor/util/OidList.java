@@ -3,6 +3,11 @@ package cn.albumenj.switchmonitor.util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 全局SNMP的OID
+ *
+ * @author Albumen
+ */
 public class OidList {
     /**
      * 运行时间
@@ -53,7 +58,7 @@ public class OidList {
     /**
      * 设备名
      */
-    private static final String NAME = "1.3.6.1.2.1.1.5";  
+    private static final String NAME = "1.3.6.1.2.1.1.5";
 
     private static final Map<String,String> CPU_LOAD;
     private static final Map<String,String> MEM_USED;

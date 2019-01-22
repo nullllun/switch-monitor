@@ -1,6 +1,9 @@
 package cn.albumenj.switchmonitor.constant;
 
 /**
+ * 状态码
+ *
+ * TODO：优化状态码
  * @author Albumen
  */
 @SuppressWarnings("ALL")

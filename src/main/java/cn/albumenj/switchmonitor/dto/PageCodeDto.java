@@ -4,6 +4,8 @@ import cn.albumenj.switchmonitor.constant.PageCodeEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
+ * 页面状态码
+ *
  * @author Albumen
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

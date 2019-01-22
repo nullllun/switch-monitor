@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class SwitchesStatusServiceImpl implements SwitchesStatusService{
     @Autowired
@@ -34,8 +37,7 @@ public class SwitchesStatusServiceImpl implements SwitchesStatusService{
     public int update(SwitchesStatus switchesStatus){
         if(switchesStatusMapper.update(switchesStatus)==0){
             return switchesStatusMapper.insert(switchesStatus);
-        }
-        else{
+        } else{
             return 1;
         }
     }
@@ -57,8 +59,8 @@ public class SwitchesStatusServiceImpl implements SwitchesStatusService{
     }
 
     @Override
-    public List<SwitchesStatus> select(SwitchesStatus switchesStatus) {
-        return switchesStatusMapper.select(switchesStatus);
+    public List<SwitchesStatus> select() {
+        return switchesStatusMapper.select();
     }
 
     @Override

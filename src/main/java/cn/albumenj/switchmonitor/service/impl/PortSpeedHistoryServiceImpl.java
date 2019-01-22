@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
-public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService{
+public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
     private static List<PortSpeedHistory> portSpeedHistoryRest = new LinkedList<>();
 
     @Autowired
@@ -29,30 +32,40 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService{
     @Value("${history.port-speed-saveTime}")
     Integer portSpeedSaveTime;
 
+    @Value("${sync.port}")
+    Integer portTime;
+
     @Autowired
     private PortSpeedHistoryMapper portSpeedHistoryMapper;
 
     @Override
-    public int insert(PortSpeedHistory portSpeedHistory){
+    public int insert(PortSpeedHistory portSpeedHistory) {
         return portSpeedHistoryMapper.insert(portSpeedHistory);
     }
 
     @Override
-    public int delete(){
+    public int delete() {
         PortSpeedHistory portSpeedHistory = new PortSpeedHistory();
         portSpeedHistory.setTimeStamp(DateUtil.beforeNow(portSpeedSaveTime));
         return portSpeedHistoryMapper.delete(portSpeedHistory);
     }
 
     @Override
-    public int insertList(List<PortSpeedHistory> portSpeedHistorys){
-        return portSpeedHistoryMapper.insertList(portSpeedHistorys);
+    public int insertList(List<PortSpeedHistory> portSpeedHistorys) {
+        int ret = portSpeedHistoryMapper.insertList(portSpeedHistorys);
+        if (ret != portSpeedHistorys.size()) {
+            ret = 0;
+            for (PortSpeedHistory portSpeedHistory : portSpeedHistorys) {
+                ret += portSpeedHistoryMapper.insert(portSpeedHistory);
+            }
+        }
+        return ret;
     }
 
     @Override
     public List<PortFlowDto> selectFlow(String ip, String name) {
         String switchPort = portStatusService.fetchPort(ip, name);
-        List<PortFlowOriginDto> portFlowOriginDtos = portSpeedHistoryMapper.selectFlow(switchPort);
+        List<PortFlowOriginDto> portFlowOriginDtos = portSpeedHistoryMapper.select(switchPort);
         List<PortSpeedHistoryBlank> portSpeedHistoryBlanks = portSpeedHistoryBlankService.selectByPort(switchPort);
         List<PortFlowDto> portFlowDtos = new LinkedList<>();
 
@@ -60,7 +73,7 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService{
             if (portSpeedHistoryBlank.getTimeStart().getTime() < DateUtil.beforeNow(portSpeedSaveTime).getTime()) {
                 portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
             }
-            for (Long i = portSpeedHistoryBlank.getTimeStart().getTime(); i <= portSpeedHistoryBlank.getTimeEnd().getTime(); i += 60 * 1000) {
+            for (Long i = portSpeedHistoryBlank.getTimeStart().getTime(); i <= portSpeedHistoryBlank.getTimeEnd().getTime(); i += portTime) {
                 PortFlowDto portFlowDto = new PortFlowDto();
                 portFlowDto.setIn(0);
                 portFlowDto.setOut(0);
@@ -69,15 +82,14 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService{
             }
         }
 
-        for(PortFlowOriginDto portFlowOriginDto:portFlowOriginDtos){
+        for (PortFlowOriginDto portFlowOriginDto : portFlowOriginDtos) {
             PortFlowDto portFlowDto = new PortFlowDto();
             portFlowDto.setIn(portFlowOriginDto.getIn());
             portFlowDto.setOut(portFlowOriginDto.getOut());
             portFlowDto.setTimestamp(portFlowOriginDto.getTimestamp().getTime());
             if (portFlowDto.getIn() < 0 || portFlowDto.getOut() < 0) {
                 portFlowDto = null;
-            }
-            else {
+            } else {
                 portFlowDtos.add(portFlowDto);
             }
         }

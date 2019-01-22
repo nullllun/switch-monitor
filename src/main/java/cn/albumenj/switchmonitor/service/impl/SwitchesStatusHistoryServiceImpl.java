@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class SwitchesStatusHistoryServiceImpl implements SwitchesStatusHistoryService {
     @Value("${history.switch-saveTime}")
@@ -27,7 +30,13 @@ public class SwitchesStatusHistoryServiceImpl implements SwitchesStatusHistorySe
 
     @Override
     public int insertList(List<SwitchesStatusHistory> switchesStatusHistory) {
-        return switchesStatusHistoryMapper.insertList(switchesStatusHistory);
+        int ret = switchesStatusHistoryMapper.insertList(switchesStatusHistory);
+        if (ret != switchesStatusHistory.size()) {
+            for (SwitchesStatusHistory statusHistory : switchesStatusHistory) {
+                ret += switchesStatusHistoryMapper.insert(statusHistory);
+            }
+        }
+        return ret;
     }
 
     @Override

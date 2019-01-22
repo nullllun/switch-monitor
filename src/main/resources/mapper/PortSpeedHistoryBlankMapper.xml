@@ -125,7 +125,7 @@
         WHERE port_speed_history_blank.latest = 1
     </select>
 
-    <delete id="deleteFirst">
+    <delete id="deleteHistory">
         DELETE
         FROM port_speed_history_blank
         WHERE time_end &lt;= #{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP}

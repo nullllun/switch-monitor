@@ -13,6 +13,11 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 交换机刷新（SNMP）
+ *
+ * @author Albumen
+ */
 @Component
 public class SwitchUpdate {
     @Autowired
@@ -297,7 +302,7 @@ public class SwitchUpdate {
     }
 
     public void updatePortStatusMap() {
-        List<PortStatus> portStatusOld = portStatusService.selectOld();
+        List<PortStatus> portStatusOld = portStatusService.select();
         portStatusConcurrentHashMap.clear();
         for (PortStatus portStatus : portStatusOld) {
             portStatusConcurrentHashMap.put(portStatus.getSwitchPort(), portStatus);
@@ -305,7 +310,7 @@ public class SwitchUpdate {
     }
 
     public void updatePortSpeedMap() {
-        List<PortSpeed> portSpeedOld = portSpeedService.selectOld();
+        List<PortSpeed> portSpeedOld = portSpeedService.select();
         portSpeedConcurrentHashMap.clear();
         for (PortSpeed portSpeed : portSpeedOld) {
             portSpeedConcurrentHashMap.put(portSpeed.getSwitchPort(), portSpeed);
@@ -313,7 +318,7 @@ public class SwitchUpdate {
     }
 
     public void updateSpeedBlankMap() {
-        List<PortSpeedHistoryBlank> portSpeedHistoryBlankOld = portSpeedHistoryBlankService.selectOld();
+        List<PortSpeedHistoryBlank> portSpeedHistoryBlankOld = portSpeedHistoryBlankService.select();
         portSpeedHistoryBlankConcurrentHashMap.clear();
         for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlankOld) {
             portSpeedHistoryBlankConcurrentHashMap.put(portSpeedHistoryBlank.getSwitchPort(), portSpeedHistoryBlank);

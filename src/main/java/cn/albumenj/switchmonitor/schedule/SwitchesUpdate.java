@@ -12,6 +12,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 交换机信息刷新
+ *
+ * @author Albumen
+ */
 @Component
 public class SwitchesUpdate {
     @Autowired

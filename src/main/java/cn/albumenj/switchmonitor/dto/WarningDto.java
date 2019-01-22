@@ -2,6 +2,11 @@ package cn.albumenj.switchmonitor.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * 报警时信息
+ *
+ * @author Albumen
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WarningDto {
     private String warning;

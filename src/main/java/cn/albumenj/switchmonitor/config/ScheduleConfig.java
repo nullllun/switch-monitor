@@ -12,6 +12,11 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+/**
+ * 配置Quartz定时任务
+ *
+ * @author Albumen
+ */
 @Configuration
 public class ScheduleConfig {
     /**

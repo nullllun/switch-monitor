@@ -61,7 +61,7 @@
         </foreach>
     </insert>
 
-    <select id="selectFlow" resultMap="FlowResultMap">
+    <select id="select" resultMap="FlowResultMap">
         SELECT
             port_speed_history.in_speed,
             port_speed_history.out_speed,

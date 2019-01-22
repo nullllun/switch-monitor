@@ -4,6 +4,11 @@ import cn.albumenj.switchmonitor.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 定期清除过期数据
+ *
+ * @author Albumen
+ */
 @Component
 public class HistoryClean {
     @Autowired

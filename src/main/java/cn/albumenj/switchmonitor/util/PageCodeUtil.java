@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
+ * 向客户端下发状态
+ *
  * @author Albumen
  */
 public class PageCodeUtil {

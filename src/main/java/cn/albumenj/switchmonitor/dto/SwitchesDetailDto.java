@@ -5,6 +5,11 @@ import cn.albumenj.switchmonitor.bean.SwitchesStatus;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 设备信息
+ *
+ * @author Albumen
+ */
 public class SwitchesDetailDto extends SwitchesStatus {
     private String model;
     private Integer reachable;

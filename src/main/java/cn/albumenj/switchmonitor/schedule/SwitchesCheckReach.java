@@ -6,7 +6,6 @@ import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,6 +17,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 交换机在线状态检测
+ *
+ * @author Albumen
+ */
 @Component
 public class SwitchesCheckReach {
     @Autowired
@@ -57,16 +61,12 @@ public class SwitchesCheckReach {
             reachable = reachable || inetAddress.isReachable(50);
             reachable = reachable || inetAddress.isReachable(50);
             SwitchesReachable switchesReachable = new SwitchesReachable();
-            SwitchesReachableHistory switchesReachableHistory = new SwitchesReachableHistory();
             if(reachable){
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(1);
 
-                BeanUtils.copyProperties(switchesReachable,switchesReachableHistory);
                 switchesReachables.add(switchesReachable);
-                switchesReachableHistories.add(switchesReachableHistory);
-            }
-            else{
+            } else{
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(0);
                 SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
@@ -74,9 +74,7 @@ public class SwitchesCheckReach {
                     switchesReachable.setDownTime(new Date());
                 }
 
-                BeanUtils.copyProperties(switchesReachable,switchesReachableHistory);
                 switchesReachables.add(switchesReachable);
-                switchesReachableHistories.add(switchesReachableHistory);
             }
         } catch (UnknownHostException e) {
             //TODO: 日志
@@ -86,10 +84,6 @@ public class SwitchesCheckReach {
         if(switchesReachables.size()>switchesReachablesLimit){
             switchesReachableService.updateList(switchesReachables);
             switchesReachables.clear();
-        }
-        if(switchesReachableHistories.size()>switchesReachableHistoriesLimit){
-            //switchesReachableHistoryService.insertList(switchesReachableHistories);
-            switchesReachableHistories.clear();
         }
     }
 }

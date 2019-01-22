@@ -239,7 +239,7 @@
         WHERE switch_port = #{portStatus.switchPort,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectOld" resultMap="BaseResultMap">
+    <select id="select" resultMap="BaseResultMap">
         SELECT time_stamp,
                in_data,
                out_data,

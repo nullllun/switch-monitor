@@ -2,7 +2,7 @@ package cn.albumenj.switchmonitor.security;
 
 import cn.albumenj.switchmonitor.constant.HttpConst;
 import cn.albumenj.switchmonitor.constant.PageCodeEnum;
-import cn.albumenj.switchmonitor.dto.MpLoginDto;
+import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.PageCodeUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
@@ -26,6 +26,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
+ * 自定义登陆认证
+ * 兼容JWT
+ *
  * @author Albumen
  */
 @Component
@@ -66,17 +69,17 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();
             ObjectMapper objectMapper = new ObjectMapper();
-            MpLoginDto mpLoginDto = new MpLoginDto();
-            mpLoginDto.setToken(HttpConst.AUTHORIZATION_PREFIX + token);
-            mpLoginDto.setSuccess(true);
-            String json = objectMapper.writeValueAsString(mpLoginDto);
+            LoginStatusDto loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setToken(HttpConst.AUTHORIZATION_PREFIX + token);
+            loginStatusDto.setSuccess(true);
+            String json = objectMapper.writeValueAsString(loginStatusDto);
             writer.print(json);
             writer.close();
             response.flushBuffer();
 
         } catch (Exception e) {
             try {
-                PageCodeUtil.printCode(response, PageCodeEnum.SYSTEM_ERROR);
+                PageCodeUtil.printCode(response, PageCodeEnum.SYSTEM_ERROR, 400);
             } catch (Exception e1) {
                 return;
             }
@@ -93,6 +96,6 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        PageCodeUtil.printCode(response, PageCodeEnum.LOGIN_FAILED);
+        PageCodeUtil.printCode(response, PageCodeEnum.LOGIN_FAILED, 403);
     }
 }

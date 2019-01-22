@@ -2,6 +2,11 @@ package cn.albumenj.switchmonitor.bean;
 
 import java.util.Date;
 
+/**
+ * 端口流量速率（历史，空）
+ *
+ * @author Albumen
+ */
 public class PortSpeedHistoryBlank {
     private Long id;
     private String switchPort;

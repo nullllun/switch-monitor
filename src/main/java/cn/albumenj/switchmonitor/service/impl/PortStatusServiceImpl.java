@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class PortStatusServiceImpl implements PortStatusService{
     private static List<PortStatus> portStatusRest = new LinkedList<>();
@@ -28,8 +31,7 @@ public class PortStatusServiceImpl implements PortStatusService{
     public int update(PortStatus portStatus){
         if(portStatusMapper.update(portStatus)==0){
             return portStatusMapper.insert(portStatus);
-        }
-        else{
+        } else{
             return 1;
         }
     }
@@ -102,8 +104,8 @@ public class PortStatusServiceImpl implements PortStatusService{
     }
 
     @Override
-    public List<PortStatus> selectOld() {
-        return portStatusMapper.selectOld();
+    public List<PortStatus> select() {
+        return portStatusMapper.select();
     }
 
 

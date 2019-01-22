@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class PortSpeedServiceImpl implements PortSpeedService{
     private static List<PortSpeed> portSpeedRest = new LinkedList<>();
@@ -23,15 +26,20 @@ public class PortSpeedServiceImpl implements PortSpeedService{
 
     @Override
     public int insertList(List<PortSpeed> portSpeeds){
-        return portSpeedMapper.insertList(portSpeeds);
+        int ret = portSpeedMapper.insertList(portSpeeds);
+        if (ret != portSpeeds.size()) {
+            for (PortSpeed portSpeed : portSpeeds) {
+                ret += portSpeedMapper.insert(portSpeed);
+            }
+        }
+        return ret;
     }
 
     @Override
     public int update(PortSpeed portSpeed) {
         if(portSpeedMapper.update(portSpeed)==0){
             return portSpeedMapper.insert(portSpeed);
-        }
-        else{
+        } else{
             return 1;
         }
     }
@@ -54,7 +62,7 @@ public class PortSpeedServiceImpl implements PortSpeedService{
     }
 
     @Override
-    public List<PortSpeed> selectOld() {
-        return portSpeedMapper.selectOld();
+    public List<PortSpeed> select() {
+        return portSpeedMapper.select();
     }
 }

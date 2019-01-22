@@ -2,6 +2,11 @@ package cn.albumenj.switchmonitor.dto;
 
 import java.util.Date;
 
+/**
+ * 设备端口信息
+ *
+ * @author Albumen
+ */
 public class SwitchesPortDetailDto {
     private Integer switchId;
     private String portIndex;

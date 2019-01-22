@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
 
+/**
+ * 传输当前概况
+ *
+ * @author Albumen
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BriefStatusDto {
     private List<WarningDto> warning;

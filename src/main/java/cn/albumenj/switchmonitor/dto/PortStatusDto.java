@@ -1,5 +1,10 @@
 package cn.albumenj.switchmonitor.dto;
 
+/**
+ * 端口状态
+ *
+ * @author Albumen
+ */
 public class PortStatusDto {
     private String portIndex;
     private Long inData;

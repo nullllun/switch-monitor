@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Redis工具
+ *
  * @author Albumen
  */
 @Component

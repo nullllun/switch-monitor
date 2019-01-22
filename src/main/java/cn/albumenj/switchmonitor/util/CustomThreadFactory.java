@@ -2,6 +2,11 @@ package cn.albumenj.switchmonitor.util;
 
 import java.util.concurrent.ThreadFactory;
 
+/**
+ * 线程池管理
+ *
+ * @author Albumen
+ */
 public class CustomThreadFactory implements ThreadFactory {
     /**
      * Constructs a new {@code Thread}.  Implementations may also initialize

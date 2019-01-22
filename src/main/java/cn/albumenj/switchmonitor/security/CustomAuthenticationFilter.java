@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
+ * 认证状态检测
+ *
  * @author Albumen
  */
 public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
@@ -52,7 +54,6 @@ public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
                                 authorities.add(new GrantedAuthorityImpl(permission));
                             }
                         }
-
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(ret[0], null, authorities);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         chain.doFilter(request, response);
@@ -61,10 +62,10 @@ public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
                 }
             }
             //验证失败
-            PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN);
+            PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN, 401);
         } else {
             //验证失败
-            PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN);
+            PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN, 401);
         }
     }
 }

@@ -3,6 +3,11 @@ package cn.albumenj.switchmonitor.bean;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * 交换机在线状态
+ *
+ * @author Albumen
+ */
 public class SwitchesReachable {
     private String id;
     private Integer switchId;

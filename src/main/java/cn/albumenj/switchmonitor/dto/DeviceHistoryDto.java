@@ -1,5 +1,10 @@
 package cn.albumenj.switchmonitor.dto;
 
+/**
+ * 设备状态记录
+ *
+ * @author Albumen
+ */
 public class DeviceHistoryDto {
     private Long timestamp;
     private Integer cpu;

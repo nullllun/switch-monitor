@@ -2,6 +2,11 @@ package cn.albumenj.switchmonitor.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * 设备状态
+ *
+ * @author Albumen
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SwitchesStatusDto {
     private String ip;

@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * @author Albumen
+ */
 @Service
 public class SwitchesReachableServiceImpl implements SwitchesReachableService{
     @Autowired
@@ -33,8 +36,7 @@ public class SwitchesReachableServiceImpl implements SwitchesReachableService{
     public int update(SwitchesReachable switchesReachable) {
         if(switchesReachableMapper.update(switchesReachable) == 0){
             return switchesReachableMapper.insert(switchesReachable);
-        }
-        else{
+        } else{
             return 1;
         }
     }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
  * 自定义身份认证验证组件
  *
  * @author zhaoxinguo on 2017/9/12.
+ * @author Albumen
  */
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {

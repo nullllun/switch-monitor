@@ -2,8 +2,13 @@ package cn.albumenj.switchmonitor.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+/**
+ * 登陆结果
+ *
+ * @author Albumen
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MpLoginDto {
+public class LoginStatusDto {
     boolean success;
     String token;
 

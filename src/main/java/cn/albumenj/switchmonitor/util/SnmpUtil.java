@@ -19,6 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SNMP工具
+ * 目前只提供Walk功能
+ *
+ * @author Albumen
+ */
 @Component
 public class SnmpUtil {
     private Logger logger = LoggerFactory.getLogger(this.getClass());

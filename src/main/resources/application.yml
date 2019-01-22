@@ -44,3 +44,6 @@ server:
 
 security:
   jwtexp: 60000000
+
+sync:
+  port: 60000
