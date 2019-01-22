@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.PortSpeedHistoryBlankMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.PortSpeedHistoryBlank">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="switch_port" property="switchPort" jdbcType="VARCHAR"/>
+        <result column="time_start" property="timeStart" jdbcType="TIMESTAMP"/>
+        <result column="time_end" property="timeEnd" jdbcType="TIMESTAMP"/>
+        <result column="latest" property="latest" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            switch_port,
+            time_start,
+            time_end,
+            latest
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeedHistoryBlank.id">
+        INSERT INTO port_speed_history_blank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portSpeedHistoryBlank.id!=null">id,</if>
+            <if test="portSpeedHistoryBlank.switchPort!=null">switch_port,</if>
+            <if test="portSpeedHistoryBlank.timeStart!=null">time_start,</if>
+            <if test="portSpeedHistoryBlank.timeEnd!=null">time_end,</if>
+            <if test="portSpeedHistoryBlank.latest!=null">latest,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portSpeedHistoryBlank.id!=null">#{portSpeedHistoryBlank.id,jdbcType=BIGINT},
+            </if>
+            <if test="portSpeedHistoryBlank.switchPort!=null">#{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR},
+            </if>
+            <if test="portSpeedHistoryBlank.timeStart!=null">#{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="portSpeedHistoryBlank.timeEnd!=null">#{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="portSpeedHistoryBlank.latest!=null">#{portSpeedHistoryBlank.latest,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO port_speed_history_blank (
+        switch_port,
+        time_start,
+        time_end,
+        latest
+        )VALUES
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index" separator=",">
+            (
+            #{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR},
+            #{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP},
+            #{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP},
+            #{portSpeedHistoryBlank.latest,jdbcType=INTEGER}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE port_speed_history_blank
+        <set>
+            <if test="portSpeedHistoryBlank.switchPort != null">switch_port=
+                #{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR},
+            </if>
+            <if test="portSpeedHistoryBlank.timeStart != null">time_start=
+                #{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP},
+            </if>
+            <if test="portSpeedHistoryBlank.timeEnd != null">time_end=
+                #{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="portSpeedHistoryBlank.latest != null">latest= #{portSpeedHistoryBlank.latest,jdbcType=INTEGER},
+            </if>
+        </set>
+        WHERE id = #{portSpeedHistoryBlank.id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateList">
+        UPDATE port_speed_history_blank
+        SET
+        switch_port = CASE id
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index">
+            WHEN #{portSpeedHistoryBlank.id,jdbcType=BIGINT} THEN #{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR}
+        </foreach>
+        END,
+        time_start = CASE id
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index">
+            WHEN #{portSpeedHistoryBlank.id,jdbcType=BIGINT} THEN #{portSpeedHistoryBlank.timeStart,jdbcType=TIMESTAMP}
+        </foreach>
+        END,
+        time_end = CASE id
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index">
+            WHEN #{portSpeedHistoryBlank.id,jdbcType=BIGINT} THEN #{portSpeedHistoryBlank.timeEnd,jdbcType=TIMESTAMP}
+        </foreach>
+        END,
+        latest = CASE id
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index">
+            WHEN #{portSpeedHistoryBlank.id,jdbcType=BIGINT} THEN #{portSpeedHistoryBlank.latest,jdbcType=INTEGER}
+        </foreach>
+        END
+        WHERE id
+        IN
+        <foreach collection="portSpeedHistoryBlanks" item="portSpeedHistoryBlank" index="index" separator="," open="("
+                 close=")">
+            #{portSpeedHistoryBlank.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <select id="selectByPort" resultMap="BaseResultMap">
+        select time_start,
+               time_end,
+               latest
+        from port_speed_history_blank
+        where switch_port = #{portSpeedHistoryBlank.switchPort,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOld" resultMap="BaseResultMap">
+        SELECT port_speed_history_blank.id,
+               port_speed_history_blank.switch_port,
+               port_speed_history_blank.time_start,
+               port_speed_history_blank.time_end,
+               port_speed_history_blank.latest
+        FROM port_speed_history_blank
+        WHERE port_speed_history_blank.latest = 1
+    </select>
+
+</mapper>
+
