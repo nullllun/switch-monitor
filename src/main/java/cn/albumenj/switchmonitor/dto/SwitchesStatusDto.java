@@ -2,8 +2,6 @@ package cn.albumenj.switchmonitor.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.Date;
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SwitchesStatusDto {
     private String ip;

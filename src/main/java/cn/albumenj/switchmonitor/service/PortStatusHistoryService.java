@@ -1,7 +1,8 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortStatusHistory;
+
+import java.util.List;
 
 public interface PortStatusHistoryService{
 

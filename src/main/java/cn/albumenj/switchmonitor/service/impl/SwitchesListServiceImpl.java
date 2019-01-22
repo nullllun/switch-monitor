@@ -1,16 +1,17 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.dao.SwitchesListMapper;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SwitchesListServiceImpl implements SwitchesListService{
 
-    @Resource
+    @Autowired
     private SwitchesListMapper switchesListMapper;
 
     @Override

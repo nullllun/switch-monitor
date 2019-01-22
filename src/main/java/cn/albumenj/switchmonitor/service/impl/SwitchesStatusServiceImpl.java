@@ -1,28 +1,25 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import cn.albumenj.switchmonitor.bean.PortStatus;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
-import cn.albumenj.switchmonitor.bean.SwitchesReachable;
+import cn.albumenj.switchmonitor.bean.SwitchesStatus;
 import cn.albumenj.switchmonitor.constant.StatusConst;
-import cn.albumenj.switchmonitor.dto.*;
+import cn.albumenj.switchmonitor.dao.SwitchesStatusMapper;
+import cn.albumenj.switchmonitor.dto.BriefStatusDto;
+import cn.albumenj.switchmonitor.dto.SwitchesStatusDto;
 import cn.albumenj.switchmonitor.schedule.SwitchesBriefFetch;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
-import cn.albumenj.switchmonitor.bean.SwitchesStatus;
-import cn.albumenj.switchmonitor.dao.SwitchesStatusMapper;
 import cn.albumenj.switchmonitor.service.SwitchesStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SwitchesStatusServiceImpl implements SwitchesStatusService{
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
 
-    @Resource
+    @Autowired
     private SwitchesStatusMapper switchesStatusMapper;
 
     @Autowired

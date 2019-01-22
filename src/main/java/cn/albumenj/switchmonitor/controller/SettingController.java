@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.controller.web;
+package cn.albumenj.switchmonitor.controller;
 
 import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import org.springframework.beans.factory.annotation.Autowired;

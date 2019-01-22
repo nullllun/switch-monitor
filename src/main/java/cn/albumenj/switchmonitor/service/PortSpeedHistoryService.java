@@ -1,9 +1,9 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortSpeedHistory;
 import cn.albumenj.switchmonitor.dto.PortFlowDto;
-import cn.albumenj.switchmonitor.dto.PortFlowOriginDto;
+
+import java.util.List;
 
 public interface PortSpeedHistoryService{
 

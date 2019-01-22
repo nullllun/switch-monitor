@@ -1,7 +1,5 @@
 package cn.albumenj.switchmonitor.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.Date;
 
 public class PortFlowOriginDto {

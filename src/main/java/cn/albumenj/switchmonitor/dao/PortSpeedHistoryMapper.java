@@ -1,11 +1,11 @@
 package cn.albumenj.switchmonitor.dao;
 
+import cn.albumenj.switchmonitor.bean.PortSpeedHistory;
 import cn.albumenj.switchmonitor.dto.PortFlowOriginDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import cn.albumenj.switchmonitor.bean.PortSpeedHistory;
 
 @Mapper
 public interface PortSpeedHistoryMapper {
@@ -15,5 +15,5 @@ public interface PortSpeedHistoryMapper {
 
     int delete(@Param("portSpeedHistory") PortSpeedHistory portSpeedHistory);
 
-    List<PortFlowOriginDto> selectFlow(@Param("ip") String ip, @Param("name") String name);
+    List<PortFlowOriginDto> selectFlow(@Param("switchPort") String switchPort);
 }

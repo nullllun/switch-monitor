@@ -1,7 +1,5 @@
 package cn.albumenj.switchmonitor.bean;
 
-import org.springframework.objenesis.instantiator.perc.PercInstantiator;
-
 import java.util.Date;
 import java.util.UUID;
 

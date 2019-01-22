@@ -1,11 +1,10 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesStatus;
-import cn.albumenj.switchmonitor.constant.StatusConst;
 import cn.albumenj.switchmonitor.dto.BriefStatusDto;
 import cn.albumenj.switchmonitor.dto.SwitchesStatusDto;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SwitchesStatusService{
 

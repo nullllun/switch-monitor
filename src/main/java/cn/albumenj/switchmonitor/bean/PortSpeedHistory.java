@@ -7,6 +7,7 @@ public class PortSpeedHistory {
     private String id;
     private Integer switchId;
     private Integer portIndex;
+    private String switchPort;
     private Long inSpeed;
     private Long outSpeed;
     private Date timeStamp;
@@ -18,6 +19,14 @@ public class PortSpeedHistory {
         this.inSpeed = -2L;
         this.outSpeed = -2L;
         this.timeStamp = new Date();
+    }
+
+    public String getSwitchPort() {
+        return switchPort;
+    }
+
+    public void setSwitchPort(String switchPort) {
+        this.switchPort = switchPort;
     }
 
     public String getId() {

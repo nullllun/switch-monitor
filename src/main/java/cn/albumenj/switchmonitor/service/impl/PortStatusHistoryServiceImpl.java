@@ -1,17 +1,18 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import cn.albumenj.switchmonitor.util.DateUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortStatusHistory;
 import cn.albumenj.switchmonitor.dao.PortStatusHistoryMapper;
 import cn.albumenj.switchmonitor.service.PortStatusHistoryService;
+import cn.albumenj.switchmonitor.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PortStatusHistoryServiceImpl implements PortStatusHistoryService{
-    @Resource
+    @Autowired
     private PortStatusHistoryMapper portStatusHistoryMapper;
 
     @Value("${history.port-saveTime}")

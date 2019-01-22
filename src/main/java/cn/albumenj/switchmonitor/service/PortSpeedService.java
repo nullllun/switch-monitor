@@ -1,8 +1,8 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortSpeed;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface PortSpeedService{
 
@@ -15,4 +15,6 @@ public interface PortSpeedService{
     int updateList(List<PortSpeed> portSpeeds);
 
     List<PortSpeed> selectBySwitch(PortSpeed portSpeed);
+
+    List<PortSpeed> selectOld();
 }

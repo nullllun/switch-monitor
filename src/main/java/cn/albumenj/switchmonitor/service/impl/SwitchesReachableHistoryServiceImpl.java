@@ -1,21 +1,21 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import cn.albumenj.switchmonitor.bean.SwitchesStatusHistory;
-import cn.albumenj.switchmonitor.util.DateUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
 import cn.albumenj.switchmonitor.dao.SwitchesReachableHistoryMapper;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
+import cn.albumenj.switchmonitor.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHistoryService{
     @Value("${history.switch-reachable-saveTime}")
     Integer switchReachableSaveTime;
 
-    @Resource
+    @Autowired
     private SwitchesReachableHistoryMapper switchesReachableHistoryMapper;
 
     @Override

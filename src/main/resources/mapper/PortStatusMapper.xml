@@ -284,5 +284,14 @@
             switches_list.id ASC,
             port_status.port_id ASC
     </select>
+
+    <select id="fetchPort" resultType="string">
+        SELECT port_status.switch_port
+        FROM switches_list
+                 INNER JOIN port_status ON switches_list.id = port_status.switch_id
+        WHERE switches_list.ip = #{ip,jdbcType=VARCHAR}
+          AND port_status.`name` = #{port,jdbcType=VARCHAR}
+        LIMIT 1
+    </select>
 </mapper>
 

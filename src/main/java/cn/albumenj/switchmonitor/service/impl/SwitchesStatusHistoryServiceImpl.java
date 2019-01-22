@@ -5,10 +5,10 @@ import cn.albumenj.switchmonitor.dao.SwitchesStatusHistoryMapper;
 import cn.albumenj.switchmonitor.dto.DeviceHistoryDto;
 import cn.albumenj.switchmonitor.service.SwitchesStatusHistoryService;
 import cn.albumenj.switchmonitor.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SwitchesStatusHistoryServiceImpl implements SwitchesStatusHistorySe
     @Value("${history.switch-saveTime}")
     Integer switchSaveTime;
 
-    @Resource
+    @Autowired
     private SwitchesStatusHistoryMapper switchesStatusHistoryMapper;
 
     @Override

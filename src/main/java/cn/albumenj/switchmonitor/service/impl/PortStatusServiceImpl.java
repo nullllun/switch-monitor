@@ -1,25 +1,22 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import cn.albumenj.switchmonitor.bean.PortSpeed;
+import cn.albumenj.switchmonitor.bean.PortStatus;
+import cn.albumenj.switchmonitor.dao.PortStatusMapper;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
 import cn.albumenj.switchmonitor.dto.VlanDto;
-import com.alibaba.druid.sql.visitor.functions.Right;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
+import cn.albumenj.switchmonitor.service.PortStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import java.util.LinkedList;
 import java.util.List;
-import cn.albumenj.switchmonitor.bean.PortStatus;
-import cn.albumenj.switchmonitor.dao.PortStatusMapper;
-import cn.albumenj.switchmonitor.service.PortStatusService;
 
 @Service
 public class PortStatusServiceImpl implements PortStatusService{
     private static List<PortStatus> portStatusRest = new LinkedList<>();
 
-    @Resource
+    @Autowired
     private PortStatusMapper portStatusMapper;
 
     @Override
@@ -128,5 +125,10 @@ public class PortStatusServiceImpl implements PortStatusService{
             portStatus.setPvlan(Integer.parseInt(ips[2]));
             portStatusMapper.updateVlan(portStatus);
         }
+    }
+
+    @Override
+    public String fetchPort(String ip, String port) {
+        return portStatusMapper.fetchPort(ip, port);
     }
 }

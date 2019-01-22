@@ -1,19 +1,19 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortSpeed;
 import cn.albumenj.switchmonitor.dao.PortSpeedMapper;
 import cn.albumenj.switchmonitor.service.PortSpeedService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class PortSpeedServiceImpl implements PortSpeedService{
     private static List<PortSpeed> portSpeedRest = new LinkedList<>();
 
-    @Resource
+    @Autowired
     private PortSpeedMapper portSpeedMapper;
 
     @Override
@@ -51,5 +51,10 @@ public class PortSpeedServiceImpl implements PortSpeedService{
     @Override
     public List<PortSpeed> selectBySwitch(PortSpeed portSpeed) {
         return portSpeedMapper.selectBySwitch(portSpeed);
+    }
+
+    @Override
+    public List<PortSpeed> selectOld() {
+        return portSpeedMapper.selectOld();
     }
 }

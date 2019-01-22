@@ -85,7 +85,8 @@
         </set>
         WHERE switch_port = #{portSpeed.switchPort,jdbcType=VARCHAR}
 
-    </update >
+    </update>
+
     <update id="updateList">
         UPDATE port_speed
         SET
@@ -135,6 +136,14 @@
                time_stamp
         FROM port_speed
         WHERE switch_id = #{portSpeed.switchId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectOld" resultMap="BaseResultMap">
+        select switch_port,
+               in_speed,
+               out_speed,
+               time_stamp
+        from port_speed
     </select>
 </mapper>
 

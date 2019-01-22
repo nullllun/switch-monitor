@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class SwitchesUpdate {
@@ -28,6 +31,8 @@ public class SwitchesUpdate {
         SwitchUpdate.getSwitchesStatusHistories().clear();
         SwitchUpdate.getSwitchesStatuses().clear();
         switchUpdate.updatePortStatusMap();
+        switchUpdate.updatePortSpeedMap();
+        switchUpdate.updateSpeedBlankMap();
 
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         ExecutorService executorService = new ThreadPoolExecutor(1000,1000,5,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(),new CustomThreadFactory());

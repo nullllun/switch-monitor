@@ -1,15 +1,11 @@
-package cn.albumenj.switchmonitor.controller.web;
+package cn.albumenj.switchmonitor.controller;
 
-import cn.albumenj.switchmonitor.bean.SwitchesList;
-import cn.albumenj.switchmonitor.bean.SwitchesStatus;
 import cn.albumenj.switchmonitor.dto.SwitchesStatusDto;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;

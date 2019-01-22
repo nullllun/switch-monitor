@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.controller.miniprogram;
+package cn.albumenj.switchmonitor.controller;
 
 import cn.albumenj.switchmonitor.dto.DeviceHistoryDto;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class MpDeviceController {
+public class DeviceController {
     @Autowired
     PortStatusService portStatusService;
     @Autowired
     SwitchesStatusHistoryService statusHistoryService;
 
-    @RequestMapping("/mpapi/devices/{ip}")
+    @RequestMapping("/api/devices/{ip}")
     public DevicePortDto device(@PathVariable("ip") String ip){
         return portStatusService.selectByIP(ip);
     }
 
-    @RequestMapping("/mpapi/history/{ip}")
+    @RequestMapping("/api/history/{ip}")
     public List<DeviceHistoryDto> history(@PathVariable("ip") String ip){
         return statusHistoryService.selectDevice(ip);
     }

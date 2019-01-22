@@ -1,10 +1,10 @@
 package cn.albumenj.switchmonitor.dao;
 
+import cn.albumenj.switchmonitor.bean.SwitchesStatusHistory;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import cn.albumenj.switchmonitor.bean.SwitchesStatusHistory;
 
 @Mapper
 public interface SwitchesStatusHistoryMapper {

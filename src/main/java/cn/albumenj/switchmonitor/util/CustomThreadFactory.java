@@ -1,9 +1,5 @@
 package cn.albumenj.switchmonitor.util;
 
-import javax.annotation.Priority;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
 
 public class CustomThreadFactory implements ThreadFactory {

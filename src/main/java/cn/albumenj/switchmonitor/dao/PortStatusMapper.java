@@ -1,12 +1,12 @@
 package cn.albumenj.switchmonitor.dao;
 
+import cn.albumenj.switchmonitor.bean.PortStatus;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
 import cn.albumenj.switchmonitor.dto.VlanDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import cn.albumenj.switchmonitor.bean.PortStatus;
 
 @Mapper
 public interface PortStatusMapper {
@@ -32,4 +32,5 @@ public interface PortStatusMapper {
 
     List<VlanDto> selectVlanOrigin();
 
+    String fetchPort(@Param("ip") String ip, @Param("port") String port);
 }

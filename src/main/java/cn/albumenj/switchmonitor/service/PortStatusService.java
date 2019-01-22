@@ -1,10 +1,9 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.PortStatus;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
-import cn.albumenj.switchmonitor.dto.PortStatusDto;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface PortStatusService{
 
@@ -25,4 +24,6 @@ public interface PortStatusService{
     List<PortStatus> selectOld();
 
     void updateVlan();
+
+    String fetchPort(String ip, String port);
 }

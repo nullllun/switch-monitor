@@ -1,23 +1,21 @@
 package cn.albumenj.switchmonitor.service.impl;
 
-import cn.albumenj.switchmonitor.bean.SwitchesStatus;
-import cn.albumenj.switchmonitor.dto.BriefStatusDto;
-import cn.albumenj.switchmonitor.schedule.SwitchesBriefFetch;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesReachable;
 import cn.albumenj.switchmonitor.dao.SwitchesReachableMapper;
+import cn.albumenj.switchmonitor.dto.BriefStatusDto;
+import cn.albumenj.switchmonitor.schedule.SwitchesBriefFetch;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SwitchesReachableServiceImpl implements SwitchesReachableService{
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
 
-    @Resource
+    @Autowired
     private SwitchesReachableMapper switchesReachableMapper;
 
     @Override

@@ -1,9 +1,8 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
-import cn.albumenj.switchmonitor.bean.SwitchesStatusHistory;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SwitchesReachableHistoryService{
 

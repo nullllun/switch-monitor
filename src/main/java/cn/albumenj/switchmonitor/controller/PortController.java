@@ -1,7 +1,6 @@
-package cn.albumenj.switchmonitor.controller.web;
+package cn.albumenj.switchmonitor.controller;
 
 import cn.albumenj.switchmonitor.dto.PortFlowDto;
-import cn.albumenj.switchmonitor.dto.PortFlowOriginDto;
 import cn.albumenj.switchmonitor.service.PortSpeedHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,7 +1,5 @@
 package cn.albumenj.switchmonitor.dto;
 
-import java.sql.Date;
-
 public class PortFlowDto {
     private Long timestamp;
     private Integer in;

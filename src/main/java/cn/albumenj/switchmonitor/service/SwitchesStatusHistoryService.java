@@ -1,9 +1,9 @@
 package cn.albumenj.switchmonitor.service;
 
-import java.util.List;
 import cn.albumenj.switchmonitor.bean.SwitchesStatusHistory;
 import cn.albumenj.switchmonitor.dto.DeviceHistoryDto;
-import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SwitchesStatusHistoryService{
 

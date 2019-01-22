@@ -12,13 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class MpSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomLoginHandler customLoginHandler;
     @Autowired
@@ -39,20 +37,21 @@ public class MpSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+       /* http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/login.html").permitAll()
                 .antMatchers("/mpapi/login**").permitAll()
-                .antMatchers("/mpapi/**").authenticated()
+                .antMatchers("/api/**").authenticated()
                 .and()
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(), redisUtil, jwtUtil))
                 .exceptionHandling()
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .authenticationEntryPoint(customHttp401AuthenticationEntryPoint);
 
-        http.addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);*/
         /*http
                 .authorizeRequests()
                 .antMatchers("/druid/**").permitAll()
@@ -69,7 +68,9 @@ public class MpSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .csrf().disable();*/
-
+        http
+                .authorizeRequests()
+                .antMatchers("/**").permitAll();
     }
 
     @Override
@@ -90,7 +91,7 @@ public class MpSecurityConfig extends WebSecurityConfigurerAdapter {
         CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
         filter.setAuthenticationSuccessHandler(customLoginHandler);
         filter.setAuthenticationFailureHandler(customLoginHandler);
-        filter.setFilterProcessesUrl("/mpapi/login");
+        filter.setFilterProcessesUrl("/api/login");
 
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;

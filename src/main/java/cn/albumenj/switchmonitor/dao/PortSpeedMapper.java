@@ -1,10 +1,10 @@
 package cn.albumenj.switchmonitor.dao;
 
+import cn.albumenj.switchmonitor.bean.PortSpeed;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import cn.albumenj.switchmonitor.bean.PortSpeed;
 
 @Mapper
 public interface PortSpeedMapper {
@@ -17,4 +17,6 @@ public interface PortSpeedMapper {
     int updateList(@Param("portSpeeds") List<PortSpeed> portSpeed);
 
     List<PortSpeed> selectBySwitch(@Param("portSpeed") PortSpeed portSpeed);
+
+    List<PortSpeed> selectOld();
 }
