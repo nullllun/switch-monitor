@@ -52,6 +52,9 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
 
     @Override
     public int insertList(List<PortSpeedHistory> portSpeedHistorys) {
+        if (portSpeedHistorys.size() == 0) {
+            return 1;
+        }
         int ret = portSpeedHistoryMapper.insertList(portSpeedHistorys);
         if (ret != portSpeedHistorys.size()) {
             ret = 0;

@@ -20,7 +20,7 @@ import java.util.Date;
  */
 @Component
 public class JwtUtil {
-    @Value("${security.jwtexp}")
+    @Value("${security.jwtDefaultExp}")
     Integer expTime;
 
     private RSAPublicKey publicKey;
@@ -34,12 +34,16 @@ public class JwtUtil {
     }
 
     public String create(String userName) {
+        return create(userName, expTime);
+    }
+
+    public String create(String userName, Integer expTime) {
         String token = null;
         try {
             token = JWT.create()
                     .withIssuer("Albumen")
                     .withSubject(userName)
-                    .withExpiresAt(new Date(System.currentTimeMillis() + expTime))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + Long.valueOf(expTime) * 1000L))
                     .sign(algorithmRS);
         } catch (JWTCreationException exception) {
             return null;
@@ -48,12 +52,16 @@ public class JwtUtil {
     }
 
     public String create(String userName, String[] claim) {
+        return create(userName, claim, expTime);
+    }
+
+    public String create(String userName, String[] claim, Integer expTime) {
         String token = null;
         try {
             token = JWT.create()
                     .withIssuer("Albumen")
                     .withSubject(userName)
-                    .withExpiresAt(new Date(System.currentTimeMillis() + expTime))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + Long.valueOf(expTime) * 1000L))
                     .withArrayClaim("Claim", claim)
                     .sign(algorithmRS);
         } catch (JWTCreationException exception) {
@@ -95,6 +103,18 @@ public class JwtUtil {
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getClaim("Claim").asArray(String.class);
+        } catch (JWTVerificationException exception) {
+            return null;
+        }
+    }
+
+    public String getName(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(algorithmRS)
+                    .withIssuer("Albumen")
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt.getSubject();
         } catch (JWTVerificationException exception) {
             return null;
         }

@@ -8,6 +8,7 @@ import cn.albumenj.switchmonitor.util.PageCodeUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,8 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
     RedisUtil redisUtil;
     @Autowired
     JwtUtil jwtUtil;
+    @Value("${security.jwtLoginExp}")
+    Integer expTime;
 
     /**
      * Login Success
@@ -62,8 +65,8 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
             claim.add(uuid);
             claim.addAll(Arrays.asList(permission));
 
-            token = jwtUtil.create(authentication.getName(), claim.stream().toArray(String[]::new));
-            redisUtil.set(uuid, token);
+            token = jwtUtil.create(authentication.getName(), claim.stream().toArray(String[]::new), expTime);
+            redisUtil.set(uuid, token, expTime);
             // 登录成功后，返回token到Body里面
 
             response.setContentType("application/json; charset=utf-8");

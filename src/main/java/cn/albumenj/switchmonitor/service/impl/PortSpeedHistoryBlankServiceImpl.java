@@ -30,6 +30,9 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
 
     @Override
     public int insertList(List<PortSpeedHistoryBlank> portSpeedHistoryBlanks) {
+        if (portSpeedHistoryBlanks.size() == 0) {
+            return 1;
+        }
         return portSpeedHistoryBlankMapper.insertList(portSpeedHistoryBlanks);
     }
 
@@ -40,6 +43,9 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
 
     @Override
     public int updateList(List<PortSpeedHistoryBlank> portSpeedHistoryBlanks) {
+        if (portSpeedHistoryBlanks.size() == 0) {
+            return 1;
+        }
         int ret = portSpeedHistoryBlankMapper.updateList(portSpeedHistoryBlanks);
         if (ret != portSpeedHistoryBlanks.size()) {
             ret = 0;

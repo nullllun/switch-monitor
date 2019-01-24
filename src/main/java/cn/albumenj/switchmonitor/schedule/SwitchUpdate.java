@@ -139,21 +139,21 @@ public class SwitchUpdate {
 
             portStatuses.add(portStatus);
         }
-        if (portSpeeds.size() > 0) {
-            ret = ret && portSpeedService.updateList(portSpeeds) > 0;
-        }
-        if (portSpeedHistories.size() > 0) {
-            ret = ret && portSpeedHistoryService.insertList(portSpeedHistories) > 0;
-        }
-        if (portStatuses.size() > 0) {
-            ret = ret && portStatusService.updateList(portStatuses) > 0;
-        }
-        if (portSpeedBlankUpdate.size() > 0) {
-            ret = ret && portSpeedHistoryBlankService.updateList(portSpeedBlankUpdate) > 0;
-        }
-        if (portSpeedBlankInsert.size() > 0) {
-            ret = ret && portSpeedHistoryBlankService.insertList(portSpeedBlankInsert) > 0;
-        }
+        ret = ret && portSpeedService.updateList(portSpeeds) > 0;
+        ret = ret && portSpeedHistoryService.insertList(portSpeedHistories) > 0;
+        ret = ret && portStatusService.updateList(portStatuses) > 0;
+        ret = ret && portSpeedHistoryBlankService.updateList(portSpeedBlankUpdate) > 0;
+        ret = ret && portSpeedHistoryBlankService.insertList(portSpeedBlankInsert) > 0;
+
+        portName = null;
+        portIndex = null;
+        portStatusG = null;
+        portIn = null;
+        portOut = null;
+        portUptime = null;
+        portDesc = null;
+        portSpeed = null;
+
         return ret;
     }
 

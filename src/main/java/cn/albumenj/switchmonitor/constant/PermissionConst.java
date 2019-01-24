@@ -14,9 +14,9 @@ public class PermissionConst {
     public final static Integer VIEWER = 3;
     public final static Map<Integer, String> PERMISSION = new HashMap<Integer, String>() {
         {
-            put(1, "ADMINISTRATOR");
-            put(2, "STAFF");
-            put(3, "VIEWER");
+            put(1, "ROLE_ADMINISTRATOR");
+            put(2, "ROLE_STAFF");
+            put(3, "ROLE_VIEWER");
         }
     };
 }

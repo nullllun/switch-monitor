@@ -46,6 +46,9 @@ public class PortSpeedServiceImpl implements PortSpeedService{
 
     @Override
     public int updateList(List<PortSpeed> portSpeeds) {
+        if (portSpeeds.size() == 0) {
+            return 1;
+        }
         int row = portSpeedMapper.updateList(portSpeeds);
         if (row != portSpeeds.size()) {
             for (PortSpeed portSpeed : portSpeeds) {

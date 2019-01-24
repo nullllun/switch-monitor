@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * 配置Spring Security
@@ -37,18 +39,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/druid/**");
+        web.ignoring().antMatchers("/druid/**").antMatchers("/auth/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-       /* http
+        http
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login.html").permitAll()
-                .antMatchers("/mpapi/login**").permitAll()
+                .antMatchers("/auth**").permitAll()
+                .antMatchers("/api/wxcode2session**").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .and()
                 .addFilter(new CustomAuthenticationFilter(authenticationManager(), redisUtil, jwtUtil))
@@ -56,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .authenticationEntryPoint(customHttp401AuthenticationEntryPoint);
 
-        http.addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);*/
+        http.addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         /*http
                 .authorizeRequests()
                 .antMatchers("/druid/**").permitAll()
@@ -73,9 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .csrf().disable();*/
-        http
+        /*http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll();*/
     }
 
     @Override

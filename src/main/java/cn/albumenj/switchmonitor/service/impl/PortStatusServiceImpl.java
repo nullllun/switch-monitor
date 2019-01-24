@@ -38,6 +38,9 @@ public class PortStatusServiceImpl implements PortStatusService{
 
     @Override
     public int updateList(List<PortStatus> portStatuses) {
+        if (portStatuses.size() == 0) {
+            return 1;
+        }
         int row = portStatusMapper.updateList(portStatuses);
         if (row != portStatuses.size()) {
             for (PortStatus portStatus : portStatuses) {

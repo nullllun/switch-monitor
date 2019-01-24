@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
     @Autowired
     StringRedisTemplate redisTemplate;
-    @Value("${security.jwtexp}")
+    @Value("${security.jwtDefaultExp}")
     Integer expTime;
 
     /**
@@ -38,8 +38,19 @@ public class RedisUtil {
      * @return true：成功；false：失败
      */
     public boolean set(String key, String value) throws Exception {
+        return set(key, value, expTime);
+    }
+
+    /**
+     * String类型缓存保存
+     *
+     * @param key   键
+     * @param value 值
+     * @return true：成功；false：失败
+     */
+    public boolean set(String key, String value, Integer expTime) throws Exception {
         if (StringUtils.isNotEmpty(key) && null != value) {
-            redisTemplate.opsForValue().set(key, value, expTime, TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(key, value, expTime, TimeUnit.SECONDS);
             return true;
         } else {
             return false;
