@@ -22,6 +22,24 @@ public class DevicePortDto {
     private List<String> ifSpeed;
     private List<String> ifStatus;
     private List<String> ifUptime;
+    private List<Integer> cvlan;
+    private List<Integer> pvlan;
+
+    public List<Integer> getCvlan() {
+        return cvlan;
+    }
+
+    public void setCvlan(List<Integer> cvlan) {
+        this.cvlan = cvlan;
+    }
+
+    public List<Integer> getPvlan() {
+        return pvlan;
+    }
+
+    public void setPvlan(List<Integer> pvlan) {
+        this.pvlan = pvlan;
+    }
 
     public List<String> getIfDescr() {
         return ifDescr;

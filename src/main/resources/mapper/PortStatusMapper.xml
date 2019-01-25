@@ -26,6 +26,8 @@
         <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
         <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
         <result column="speed" property="speed" jdbcType="INTEGER"/>
+        <result column="cvlan" property="cvlan" jdbcType="INTEGER"/>
+        <result column="pvlan" property="pvlan" jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="VlanResultMap" type="cn.albumenj.switchmonitor.dto.VlanDto">
@@ -218,6 +220,8 @@
     <select id="selectBySwitch" resultMap="BaseResultMap">
         SELECT id,
                switch_id,
+               port_id,
+               switch_port,
                port_index,
                name,
                up_time,
@@ -258,7 +262,9 @@
             port_status.`status`,
             port_status.up_time,
             port_status.speed,
-            port_status.port_index
+            port_status.port_index,
+            port_status.cvlan,
+            port_status.pvlan
         FROM
             switches_list
                 INNER JOIN port_status ON switches_list.id = port_status.switch_id

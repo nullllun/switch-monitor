@@ -16,6 +16,24 @@ public class PortStatusDto {
     private String name;
     private String upTime;
     private String status;
+    private Integer cvlan;
+    private Integer pvlan;
+
+    public Integer getCvlan() {
+        return cvlan;
+    }
+
+    public void setCvlan(Integer cvlan) {
+        this.cvlan = cvlan;
+    }
+
+    public Integer getPvlan() {
+        return pvlan;
+    }
+
+    public void setPvlan(Integer pvlan) {
+        this.pvlan = pvlan;
+    }
 
     public String getPortIndex() {
         return portIndex;

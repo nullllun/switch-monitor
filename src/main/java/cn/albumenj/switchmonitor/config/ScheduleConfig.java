@@ -145,8 +145,8 @@ public class ScheduleConfig {
         factoryBean.setStartupDelay(1);
 
         // 注册触发器
-        //factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger, checkReachableJobTrigger, briefFetchJobTrigger);
-        factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);
+        factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger, checkReachableJobTrigger, briefFetchJobTrigger);
+        //factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);
         return factoryBean;
     }
 }
