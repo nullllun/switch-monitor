@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * 设备端口信息
+ * 用于设备报警
  *
  * @author Albumen
  */
@@ -15,6 +16,24 @@ public class SwitchesPortDetailDto {
     private Long outSpeed;
     private Integer speedMax;
     private Date speedTime;
+    private Integer cvlan;
+    private Integer pvlan;
+
+    public Integer getCvlan() {
+        return cvlan;
+    }
+
+    public void setCvlan(Integer cvlan) {
+        this.cvlan = cvlan;
+    }
+
+    public Integer getPvlan() {
+        return pvlan;
+    }
+
+    public void setPvlan(Integer pvlan) {
+        this.pvlan = pvlan;
+    }
 
     public Integer getSwitchId() {
         return switchId;

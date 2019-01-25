@@ -37,6 +37,8 @@
             <result column="port_name" property="name" jdbcType="VARCHAR"/>
             <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
             <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
+            <result column="cvlan" property="cvlan" jdbcType="INTEGER"/>
+            <result column="pvlan" property="pvlan" jdbcType="INTEGER"/>
             <result column="speed_max" property="speedMax" jdbcType="INTEGER"/>
             <result column="speed_time" property="speedTime" jdbcType="TIMESTAMP"/>
         </collection>
@@ -275,16 +277,18 @@
             switches_status.memory_used,
             switches_status.temp,
             switches_status.time_stamp,
-            list.ip AS ip_origin,
+            list.ip           AS ip_origin,
             list.model,
             reach.reachable,
             reach.down_time,
             speed.in_speed,
             speed.out_speed,
-            speed.time_stamp AS speed_time,
+            speed.time_stamp  AS speed_time,
             speed.port_index,
             port_status.speed AS speed_max,
-            port_status.name AS port_name
+            port_status.name  AS port_name,
+            port_status.cvlan,
+            port_status.pvlan
         FROM
             switches_status
                 INNER JOIN switches_list AS list ON switches_status.switch_id = list.id

@@ -75,6 +75,8 @@ public class SwitchesBriefFetch {
                     WarningDto warningDto = new WarningDto("if_in",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
                     warningDto.setPortSpeed(switchesPortDetailDto.getInSpeed() / 131072 + "/" + switchesPortDetailDto.getSpeedMax());
                     warningDto.setPortName(switchesPortDetailDto.getName());
+                    warningDto.setCvlan(switchesPortDetailDto.getCvlan());
+                    warningDto.setPvlan(switchesPortDetailDto.getPvlan());
                     warning.add(warningDto);
                 }
                 if (switchesPortDetailDto.getOutSpeed() != null
@@ -85,6 +87,8 @@ public class SwitchesBriefFetch {
                     WarningDto warningDto = new WarningDto("if_out",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
                     warningDto.setPortSpeed(switchesPortDetailDto.getOutSpeed() / 131072 + "/" + switchesPortDetailDto.getSpeedMax());
                     warningDto.setPortName(switchesPortDetailDto.getName());
+                    warningDto.setCvlan(switchesPortDetailDto.getCvlan());
+                    warningDto.setPvlan(switchesPortDetailDto.getPvlan());
                     warning.add(warningDto);
                 }
             }

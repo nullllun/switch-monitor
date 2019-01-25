@@ -13,9 +13,7 @@ import cn.albumenj.switchmonitor.util.SnmpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -145,15 +143,21 @@ public class PortStatusServiceImpl implements PortStatusService {
                 portStatus.setSwitchId(s.getId());
                 List<PortStatus> portStatusList = portStatusMapper.selectBySwitch(portStatus);
                 Map<Integer, String> pvid = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getPVID());
+                Map<Integer, String> pvidName = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getVlanName());
+                Map<String, String> vlan = new LinkedHashMap<>();
+                Set<Map.Entry<Integer, String>> entries = pvid.entrySet();
+                for (Map.Entry<Integer, String> entry : entries) {
+                    vlan.put(stringEncoding(pvidName.get(entry.getKey())), entry.getValue());
+                }
 
                 for (PortStatus port : portStatusList) {
                     String[] ips = s.getIp().split("\\.");
 
-                    String cvlan = pvid.get(port.getPortId());
+                    String cvlan = vlan.get(port.getName());
                     if (cvlan == null) {
                         port.setCvlan(-1);
                     } else {
-                        port.setCvlan(Integer.parseInt(pvid.get(port.getPortId())));
+                        port.setCvlan(Integer.parseInt(cvlan));
                     }
                     port.setPvlan(Integer.parseInt(ips[2]));
                     portStatusMapper.updateVlan(port);
@@ -171,5 +175,31 @@ public class PortStatusServiceImpl implements PortStatusService {
     @Override
     public String fetchPort(String ip, String port) {
         return portStatusMapper.fetchPort(ip, port);
+    }
+
+    /**
+     * S2700 VLAN对应端口名字获取结果转换
+     * "45:74:68:65:72:6e:65:74:30:2f:30:2f:31:00"
+     *
+     * @param str
+     * @return
+     */
+    private String stringEncoding(String str) {
+        if (str == null) {
+            return str;
+        }
+        String[] strings = str.split(":");
+        if (strings.length > 1) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String s : strings) {
+                if (s.equals("00")) {
+                    continue;
+                }
+                stringBuilder.append((char) Integer.parseInt(s, 16));
+            }
+            return stringBuilder.toString();
+        } else {
+            return str;
+        }
     }
 }

@@ -72,9 +72,10 @@ public class SwitchUpdate {
         switchesStatus.setCpuLoad(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getCpuLoad())));
         switchesStatus.setMemoryUsed(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getMemUsed())));
         switchesStatus.setTemp(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getTEMP())));
-        switchesStatus.setTimeStamp(new Date());
 
         submitPort(s, oidList);
+
+        switchesStatus.setTimeStamp(new Date());
 
         BeanUtils.copyProperties(switchesStatus, switchesStatusHistory);
         synchronized (switchesStatusHistories) {
@@ -114,7 +115,10 @@ public class SwitchUpdate {
         List<PortSpeedHistoryBlank> portSpeedBlankInsert = new LinkedList<>();
 
         for (Map.Entry<Integer, String> entry : portNameEntries) {
-            if (portIndex.get(entry.getKey()) == null) {
+            if (portIndex.get(entry.getKey()) == null ||
+                    (Integer.parseInt(portIndex.get(entry.getKey())) > 1000
+                            &&
+                            portIndex.get(entry.getKey()).equals(entry.getKey()))) {
                 continue;
             }
             PortStatus portStatus = new PortStatus();
@@ -130,10 +134,6 @@ public class SwitchUpdate {
             portStatus.setStatus((Integer) getData(Integer.class, portStatusG.get(entry.getKey())));
             portStatus.setTimeStamp(new Date());
             portStatus.setSwitchPort("s" + portStatus.getSwitchId() + "p" + portStatus.getPortIndex());
-            String[] portId = portStatus.getName().split("Ethernet[0-9]/[0-9]/");
-            if (portId.length == 2 && portStatus.getName().split("bitEthernet[0-9]/[0-9]/").length != 2) {
-                portStatus.setPortId(Integer.parseInt(portId[1]));
-            }
 
             submitPortSpeed(portSpeeds, portSpeedHistories, portStatus, portSpeedBlankUpdate, portSpeedBlankInsert);
 

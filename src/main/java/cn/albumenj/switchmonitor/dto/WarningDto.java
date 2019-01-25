@@ -18,6 +18,8 @@ public class WarningDto {
     private String temp;
     private String portName;
     private String portSpeed;
+    private Integer cvlan;
+    private Integer pvlan;
 
     public WarningDto() {
     }
@@ -26,6 +28,22 @@ public class WarningDto {
         this.warning = warning;
         this.ip = ip;
         this.model = model;
+    }
+
+    public Integer getCvlan() {
+        return cvlan;
+    }
+
+    public void setCvlan(Integer cvlan) {
+        this.cvlan = cvlan;
+    }
+
+    public Integer getPvlan() {
+        return pvlan;
+    }
+
+    public void setPvlan(Integer pvlan) {
+        this.pvlan = pvlan;
     }
 
     public String getWarning() {
