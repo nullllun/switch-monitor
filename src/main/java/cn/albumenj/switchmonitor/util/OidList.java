@@ -17,7 +17,7 @@ public class OidList {
      * 接口名字 1.3.6.1.2.1.31.1.1.1.1
      */
     private static final String IF_NAME = "1.3.6.1.2.1.2.2.1.2";
-    private static final String IF_INDEX = "1.3.6.1.2.1.2.2.1.1";
+    private static final Map<String, String> IF_INDEX;
     /**
      * 接口状态 
      * up(1),down(2),testing(3),unknown(4),dormant(5),notPresent(6),lowerLayerDown(7)
@@ -63,6 +63,8 @@ public class OidList {
     private static final Map<String,String> CPU_LOAD;
     private static final Map<String,String> MEM_USED;
     private static final Map<String,String> TEMP;
+    private static final Map<String, String> PVID;
+    private static final Map<String, String> REBOOT;
 
     private String model;
 
@@ -70,27 +72,51 @@ public class OidList {
         CPU_LOAD = new HashMap<>();
         MEM_USED = new HashMap<>();
         TEMP = new HashMap<>();
+        PVID = new HashMap<>();
+        REBOOT = new HashMap<>();
+        IF_INDEX = new HashMap<>();
 
         CPU_LOAD.put("S2700","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5");
         CPU_LOAD.put("S5720","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5");
         CPU_LOAD.put("S3050","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5");
         CPU_LOAD.put("S12708","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.5");
-        CPU_LOAD.put("E152","1.3.6.1.4.1.25506.2.6.1.1.1.1.6");
+        CPU_LOAD.put("E152", "1.3.6.1.4.1.2011.10.2.6.1.1.1.1.6");
         CPU_LOAD.put("E152B","1.3.6.1.4.1.25506.2.6.1.1.1.1.6");
 
         MEM_USED.put("S2700","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.7");
         MEM_USED.put("S5720", "1.3.6.1.4.1.2011.5.25.31.1.1.1.1.7");
         MEM_USED.put("S3050","1.3.6.1.4.1.4881.1.1.10.2.35.1.1.1.3.1");
         MEM_USED.put("S12708","1.3.6.1.4.1.4881.1.1.10.2.35.1.1.1.3.1");
-        MEM_USED.put("E152","1.3.6.1.4.1.25506.2.6.1.1.1.1.8");
+        MEM_USED.put("E152", "1.3.6.1.4.1.2011.10.2.6.1.1.1.1.8");
         MEM_USED.put("E152B","1.3.6.1.4.1.25506.2.6.1.1.1.1.8");
 
         TEMP.put("S2700","1.3.6.1.4.1.2011.5.25.31.1.1.1.1.11");
         TEMP.put("S5720", "1.3.6.1.4.1.2011.5.25.31.1.1.1.1.11");
         TEMP.put("S3050","1.3.6.1.4.1.4881.1.1.10.2.1.1.16");
         TEMP.put("S12708","1.3.6.1.4.1.4881.1.1.10.2.1.1.16");
-        TEMP.put("E152","1.3.6.1.4.1.25506.2.6.1.1.1.1.12");
+        TEMP.put("E152", "1.3.6.1.4.1.2011.10.2.6.1.1.1.1.12");
         TEMP.put("E152B","1.3.6.1.4.1.25506.2.6.1.1.1.1.12");
+
+        IF_INDEX.put("S2700", "1.3.6.1.4.1.2011.5.25.42.1.1.1.3.1.1");
+        IF_INDEX.put("S5720", "1.3.6.1.2.1.2.2.1.1");
+        IF_INDEX.put("S3050", "1.3.6.1.2.1.2.2.1.1");
+        IF_INDEX.put("S12708", "1.3.6.1.2.1.2.2.1.1");
+        IF_INDEX.put("E152", "1.3.6.1.2.1.2.2.1.1");
+        IF_INDEX.put("E152B", "1.3.6.1.2.1.2.2.1.1");
+
+        PVID.put("S2700", "1.3.6.1.4.1.2011.5.25.42.1.1.1.3.1.4");
+        PVID.put("S5720", "1.3.6.1.4.1.2011.5.25.42.1.1.1.3.1.3");
+        PVID.put("S3050", "1.3.6.1.4.1.2011.5.25.42.1.1.1.3.1.4");
+        PVID.put("S12708", "1.3.6.1.4.1.4881.1.1.10.2.1.1.16");
+        PVID.put("E152", "1.3.6.1.2.1.17.7.1.4.5.1.1");
+        PVID.put("E152B", "1.3.6.1.2.1.17.7.1.4.5.1.1");
+
+        REBOOT.put("S2700", "1.3.6.1.4.1.2011.5.25.19.1.3.2");
+        REBOOT.put("S5720", "1.3.6.1.4.1.2011.5.25.31.1.1.1.1.11");
+        REBOOT.put("S3050", "1.3.6.1.4.1.4881.1.1.10.2.1.1.16");
+        REBOOT.put("S12708", "1.3.6.1.4.1.4881.1.1.10.2.1.1.16");
+        REBOOT.put("E152", "1.3.6.1.4.1.2011.10.2.3.1.3.1");
+        REBOOT.put("E152B", "1.3.6.1.4.1.25506.2.3.1.3.1");
     }
 
     public OidList(String model) {
@@ -106,7 +132,7 @@ public class OidList {
     }
 
     public String getIfIndex() {
-        return IF_INDEX;
+        return IF_INDEX.get(model);
     }
 
     public String getIfStatus() {
@@ -159,5 +185,13 @@ public class OidList {
 
     public String getTEMP() {
         return TEMP.get(model);
+    }
+
+    public String getPVID() {
+        return PVID.get(model);
+    }
+
+    public String getREBOOT() {
+        return REBOOT.get(model);
     }
 }
