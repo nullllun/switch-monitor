@@ -40,7 +40,7 @@ public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHis
     @Override
     public int delete() {
         SwitchesReachableHistory switchesReachableHistory = new SwitchesReachableHistory();
-        switchesReachableHistory.setTimeStamp(DateUtil.beforeNow(switchReachableSaveTime));
+        switchesReachableHistory.setTimeStamp(DateUtil.beforeNowDate(switchReachableSaveTime));
         return switchesReachableHistoryMapper.delete(switchesReachableHistory);
     }
 

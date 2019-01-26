@@ -30,8 +30,7 @@ public class SwitchUpdate {
     SwitchesStatusHistoryService switchesStatusHistoryService;
     @Autowired
     PortSpeedService portSpeedService;
-    @Autowired
-    SnmpUtil snmpUtil;
+    private SnmpUtil snmpUtil;
     @Autowired
     MongoTemplate mongoTemplate;
     @Autowired
@@ -323,5 +322,9 @@ public class SwitchUpdate {
         for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlankOld) {
             portSpeedHistoryBlankConcurrentHashMap.put(portSpeedHistoryBlank.getSwitchPort(), portSpeedHistoryBlank);
         }
+    }
+
+    public void setSnmpUtil(SnmpUtil snmpUtil) {
+        this.snmpUtil = snmpUtil;
     }
 }

@@ -6,6 +6,7 @@ import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
+import cn.albumenj.switchmonitor.util.CustomThreadFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * 交换机在线状态检测
@@ -37,53 +39,77 @@ public class SwitchesCheckReach {
     Integer switchesReachableHistoriesLimit;
 
     List<SwitchesReachableHistory> switchesReachableHistories = new LinkedList<>();
-    List<SwitchesReachable> switchesReachables = new LinkedList<>();
+    private List<SwitchesReachable> switchesReachables = new CopyOnWriteArrayList<>();
 
-    public void submit(){
+    public void submit() {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
-        for(SwitchesList switchesList:switchesLists){
-            check(switchesList);
+        switchesReachables.clear();
+
+        ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
+        for (SwitchesList switchesList : switchesLists) {
+            executorService.submit(() -> {
+                check(switchesList);
+            });
         }
-        if(switchesReachableHistories.size()>0){
+        executorService.shutdown();
+        try {//等待直到所有任务完成
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (switchesReachableHistories.size() > 0) {
             switchesReachableHistoryService.insertList(switchesReachableHistories);
             switchesReachableHistories.clear();
         }
-        if(switchesReachables.size()>0){
-            switchesReachableService.updateList(switchesReachables);
-            switchesReachables.clear();
+
+        List<SwitchesReachable> switchesReachableSubmit = new LinkedList<>();
+        for (SwitchesReachable switchesReachable : switchesReachables) {
+            if (switchesReachable == null) {
+                continue;
+            }
+            switchesReachableSubmit.add(switchesReachable);
+            if (switchesReachableSubmit.size() > switchesReachablesLimit) {
+                switchesReachableService.updateList(switchesReachableSubmit);
+                switchesReachableSubmit.clear();
+            }
+        }
+        if (switchesReachableSubmit.size() > 0) {
+            switchesReachableService.updateList(switchesReachableSubmit);
+            switchesReachableSubmit.clear();
         }
     }
 
-    public void check(SwitchesList switchesList){
+    public void check(SwitchesList switchesList) {
         try {
             InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
             boolean reachable = inetAddress.isReachable(50);
             reachable = reachable || inetAddress.isReachable(50);
             reachable = reachable || inetAddress.isReachable(50);
             SwitchesReachable switchesReachable = new SwitchesReachable();
-            if(reachable){
+            if (reachable) {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(1);
 
                 switchesReachables.add(switchesReachable);
-            } else{
+            } else {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(0);
                 SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
                 if (switchesReachableOld.getReachable() == null || switchesReachableOld.getReachable() == 1) {
                     switchesReachable.setDownTime(new Date());
+                } else {
+                    switchesReachable.setDownTime(switchesReachableOld.getDownTime());
                 }
 
                 switchesReachables.add(switchesReachable);
+            }
+            if (switchesReachable == null) {
+                System.out.println("catch");
             }
         } catch (UnknownHostException e) {
             //TODO: 日志
         } catch (IOException e) {
             //TODO: 日志
-        }
-        if(switchesReachables.size()>switchesReachablesLimit){
-            switchesReachableService.updateList(switchesReachables);
-            switchesReachables.clear();
         }
     }
 }

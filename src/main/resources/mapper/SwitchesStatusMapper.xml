@@ -31,6 +31,7 @@
         <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
         <result column="ip_origin" property="originIp" jdbcType="VARCHAR"/>
         <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="building" property="building" jdbcType="VARCHAR"/>
         <collection property="switchesPortDetailDto" ofType="cn.albumenj.switchmonitor.dto.SwitchesPortDetailDto">
             <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
             <result column="port_index" property="portIndex" jdbcType="INTEGER"/>
@@ -52,7 +53,7 @@
         <result column="temp" property="temp" jdbcType="INTEGER"/>
         <result column="info_time" property="infoTime" jdbcType="TIMESTAMP"/>
         <result column="reachable" property="reachable" jdbcType="INTEGER"/>
-        <result column="down_time" property="downTime" jdbcType="TIMESTAMP"/>
+        <result column="down_time" property="downTime" jdbcType="BIGINT"/>
         <result column="up_time" property="upTime" jdbcType="VARCHAR"/>
         <result column="model" property="model" jdbcType="VARCHAR"/>
         <result column="describe" property="desc" jdbcType="VARCHAR"/>
@@ -279,6 +280,7 @@
             switches_status.time_stamp,
             list.ip           AS ip_origin,
             list.model,
+            list.building,
             reach.reachable,
             reach.down_time,
             speed.in_speed,
@@ -295,12 +297,13 @@
                 INNER JOIN switches_reachable AS reach ON switches_status.switch_id = reach.switch_id
                 LEFT JOIN port_speed AS speed ON switches_status.switch_id = speed.switch_id
                 LEFT JOIN port_status ON speed.switch_id = port_status.switch_id AND speed.port_index = port_status.port_index
+        order by list.id asc
     </select>
 
     <select id="selectByBuilding" resultMap="BuildingResultMap">
         SELECT
             switches_status.up_time,
-            unix_timestamp(switches_reachable.down_time),
+        unix_timestamp(switches_reachable.down_time) as down_time,
             switches_reachable.reachable,
             switches_list.ip,
             switches_list.model,

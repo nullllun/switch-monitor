@@ -3,6 +3,7 @@ package cn.albumenj.switchmonitor.schedule;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.service.*;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
+import cn.albumenj.switchmonitor.util.SnmpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,13 +34,15 @@ public class SwitchesUpdate {
     PortSpeedHistoryService portSpeedHistoryService;
 
     public void execute() {
+        SnmpUtil snmpUtil = new SnmpUtil();
         SwitchUpdate.getSwitchesStatusHistories().clear();
         SwitchUpdate.getSwitchesStatuses().clear();
         switchUpdate.updatePortStatusMap();
         switchUpdate.updatePortSpeedMap();
         switchUpdate.updateSpeedBlankMap();
+        switchUpdate.setSnmpUtil(snmpUtil);
 
-        List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
+        List<SwitchesList> switchesLists = switchesListService.selectOnline(new SwitchesList());
         ExecutorService executorService = new ThreadPoolExecutor(1000,1000,5,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(),new CustomThreadFactory());
         for(SwitchesList s:switchesLists) {
             executorService.execute(() -> {
@@ -64,5 +67,6 @@ public class SwitchesUpdate {
             }
             SwitchUpdate.getSwitchesStatuses().clear();
         }
+        snmpUtil.close();
     }
 }

@@ -1,9 +1,6 @@
 package cn.albumenj.switchmonitor.config;
 
-import cn.albumenj.switchmonitor.schedule.HistoryClean;
-import cn.albumenj.switchmonitor.schedule.SwitchesBriefFetch;
-import cn.albumenj.switchmonitor.schedule.SwitchesCheckReach;
-import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
+import cn.albumenj.switchmonitor.schedule.*;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.springframework.context.annotation.Bean;
@@ -75,6 +72,19 @@ public class ScheduleConfig {
         return jobDetail;
     }
 
+    @Bean(name = "wechatReachCheckJob")
+    public MethodInvokingJobDetailFactoryBean wechatReachCheckJob(WechatPush wechatPush) {
+        MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
+
+        jobDetail.setConcurrent(false);
+        jobDetail.setName("wechatReachCheckJob");
+        jobDetail.setGroup("wechatReachCheckGroup");
+        jobDetail.setTargetObject(wechatPush);
+        jobDetail.setTargetMethod("deviceReachable");
+
+        return jobDetail;
+    }
+
     /**
      * 定时触发器
      * @param updateJob 任务
@@ -128,13 +138,30 @@ public class ScheduleConfig {
         return tigger;
     }
 
+    @Bean(name = "wechatReachCheckJobTrigger")
+    public CronTriggerFactoryBean wechatReachCheckJobTrigger(JobDetail wechatReachCheckJob) {
+
+        CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
+        tigger.setJobDetail(wechatReachCheckJob);
+
+        //cron表达式，每1分钟执行一次
+        tigger.setCronExpression("55 * * * * ?");
+        tigger.setName("wechatReachCheckTrigger");
+        return tigger;
+    }
+
+
     /**
      * 调度工厂
      * @param updateJobTrigger 触发器
      * @return
      */
     @Bean(name = "scheduler")
-    public SchedulerFactoryBean schedulerFactory(Trigger updateJobTrigger,Trigger cleanHistoryJobTrigger,Trigger checkReachableJobTrigger,Trigger briefFetchJobTrigger) {
+    public SchedulerFactoryBean schedulerFactory(Trigger updateJobTrigger,
+                                                 Trigger cleanHistoryJobTrigger,
+                                                 Trigger checkReachableJobTrigger,
+                                                 Trigger briefFetchJobTrigger,
+                                                 Trigger wechatReachCheckJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 
@@ -145,7 +172,8 @@ public class ScheduleConfig {
         factoryBean.setStartupDelay(1);
 
         // 注册触发器
-        factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger, checkReachableJobTrigger, briefFetchJobTrigger);
+        factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger,
+                checkReachableJobTrigger, briefFetchJobTrigger, wechatReachCheckJobTrigger);
         //factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);
         return factoryBean;
     }

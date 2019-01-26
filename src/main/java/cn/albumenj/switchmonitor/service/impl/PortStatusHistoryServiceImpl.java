@@ -30,7 +30,7 @@ public class PortStatusHistoryServiceImpl implements PortStatusHistoryService{
     @Override
     public int delete() {
         PortStatusHistory portStatusHistory = new PortStatusHistory();
-        portStatusHistory.setTimeStamp(DateUtil.beforeNow(portSaveTime));
+        portStatusHistory.setTimeStamp(DateUtil.beforeNowDate(portSaveTime));
         return portStatusHistoryMapper.delete(portStatusHistory);
     }
 

@@ -39,7 +39,6 @@ public class SnmpUtil {
     private TreeUtils treeUtils;
 
     public SnmpUtil() {
-
         try {
             transport = new DefaultUdpTransportMapping();
             snmp = new Snmp(transport);
@@ -50,9 +49,10 @@ public class SnmpUtil {
         }
     }
 
-    public Map<Integer,String> walk(String ip, String community, String targetOid){
+    public Map<Integer, String> walk(String ip, String community, String targetOid) {
         String address = PROTOCOL + ":" + ip + "/" + PORT;
         target = createCommunityTarget(address, community, VERSION, 1500, 2);
+
         OID targetOID = new OID(targetOid);
         try {
             return snmpWalk(snmp, target, targetOID);
@@ -62,7 +62,7 @@ public class SnmpUtil {
         }
     }
 
-    public void close(){
+    public void close() {
         if (snmp != null) {
             try {
                 snmp.close();

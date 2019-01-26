@@ -47,7 +47,7 @@ public class SwitchesStatusHistoryServiceImpl implements SwitchesStatusHistorySe
     @Override
     public int delete() {
         SwitchesStatusHistory switchesStatusHistory = new SwitchesStatusHistory();
-        switchesStatusHistory.setTimeStamp(DateUtil.beforeNow(switchSaveTime));
+        switchesStatusHistory.setTimeStamp(DateUtil.beforeNowDate(switchSaveTime));
         return switchesStatusHistoryMapper.delete(switchesStatusHistory);
     }
 
@@ -55,15 +55,30 @@ public class SwitchesStatusHistoryServiceImpl implements SwitchesStatusHistorySe
     public List<DeviceHistoryDto> selectDevice(String ip) {
         List<SwitchesStatusHistory> switchesStatusHistories = switchesStatusHistoryMapper.selectBySwitch(ip);
         List<DeviceHistoryDto> deviceHistoryDtos = new LinkedList<>();
+        boolean isCpu = false;
+        boolean isMem = false;
+        boolean isTemp = false;
         for (SwitchesStatusHistory switchesStatusHistory : switchesStatusHistories) {
-            if (!(switchesStatusHistory.getCpuLoad() == -1
-                    || switchesStatusHistory.getMemoryUsed() == -1
-                    || switchesStatusHistory.getTemp() == -1
-                    || switchesStatusHistory.getTimeStamp().getTime() == -1)) {
+            if (switchesStatusHistory.getCpuLoad() != -1) {
+                isCpu = true;
+            }
+            if (switchesStatusHistory.getMemoryUsed() != -1) {
+                isMem = true;
+            }
+            if (switchesStatusHistory.getTemp() != -1) {
+                isTemp = true;
+            }
+        }
+        for (SwitchesStatusHistory switchesStatusHistory : switchesStatusHistories) {
+            boolean ret = !((switchesStatusHistory.getCpuLoad() == -1 && isCpu)
+                    || (switchesStatusHistory.getMemoryUsed() == -1 && isMem)
+                    || (switchesStatusHistory.getTemp() == -1 && isTemp)
+                    || switchesStatusHistory.getTimeStamp().getTime() == -1);
+            if (ret) {
                 DeviceHistoryDto deviceHistoryDto = new DeviceHistoryDto();
-                deviceHistoryDto.setCpu(switchesStatusHistory.getCpuLoad());
-                deviceHistoryDto.setMem(switchesStatusHistory.getMemoryUsed());
-                deviceHistoryDto.setTemp(switchesStatusHistory.getTemp());
+                deviceHistoryDto.setCpu(isCpu ? switchesStatusHistory.getCpuLoad() : 0);
+                deviceHistoryDto.setMem(isMem ? switchesStatusHistory.getMemoryUsed() : 0);
+                deviceHistoryDto.setTemp(isTemp ? switchesStatusHistory.getTemp() : 0);
                 deviceHistoryDto.setTimestamp(switchesStatusHistory.getTimeStamp().getTime());
                 deviceHistoryDtos.add(deviceHistoryDto);
             }

@@ -46,6 +46,17 @@ public interface SwitchesListMapper {
     List<SwitchesList> select(@Param("switchesList") SwitchesList switchesList);
 
     /**
+     * 获取数据
+     * 可自定义查询条件
+     * 通过传入非空判断
+     * 设备在线
+     *
+     * @param switchesList
+     * @return
+     */
+    List<SwitchesList> selectOnline(@Param("switchesList") SwitchesList switchesList);
+
+    /**
      * 删除数据
      *
      * @param switchesList

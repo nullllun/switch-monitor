@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 获取设备概况
@@ -37,33 +36,36 @@ public class SwitchesBriefFetch {
     private volatile static BriefStatusDto briefStatusDtoTemp = new BriefStatusDto();
     private volatile static BriefStatusDto briefStatusDtoWarn = new BriefStatusDto();
     private volatile static BriefStatusDto briefStatusDtoStat = new BriefStatusDto();
+    private volatile static BriefStatusDto briefStatusDtoReach = new BriefStatusDto();
 
     public void refresh() {
         List<SwitchesDetailDto> switchesDetailDtos = switchesStatusMapper.selectDetail();
         List<WarningDto> warning = new LinkedList<>();
+        List<WarningDto> reach = new LinkedList<>();
         List<Integer> cpuLoad = new LinkedList<>();
         List<Integer> memUsed = new LinkedList<>();
         List<Integer> temp = new LinkedList<>();
         List<Long> status = new LinkedList<>();
         for (SwitchesDetailDto switchesDetailDto : switchesDetailDtos) {
+            /**
+             * 导航栏警告
+             */
             if (switchesDetailDto.getTemp() != null && switchesDetailDto.getTemp() > tempThreshold) {
-                WarningDto warningDto = new WarningDto("heat",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
+                WarningDto warningDto = new WarningDto("heat",
+                        switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                 warningDto.setTemp(switchesDetailDto.getTemp().toString());
                 warning.add(warningDto);
             }
             if (switchesDetailDto.getCpuLoad() != null && switchesDetailDto.getCpuLoad() > cpuThreshold) {
-                WarningDto warningDto = new WarningDto("cpu_overload",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
+                WarningDto warningDto = new WarningDto("cpu_overload",
+                        switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                 warningDto.setCpuLoad(switchesDetailDto.getCpuLoad().toString());
                 warning.add(warningDto);
             }
             if (switchesDetailDto.getMemoryUsed() != null && switchesDetailDto.getMemoryUsed() > memThreshold) {
-                WarningDto warningDto = new WarningDto("mem_overload",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
+                WarningDto warningDto = new WarningDto("mem_overload",
+                        switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                 warningDto.setMemUsed(switchesDetailDto.getMemoryUsed().toString());
-                warning.add(warningDto);
-            }
-            if (switchesDetailDto.getReachable().equals(0)) {
-                WarningDto warningDto = new WarningDto("devices_down",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
-                warningDto.setDownTime(switchesDetailDto.getDownTime().getTime());
                 warning.add(warningDto);
             }
             for (SwitchesPortDetailDto switchesPortDetailDto : switchesDetailDto.getSwitchesPortDetailDto()) {
@@ -72,7 +74,8 @@ public class SwitchesBriefFetch {
                         (switchesPortDetailDto.getSpeedMax() * 131072 / 100 * speedThreshold)
                         && switchesPortDetailDto.getInSpeed() <
                         (switchesPortDetailDto.getSpeedMax() * 131072)) {
-                    WarningDto warningDto = new WarningDto("if_in",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
+                    WarningDto warningDto = new WarningDto("if_in",
+                            switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                     warningDto.setPortSpeed(switchesPortDetailDto.getInSpeed() / 131072 + "/" + switchesPortDetailDto.getSpeedMax());
                     warningDto.setPortName(switchesPortDetailDto.getName());
                     warningDto.setCvlan(switchesPortDetailDto.getCvlan());
@@ -84,7 +87,8 @@ public class SwitchesBriefFetch {
                         (switchesPortDetailDto.getSpeedMax() * 131072 / 100 * speedThreshold)
                         && switchesPortDetailDto.getOutSpeed() <
                         (switchesPortDetailDto.getSpeedMax() * 131072)) {
-                    WarningDto warningDto = new WarningDto("if_out",switchesDetailDto.getOriginIp(),switchesDetailDto.getModel());
+                    WarningDto warningDto = new WarningDto("if_out",
+                            switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                     warningDto.setPortSpeed(switchesPortDetailDto.getOutSpeed() / 131072 + "/" + switchesPortDetailDto.getSpeedMax());
                     warningDto.setPortName(switchesPortDetailDto.getName());
                     warningDto.setCvlan(switchesPortDetailDto.getCvlan());
@@ -92,6 +96,9 @@ public class SwitchesBriefFetch {
                     warning.add(warningDto);
                 }
             }
+            /**
+             * 图表
+             */
             if (!"".equals(switchesDetailDto.getCpuLoad())) {
                 cpuLoad.add(Integer.valueOf(switchesDetailDto.getCpuLoad()));
             }
@@ -107,11 +114,51 @@ public class SwitchesBriefFetch {
                 status.add(switchesDetailDto.getDownTime().getTime());
             }
         }
+
+        /**
+         * 按楼栋分组
+         */
+        Map<String, List<SwitchesDetailDto>> linkedListMap = new LinkedHashMap<>();
+        for (SwitchesDetailDto switchesDetailDto : switchesDetailDtos) {
+            List<SwitchesDetailDto> list = linkedListMap.get(switchesDetailDto.getBuilding());
+            if (list == null) {
+                list = new LinkedList<>();
+                linkedListMap.put(switchesDetailDto.getBuilding(), list);
+            }
+            list.add(switchesDetailDto);
+        }
+
+        Set<Map.Entry<String, List<SwitchesDetailDto>>> entries = linkedListMap.entrySet();
+        for (Map.Entry<String, List<SwitchesDetailDto>> entry : entries) {
+            List<WarningDto> list = new LinkedList<>();
+            for (SwitchesDetailDto switchesDetailDto : entry.getValue()) {
+                if (switchesDetailDto.getReachable().equals(0)) {
+                    WarningDto warningDto = new WarningDto("devices_down",
+                            switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
+                    warningDto.setDownTime(switchesDetailDto.getDownTime().getTime());
+                    list.add(warningDto);
+                }
+            }
+            if (list.size() == entry.getValue().size()) {
+                String[] ips = entry.getValue().get(0).getOriginIp().split("\\.");
+                WarningDto warningDto = new WarningDto("devices_down",
+                        ips[0] + "." + ips[1] + "." + ips[2] + "网段", "全部设备", entry.getKey());
+                warningDto.setDownTime(entry.getValue().get(0).getDownTime().getTime());
+                warning.add(warningDto);
+                reach.add(warningDto);
+            } else {
+                warning.addAll(list);
+                reach.addAll(list);
+            }
+        }
         briefStatusDtoCpu.setCpu(cpuLoad);
         briefStatusDtoMem.setMem(memUsed);
         briefStatusDtoTemp.setTemp(temp);
         briefStatusDtoWarn.setWarning(warning);
         briefStatusDtoStat.setStat(status);
+        briefStatusDtoReach.setWarning(reach);
+
+        switchesDetailDtos = null;
     }
 
     public BriefStatusDto getBriefStatusDtoCpu() {
@@ -132,5 +179,9 @@ public class SwitchesBriefFetch {
 
     public BriefStatusDto getBriefStatusDtoStat() {
         return briefStatusDtoStat;
+    }
+
+    public BriefStatusDto getBriefStatusDtoReach() {
+        return briefStatusDtoReach;
     }
 }

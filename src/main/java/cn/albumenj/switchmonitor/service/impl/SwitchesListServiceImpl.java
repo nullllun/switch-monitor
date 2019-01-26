@@ -38,6 +38,11 @@ public class SwitchesListServiceImpl implements SwitchesListService{
     }
 
     @Override
+    public List<SwitchesList> selectOnline(SwitchesList switchesList) {
+        return switchesListMapper.selectOnline(switchesList);
+    }
+
+    @Override
     public int delete(SwitchesList switchesList) {
         return switchesListMapper.delete(switchesList);
     }

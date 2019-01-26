@@ -103,7 +103,8 @@
     </update>
 
     <select id="selectBySwitch" resultMap="BaseResultMap">
-        select reachable from switches_reachable
+        select reachable,down_time
+        from switches_reachable
         where switch_id = #{switchesReachable.switchId,jdbcType=INTEGER}
     </select>
 

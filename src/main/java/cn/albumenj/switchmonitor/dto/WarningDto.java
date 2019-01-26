@@ -12,6 +12,7 @@ public class WarningDto {
     private String warning;
     private String ip;
     private String model;
+    private String building;
     private Long downTime;
     private String cpuLoad;
     private String memUsed;
@@ -24,10 +25,19 @@ public class WarningDto {
     public WarningDto() {
     }
 
-    public WarningDto(String warning, String ip, String model) {
+    public WarningDto(String warning, String ip, String model, String building) {
         this.warning = warning;
         this.ip = ip;
         this.model = model;
+        this.building = building;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
     }
 
     public Integer getCvlan() {

@@ -46,7 +46,7 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
     @Override
     public int delete() {
         PortSpeedHistory portSpeedHistory = new PortSpeedHistory();
-        portSpeedHistory.setTimeStamp(DateUtil.beforeNow(portSpeedSaveTime));
+        portSpeedHistory.setTimeStamp(DateUtil.beforeNowDate(portSpeedSaveTime));
         return portSpeedHistoryMapper.delete(portSpeedHistory);
     }
 
@@ -73,8 +73,8 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
         List<PortFlowDto> portFlowDtos = new LinkedList<>();
 
         for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlanks) {
-            if (portSpeedHistoryBlank.getTimeStart().getTime() < DateUtil.beforeNow(portSpeedSaveTime).getTime()) {
-                portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
+            if (portSpeedHistoryBlank.getTimeStart().getTime() < DateUtil.beforeNowDate(portSpeedSaveTime).getTime()) {
+                portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNowDate(portSpeedSaveTime));
             }
             for (Long i = portSpeedHistoryBlank.getTimeStart().getTime(); i <= portSpeedHistoryBlank.getTimeEnd().getTime(); i += portTime) {
                 PortFlowDto portFlowDto = new PortFlowDto();

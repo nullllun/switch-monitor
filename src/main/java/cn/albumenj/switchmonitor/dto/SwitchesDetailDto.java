@@ -15,6 +15,7 @@ public class SwitchesDetailDto extends SwitchesStatus {
     private Integer reachable;
     private Date downTime;
     private String originIp;
+    private String building;
     private List<SwitchesPortDetailDto> switchesPortDetailDto;
 
     public String getModel() {
@@ -55,5 +56,13 @@ public class SwitchesDetailDto extends SwitchesStatus {
 
     public void setSwitchesPortDetailDto(List<SwitchesPortDetailDto> switchesPortDetailDto) {
         this.switchesPortDetailDto = switchesPortDetailDto;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
     }
 }

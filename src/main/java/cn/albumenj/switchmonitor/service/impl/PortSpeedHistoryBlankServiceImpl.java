@@ -71,8 +71,8 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
     @Override
     public int delete() {
         PortSpeedHistoryBlank portSpeedHistoryBlank = new PortSpeedHistoryBlank();
-        portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNow(portSpeedSaveTime));
-        portSpeedHistoryBlank.setTimeEnd(DateUtil.beforeNow(portSpeedSaveTime));
+        portSpeedHistoryBlank.setTimeStart(DateUtil.beforeNowDate(portSpeedSaveTime));
+        portSpeedHistoryBlank.setTimeEnd(DateUtil.beforeNowDate(portSpeedSaveTime));
         int ret = portSpeedHistoryBlankMapper.deleteHistory(portSpeedHistoryBlank);
         return ret;
     }

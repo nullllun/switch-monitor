@@ -97,6 +97,25 @@
         switches_list.id ASC
     </select>
 
+    <select id="selectOnline" resultMap="BaseResultMap">
+        SELECT * from switch_monitor.switches_list
+        INNER JOIN switches_reachable ON switches_list.id = switches_reachable.switch_id
+        WHERE 1 = 1
+        <trim prefix="AND (" suffix=")" suffixOverrides=",">
+            <if test="switchesList.id != null">id = #{switchesList.id,jdbcType=INTEGER},</if>
+            <if test="switchesList.ip != null">ip = #{switchesList.ip,jdbcType=VARCHAR},</if>
+            <if test="switchesList.model != null">model = #{switchesList.model,jdbcType=VARCHAR},</if>
+            <if test="switchesList.building != null">building = #{switchesList.building,jdbcType=VARCHAR},</if>
+            <if test="switchesList.description != null">description = #{switchesList.description,jdbcType=VARCHAR},</if>
+            <if test="switchesList.readKey != null">read_key = #{switchesList.readKey,jdbcType=VARCHAR},</if>
+            <if test="switchesList.writeKey != null">write_key = #{switchesList.writeKey,jdbcType=VARCHAR}</if>
+        </trim>
+        AND
+        switches_reachable.reachable = 1
+        ORDER BY
+        switches_list.id ASC
+    </select>
+
     <delete id="delete">
         DELETE FROM switches_list
         WHERE id = #{switchesList.id,jdbcType=INTEGER}
