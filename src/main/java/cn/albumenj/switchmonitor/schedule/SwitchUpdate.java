@@ -64,9 +64,6 @@ public class SwitchUpdate {
 
         switchesStatus.setSwitchId(s.getId());
         switchesStatus.setUpTime(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getUpTime())));
-        switchesStatus.setIp(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIp())));
-        switchesStatus.setIpIndex(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIpindex())));
-        switchesStatus.setIpMask(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIpmask())));
         switchesStatus.setName(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getNAME())));
         switchesStatus.setCpuLoad(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getCpuLoad())));
         switchesStatus.setMemoryUsed(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getMemUsed())));
