@@ -194,7 +194,7 @@ public class SwitchUpdate {
                 portSpeedSubmit.setOutSpeed(outB);
                 portSpeedSubmit.setSwitchId(portStatus.getSwitchId());
                 portSpeedSubmit.setPortIndex(portStatus.getPortIndex());
-                portSpeedSubmit.setSwitchPort("s" + portSpeedSubmit.getSwitchId() + "p" + portSpeedSubmit.getPortIndex());
+                portSpeedSubmit.setSwitchPort(portStatus.getSwitchPort());
 
                 Integer up = 2;
                 if (up.equals(portStatus.getStatus())) {

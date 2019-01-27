@@ -12,9 +12,6 @@ public class SwitchesStatus {
     private String id;
     private Integer switchId;
     private String upTime;
-    private String ip;
-    private Integer ipIndex;
-    private String ipMask;
     private String name;
     private Integer cpuLoad;
     private Integer memoryUsed;
@@ -24,9 +21,6 @@ public class SwitchesStatus {
     public SwitchesStatus() {
         this.id = UUID.randomUUID().toString();
         this.upTime = "";
-        this.ip = "";
-        this.ipIndex = -2;
-        this.ipMask = "";
         this.name = "";
         this.cpuLoad = -2;
         this.memoryUsed = -2;
@@ -56,30 +50,6 @@ public class SwitchesStatus {
 
     public void setUpTime(String upTime) {
         this.upTime = upTime;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getIpIndex() {
-        return ipIndex;
-    }
-
-    public void setIpIndex(Integer ipIndex) {
-        this.ipIndex = ipIndex;
-    }
-
-    public String getIpMask() {
-        return ipMask;
-    }
-
-    public void setIpMask(String ipMask) {
-        this.ipMask = ipMask;
     }
 
     public String getName() {

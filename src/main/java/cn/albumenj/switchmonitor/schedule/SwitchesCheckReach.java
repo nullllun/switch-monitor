@@ -44,6 +44,7 @@ public class SwitchesCheckReach {
     private List<SwitchesReachable> switchesReachables = new CopyOnWriteArrayList<>();
 
     public void submit() {
+
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         switchesReachables.clear();
 
@@ -86,7 +87,7 @@ public class SwitchesCheckReach {
     private void check(SwitchesList switchesList, int times) {
         try {
             InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
-            boolean reachable = inetAddress.isReachable(300);
+            boolean reachable = inetAddress.isReachable(50);
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {
                 switchesReachable.setSwitchId(switchesList.getId());
