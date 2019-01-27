@@ -2,6 +2,7 @@ package cn.albumenj.switchmonitor.controller;
 
 import cn.albumenj.switchmonitor.constant.PageCodeEnum;
 import cn.albumenj.switchmonitor.dto.PageCodeDto;
+import cn.albumenj.switchmonitor.schedule.SwitchesCheckReach;
 import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import cn.albumenj.switchmonitor.service.PortStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,8 @@ public class SettingController {
     SwitchesUpdate switchesUpdate;
     @Autowired
     PortStatusService portStatusService;
-
+    @Autowired
+    SwitchesCheckReach switchesCheckReach;
 
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping("/api/reboot_scan_process")
@@ -41,4 +43,13 @@ public class SettingController {
     public PageCodeDto test() {
         return new PageCodeDto(PageCodeEnum.PERMISSION_ACCEPT);
     }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @RequestMapping("/api/setting/update_reach")
+    public String updateReach() {
+        switchesCheckReach.submit();
+        return "刷新成功";
+    }
+
 }

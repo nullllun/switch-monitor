@@ -32,6 +32,8 @@ public class SwitchesCheckReach {
     SwitchesReachableHistoryService switchesReachableHistoryService;
     @Autowired
     SwitchesListService switchesListService;
+    @Autowired
+    SwitchesBriefFetch switchesBriefFetch;
 
     @Value("${commit.switchesReachables-update}")
     Integer switchesReachablesLimit;
@@ -48,11 +50,12 @@ public class SwitchesCheckReach {
         ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
         for (SwitchesList switchesList : switchesLists) {
             executorService.submit(() -> {
-                check(switchesList);
+                check(switchesList, 5);
             });
         }
         executorService.shutdown();
-        try {//等待直到所有任务完成
+        try {
+            //等待直到所有任务完成
             executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -77,21 +80,20 @@ public class SwitchesCheckReach {
             switchesReachableService.updateList(switchesReachableSubmit);
             switchesReachableSubmit.clear();
         }
+        switchesBriefFetch.refresh();
     }
 
-    public void check(SwitchesList switchesList) {
+    private void check(SwitchesList switchesList, int times) {
         try {
             InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
-            boolean reachable = inetAddress.isReachable(50);
-            reachable = reachable || inetAddress.isReachable(50);
-            reachable = reachable || inetAddress.isReachable(50);
+            boolean reachable = inetAddress.isReachable(300);
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(1);
 
                 switchesReachables.add(switchesReachable);
-            } else {
+            } else if (times == 0) {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(0);
                 SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
@@ -102,9 +104,8 @@ public class SwitchesCheckReach {
                 }
 
                 switchesReachables.add(switchesReachable);
-            }
-            if (switchesReachable == null) {
-                System.out.println("catch");
+            } else {
+                check(switchesList, times - 1);
             }
         } catch (UnknownHostException e) {
             //TODO: 日志

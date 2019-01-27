@@ -160,7 +160,6 @@ public class ScheduleConfig {
     public SchedulerFactoryBean schedulerFactory(Trigger updateJobTrigger,
                                                  Trigger cleanHistoryJobTrigger,
                                                  Trigger checkReachableJobTrigger,
-                                                 Trigger briefFetchJobTrigger,
                                                  Trigger wechatReachCheckJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
@@ -173,7 +172,7 @@ public class ScheduleConfig {
 
         // 注册触发器
         factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger,
-                checkReachableJobTrigger, briefFetchJobTrigger, wechatReachCheckJobTrigger);
+                checkReachableJobTrigger, wechatReachCheckJobTrigger);
         //factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);
         return factoryBean;
     }
