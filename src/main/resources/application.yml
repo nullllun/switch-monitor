@@ -4,14 +4,13 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://127.0.0.1:3306/switch_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
       username: root
-      password: 123456
+      password: ENC(sYpdQW6HInjnCeZNHzAW1w==)
       initial-size: 20
       max-active: 200
-  data:
-    mongodb:
-      uri: mongodb://127.0.0.1/switchmonitor
   main:
     allow-bean-definition-overriding: true
+  profiles:
+    include: encrypt
 
 debug: true
 
@@ -37,13 +36,19 @@ threshold:
   mem: 80
   temp: 60
   speed: 95
+  reach: 0
 
 server:
   address: 0.0.0.0
   port: 8082
 
 security:
-  jwtexp: 60000000
+  jwtDefaultExp: 60000
+  jwtLoginExp: 2592000
 
 sync:
   port: 60000
+
+wechat:
+  appid: ENC(eOr8TLUhfO8bIfuc8Vfdtbog/C2tmmZOGdZ/f6rpPAM=)
+  appSecret: ENC(iqQZaIBMb3BvJzG28NPBmzIMBO5qGDar2Pwm1mKAXwnhCxfCi04SVCU2U1kPNspr)

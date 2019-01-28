@@ -92,7 +92,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.55</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
 
     </dependencies>
 

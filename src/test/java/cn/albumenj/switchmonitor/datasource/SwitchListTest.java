@@ -17,12 +17,6 @@ public class SwitchListTest {
     SwitchesListService switchesListService;
     @Test
     public void test(){
-        insert();
-        select();
-        update();
-        select();
-        delete();
-        select();
     }
 
     public void insert() {

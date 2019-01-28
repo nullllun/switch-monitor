@@ -42,7 +42,7 @@ public class WalkTest {
 
     }
 
-    @Test
+    //@Test
     public void main() {
         CommunityTarget target = new CommunityTarget();
         target.setCommunity(new OctetString("gdgydx_pub"));
