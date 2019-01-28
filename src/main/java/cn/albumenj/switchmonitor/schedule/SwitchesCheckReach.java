@@ -45,13 +45,14 @@ public class SwitchesCheckReach {
 
     public void submit() {
 
+        Long time = System.currentTimeMillis();
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         switchesReachables.clear();
 
         ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
         for (SwitchesList switchesList : switchesLists) {
             executorService.submit(() -> {
-                check(switchesList, 5);
+                check(switchesList, 10);
             });
         }
         executorService.shutdown();
@@ -81,13 +82,14 @@ public class SwitchesCheckReach {
             switchesReachableService.updateList(switchesReachableSubmit);
             switchesReachableSubmit.clear();
         }
+        System.out.println(System.currentTimeMillis() - time);
         switchesBriefFetch.refresh();
+        System.out.println(System.currentTimeMillis() - time);
     }
 
     private void check(SwitchesList switchesList, int times) {
         try {
-            InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
-            boolean reachable = inetAddress.isReachable(50);
+            boolean reachable = (0 == Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp()).waitFor());
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {
                 switchesReachable.setSwitchId(switchesList.getId());
@@ -108,7 +110,7 @@ public class SwitchesCheckReach {
             } else {
                 check(switchesList, times - 1);
             }
-        } catch (UnknownHostException e) {
+        } catch (InterruptedException e) {
             //TODO: 日志
         } catch (IOException e) {
             //TODO: 日志
