@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -48,7 +48,9 @@ public class SwitchesCheckReach {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         switchesReachables.clear();
 
+        Long time = System.currentTimeMillis();
         ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
+
         for (SwitchesList switchesList : switchesLists) {
             executorService.submit(() -> {
                 check(switchesList, 10);
@@ -86,7 +88,19 @@ public class SwitchesCheckReach {
 
     private void check(SwitchesList switchesList, int times) {
         try {
-            boolean reachable = (0 == Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp()).waitFor());
+            final Process process = Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp());
+            printMessage(process.getInputStream());
+            printMessage(process.getErrorStream());
+
+            boolean end = process.waitFor(100,TimeUnit.MILLISECONDS);
+            boolean reachable;
+            if(end){
+                reachable = (0 == process.exitValue());
+            }
+            else {
+                process.destroy();
+                reachable = false;
+            }
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {
                 switchesReachable.setSwitchId(switchesList.getId());
@@ -112,5 +126,22 @@ public class SwitchesCheckReach {
         } catch (IOException e) {
             //TODO: 日志
         }
+    }
+
+    private static void printMessage(final InputStream input) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Reader reader = new InputStreamReader(input);
+                BufferedReader bf = new BufferedReader(reader);
+                String line = null;
+                try {
+                    while ((line = bf.readLine()) != null) {
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
