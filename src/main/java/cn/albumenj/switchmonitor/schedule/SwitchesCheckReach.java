@@ -45,7 +45,6 @@ public class SwitchesCheckReach {
 
     public void submit() {
 
-        Long time = System.currentTimeMillis();
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         switchesReachables.clear();
 
@@ -82,9 +81,7 @@ public class SwitchesCheckReach {
             switchesReachableService.updateList(switchesReachableSubmit);
             switchesReachableSubmit.clear();
         }
-        System.out.println(System.currentTimeMillis() - time);
         switchesBriefFetch.refresh();
-        System.out.println(System.currentTimeMillis() - time);
     }
 
     private void check(SwitchesList switchesList, int times) {
