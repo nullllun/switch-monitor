@@ -9,6 +9,8 @@ import org.springframework.web.client.RestTemplate;
 /**
  * Created by EalenXie on 2018-03-23 07:37
  * RestTemplate的配置类
+ *
+ * @author EalenXie
  */
 @Configuration
 public class RestTemplateConfig {
@@ -21,8 +23,10 @@ public class RestTemplateConfig {
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setReadTimeout(1000 * 60);                                           //读取超时时间为单位为60秒
-        factory.setConnectTimeout(1000 * 10);                                        //连接超时时间设置为10秒
+        //读取超时时间为单位为60秒
+        factory.setReadTimeout(1000 * 60);
+        //连接超时时间设置为10秒
+        factory.setConnectTimeout(1000 * 10);
         return factory;
     }
 }

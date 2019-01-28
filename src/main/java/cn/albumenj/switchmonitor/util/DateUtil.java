@@ -38,7 +38,8 @@ public class DateUtil {
         calendar.setTimeZone((TimeZone.getTimeZone("GMT+0:00")));
 
         StringBuffer result = new StringBuffer();
-        if ((calendar.get(Calendar.YEAR) - 1970) > 0) {
+        int yearStart = 1970;
+        if ((calendar.get(Calendar.YEAR) - yearStart) > 0) {
             result.append(calendar.get(Calendar.YEAR) - 1970).append("年");
             result.append(calendar.get(Calendar.MONTH)).append("月");
             result.append(calendar.get(Calendar.DAY_OF_MONTH) - 1).append("日 ");

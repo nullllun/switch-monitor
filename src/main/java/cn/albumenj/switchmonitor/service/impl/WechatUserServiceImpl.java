@@ -104,7 +104,8 @@ public class WechatUserServiceImpl implements WechatUserService {
      */
     @Override
     public WechatUser checkToken(String token) {
-        if (token == null || token.compareTo("已验证") == 0) {
+        String valid = "已验证";
+        if (token == null || token.compareTo(valid) == 0) {
             return null;
         }
 

@@ -192,7 +192,7 @@ public class PortStatusServiceImpl implements PortStatusService {
         if (strings.length > 1) {
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : strings) {
-                if (s.equals("00")) {
+                if ("00".equals(s)) {
                     continue;
                 }
                 stringBuilder.append((char) Integer.parseInt(s, 16));

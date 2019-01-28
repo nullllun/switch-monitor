@@ -8,6 +8,8 @@ import java.net.URI;
 
 /**
  * Created by EalenXie on 2018/11/22 16:37.
+ *
+ * @author EalenXie
  */
 public enum HttpUtil {
 

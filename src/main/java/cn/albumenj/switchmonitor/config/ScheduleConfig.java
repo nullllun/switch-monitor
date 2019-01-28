@@ -173,7 +173,7 @@ public class ScheduleConfig {
         // 注册触发器
         factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger,
                 checkReachableJobTrigger, wechatReachCheckJobTrigger);
-        //factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);
+        /*factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);*/
         return factoryBean;
     }
 }

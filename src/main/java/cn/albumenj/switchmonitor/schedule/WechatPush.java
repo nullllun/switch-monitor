@@ -27,7 +27,7 @@ public class WechatPush {
     public void deviceReachable() {
         List<String> message = new LinkedList<>();
         List<WarningDto> reach = switchesBriefFetch.getBriefStatusDtoReach().getWarning();
-        HashMap<String, WarningDto> send = new HashMap<>();
+        HashMap<String, WarningDto> send = new HashMap<>(reachSend.size());
         send.putAll(reachSend);
 
         if (reach != null && reach.size() > 0) {

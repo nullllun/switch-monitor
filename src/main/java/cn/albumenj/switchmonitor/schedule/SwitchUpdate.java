@@ -111,10 +111,11 @@ public class SwitchUpdate {
         List<PortSpeedHistoryBlank> portSpeedBlankInsert = new LinkedList<>();
 
         for (Map.Entry<Integer, String> entry : portNameEntries) {
-            if (portIndex.get(entry.getKey()) == null ||
+            boolean ret1 = portIndex.get(entry.getKey()) == null ||
                     (Integer.parseInt(portIndex.get(entry.getKey())) > 1000
                             &&
-                            portIndex.get(entry.getKey()).equals(entry.getKey()))) {
+                            portIndex.get(entry.getKey()).equals(entry.getKey()));
+            if (ret1) {
                 continue;
             }
             PortStatus portStatus = new PortStatus();
