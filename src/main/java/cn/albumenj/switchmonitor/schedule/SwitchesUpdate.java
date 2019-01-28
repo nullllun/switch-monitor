@@ -4,6 +4,8 @@ import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.service.*;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
 import cn.albumenj.switchmonitor.util.SnmpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class SwitchesUpdate {
+    private final static Logger logger = LoggerFactory.getLogger(SwitchesUpdate.class);
     @Autowired
     SwitchesListService switchesListService;
     @Autowired
@@ -53,7 +56,7 @@ public class SwitchesUpdate {
         try {//等待直到所有任务完成
             executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("SwitchesUpdate Interrupted!");
         }
         synchronized (SwitchUpdate.getSwitchesStatusHistories()) {
             if(SwitchUpdate.getSwitchesStatusHistories().size()>0) {

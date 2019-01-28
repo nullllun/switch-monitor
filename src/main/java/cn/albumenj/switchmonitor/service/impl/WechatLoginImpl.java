@@ -5,12 +5,15 @@ import cn.albumenj.switchmonitor.constant.HttpConst;
 import cn.albumenj.switchmonitor.constant.PermissionConst;
 import cn.albumenj.switchmonitor.dto.LoginCodeDto;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
+import cn.albumenj.switchmonitor.security.CustomLoginHandler;
 import cn.albumenj.switchmonitor.service.WechatLogin;
 import cn.albumenj.switchmonitor.service.WechatUserService;
 import cn.albumenj.switchmonitor.util.JSONUtil;
 import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
 import cn.albumenj.switchmonitor.util.WechatServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,7 @@ import java.util.UUID;
  */
 @Service
 public class WechatLoginImpl implements WechatLogin {
+    private final static Logger logger = LoggerFactory.getLogger(CustomLoginHandler.class);
     @Autowired
     WechatServer wechatServer;
     @Autowired
@@ -69,6 +73,7 @@ public class WechatLoginImpl implements WechatLogin {
                 try {
                     redisUtil.set(uuid, resultJson);
                 } catch (Exception e) {
+                    logger.warn("Wechat Token Set To Redis Failed!");
                     loginStatusDto.setToken(null);
                 }
             }
@@ -138,6 +143,7 @@ public class WechatLoginImpl implements WechatLogin {
         try {
             redisUtil.set(uuid, token, expTime);
         } catch (Exception e) {
+            logger.warn("Wechat Token Set To Redis Failed!");
             loginStatusDto.setSuccess(false);
             loginStatusDto.setToken(null);
         }

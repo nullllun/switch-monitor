@@ -2,10 +2,13 @@ package cn.albumenj.switchmonitor.security;
 
 import cn.albumenj.switchmonitor.constant.HttpConst;
 import cn.albumenj.switchmonitor.constant.PageCodeEnum;
+import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import cn.albumenj.switchmonitor.service.impl.GrantedAuthorityImpl;
 import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.PageCodeUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
  * @author Albumen
  */
 public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
+    private final static Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
     private JwtUtil jwtUtil;
 
     private RedisUtil redisUtil;
@@ -62,9 +66,11 @@ public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
                 }
             }
             //验证失败
+            logger.trace("Login Failed");
             PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN, 401);
         } else {
             //验证失败
+            logger.trace("Login Failed");
             PageCodeUtil.printCode(response, PageCodeEnum.NOT_LOGIN, 401);
         }
     }

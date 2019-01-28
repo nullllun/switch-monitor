@@ -7,6 +7,8 @@ import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.PageCodeUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  */
 @Component
 public class CustomLoginHandler implements AuthenticationSuccessHandler, AuthenticationFailureHandler {
+    private final static Logger logger = LoggerFactory.getLogger(CustomLoginHandler.class);
     @Autowired
     RedisUtil redisUtil;
     @Autowired
@@ -84,7 +87,7 @@ public class CustomLoginHandler implements AuthenticationSuccessHandler, Authent
             try {
                 PageCodeUtil.printCode(response, PageCodeEnum.SYSTEM_ERROR, 400);
             } catch (Exception e1) {
-                return;
+                logger.debug("Print Page Code Error " + e1.toString());
             }
         }
     }

@@ -7,6 +7,8 @@ import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,7 @@ import java.util.concurrent.*;
  */
 @Component
 public class SwitchesCheckReach {
+    private final static Logger logger = LoggerFactory.getLogger(SwitchesCheckReach.class);
     @Autowired
     SwitchesReachableService switchesReachableService;
     @Autowired
@@ -39,6 +42,7 @@ public class SwitchesCheckReach {
     Integer switchesReachablesLimit;
     @Value("${commit.switchesReachableHistories-insert}")
     Integer switchesReachableHistoriesLimit;
+
 
     List<SwitchesReachableHistory> switchesReachableHistories = new LinkedList<>();
     private List<SwitchesReachable> switchesReachables = new CopyOnWriteArrayList<>();
@@ -123,9 +127,9 @@ public class SwitchesCheckReach {
                 check(switchesList, times - 1);
             }
         } catch (InterruptedException e) {
-            //TODO: 日志
+            logger.warn("Check " + e.toString());
         } catch (IOException e) {
-            //TODO: 日志
+            logger.warn("Check " + e.toString());
         }
     }
 
@@ -138,7 +142,7 @@ public class SwitchesCheckReach {
             while ((line = bf.readLine()) != null) {
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn("PrintPingMessage " + e.toString());
         }
     }
 

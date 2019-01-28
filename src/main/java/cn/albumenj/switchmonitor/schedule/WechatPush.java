@@ -2,6 +2,8 @@ package cn.albumenj.switchmonitor.schedule;
 
 import cn.albumenj.switchmonitor.dto.WarningDto;
 import cn.albumenj.switchmonitor.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class WechatPush {
+    private final static Logger logger = LoggerFactory.getLogger(WechatPush.class);
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
 
@@ -39,7 +42,7 @@ public class WechatPush {
                                 warningDto.getBuilding() + " " + warningDto.getIp() + "(" + warningDto.getModel() + ")";
                         message.add(msg);
 
-                        System.out.println(msg);
+                        logger.info(msg);
                     } else {
                         send.remove(warningDto.getIp());
                     }
@@ -59,7 +62,7 @@ public class WechatPush {
                         + "总掉线时间：" + time;
                 message.add(msg);
 
-                System.out.println(msg);
+                logger.info(msg);
             }
         }
     }

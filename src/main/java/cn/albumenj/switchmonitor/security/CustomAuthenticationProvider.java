@@ -2,8 +2,11 @@ package cn.albumenj.switchmonitor.security;
 
 import cn.albumenj.switchmonitor.bean.User;
 import cn.albumenj.switchmonitor.constant.PermissionConst;
+import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import cn.albumenj.switchmonitor.service.UserService;
 import cn.albumenj.switchmonitor.service.impl.GrantedAuthorityImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +26,7 @@ import java.util.ArrayList;
  */
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
+    private final static Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
     @Autowired
     private UserService userService;
 
@@ -49,6 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             Authentication auth = new UsernamePasswordAuthenticationToken(name, password, authorities);
             return auth;
         } else {
+            logger.debug("Username or Password Error");
             throw new BadCredentialsException("Username or Password Error");
         }
     }

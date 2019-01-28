@@ -5,11 +5,14 @@ import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.dao.PortStatusMapper;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
+import cn.albumenj.switchmonitor.security.CustomLoginHandler;
 import cn.albumenj.switchmonitor.service.PortStatusService;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
 import cn.albumenj.switchmonitor.util.OidList;
 import cn.albumenj.switchmonitor.util.SnmpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class PortStatusServiceImpl implements PortStatusService {
     private static List<PortStatus> portStatusRest = new LinkedList<>();
+    private final static Logger logger = LoggerFactory.getLogger(PortStatusService.class);
 
     @Autowired
     private PortStatusMapper portStatusMapper;
@@ -168,7 +172,7 @@ public class PortStatusServiceImpl implements PortStatusService {
         try {//等待直到所有任务完成
             executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.warn("Fetch Vlan Interrupted!");
         }
     }
 
