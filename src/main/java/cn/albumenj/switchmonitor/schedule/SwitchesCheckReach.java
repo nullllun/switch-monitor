@@ -3,6 +3,7 @@ package cn.albumenj.switchmonitor.schedule;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.bean.SwitchesReachable;
 import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
+import cn.albumenj.switchmonitor.constant.SystemConst;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
@@ -37,6 +38,8 @@ public class SwitchesCheckReach {
     SwitchesListService switchesListService;
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
+    @Autowired
+    SystemConst systemConst;
 
     @Value("${commit.switchesReachables-update}")
     Integer switchesReachablesLimit;
@@ -93,8 +96,8 @@ public class SwitchesCheckReach {
     private void check(SwitchesList switchesList, int times) {
         try {
             boolean reachable;
-            if (OS.IS_LINUX) {
-                final Process process = Runtime.getRuntime().exec("ping -n 1 -w 50 " + switchesList.getIp());
+            if (systemConst.isLinux()) {
+                final Process process = Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp());
                 ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
                 executorService.execute(() -> {
                     printMessage(process.getInputStream());
@@ -111,7 +114,8 @@ public class SwitchesCheckReach {
                     process.destroy();
                     reachable = false;
                 }
-            } else {
+            }
+            else {
                 InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
                 reachable = inetAddress.isReachable(50);
             }
@@ -151,7 +155,7 @@ public class SwitchesCheckReach {
             while ((line = bf.readLine()) != null) {
             }
         } catch (IOException e) {
-            logger.warn("PrintPingMessage " + e.toString());
+            logger.trace("PrintPingMessage " + e.toString());
         }
     }
 
