@@ -35,7 +35,6 @@ public class SwitchesUpdate {
 
     public void execute() {
         Long time = System.currentTimeMillis();
-        SnmpUtil snmpUtil = new SnmpUtil();
         ExecutorService executorService = CustomExecutors.newFixExecutorService(4);
         executorService.execute(() -> {
             SwitchUpdate.getSwitchesStatusHistories().clear();
@@ -51,11 +50,13 @@ public class SwitchesUpdate {
         });
         CustomExecutors.waitExecutor(executorService);
 
-        switchUpdate.setSnmpUtil(snmpUtil);
-
         List<SwitchesList> switchesLists = switchesListService.selectOnline(new SwitchesList());
+        if (switchesLists.size() == 0) {
+            return;
+        }
+
         executorService = CustomExecutors.newFixExecutorService(switchesLists.size());
-        for(SwitchesList s:switchesLists) {
+        for (SwitchesList s : switchesLists) {
             executorService.execute(() -> {
                 switchUpdate.submit(s);
             });
@@ -64,18 +65,17 @@ public class SwitchesUpdate {
 
         System.out.println(System.currentTimeMillis() - time);
         synchronized (SwitchUpdate.getSwitchesStatusHistories()) {
-            if(SwitchUpdate.getSwitchesStatusHistories().size()>0) {
+            if (SwitchUpdate.getSwitchesStatusHistories().size() > 0) {
                 switchesStatusHistoryService.insertList(SwitchUpdate.getSwitchesStatusHistories());
             }
             SwitchUpdate.getSwitchesStatusHistories().clear();
         }
         synchronized (SwitchUpdate.getSwitchesStatuses()) {
-            if(SwitchUpdate.getSwitchesStatuses().size()>0) {
+            if (SwitchUpdate.getSwitchesStatuses().size() > 0) {
                 switchesStatusService.updateList(SwitchUpdate.getSwitchesStatuses());
             }
             SwitchUpdate.getSwitchesStatuses().clear();
         }
-        snmpUtil.close();
     }
 
 }

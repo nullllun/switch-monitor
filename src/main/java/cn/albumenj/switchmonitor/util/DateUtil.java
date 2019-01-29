@@ -50,7 +50,7 @@ public class DateUtil {
             result.append(calendar.get(Calendar.DAY_OF_MONTH) - 1).append("日 ");
         }
         result.append(calendar.get(Calendar.HOUR)).append("时");
-        result.append(calendar.get(Calendar.MILLISECOND)).append("分");
+        result.append(calendar.get(Calendar.MINUTE)).append("分");
         result.append(calendar.get(Calendar.SECOND)).append("秒");
 
         return result.toString();

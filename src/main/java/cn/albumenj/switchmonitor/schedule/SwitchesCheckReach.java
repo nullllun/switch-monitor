@@ -60,7 +60,7 @@ public class SwitchesCheckReach {
 
         for (SwitchesList switchesList : switchesLists) {
             executorService.submit(() -> {
-                check(switchesList, 10);
+                check(switchesList, 5);
             });
         }
         executorService.shutdown();
@@ -97,7 +97,7 @@ public class SwitchesCheckReach {
         try {
             boolean reachable;
             if (systemConst.isLinux()) {
-                final Process process = Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp());
+                final Process process = Runtime.getRuntime().exec("ping -c 1 -W 300 " + switchesList.getIp());
                 ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
                 executorService.execute(() -> {
                     printMessage(process.getInputStream());
@@ -155,7 +155,7 @@ public class SwitchesCheckReach {
             while ((line = bf.readLine()) != null) {
             }
         } catch (IOException e) {
-            logger.trace("PrintPingMessage " + e.toString());
+            //logger.trace("PrintPingMessage " + e.toString());
         }
     }
 

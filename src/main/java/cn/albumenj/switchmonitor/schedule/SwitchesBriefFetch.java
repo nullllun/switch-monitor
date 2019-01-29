@@ -5,6 +5,7 @@ import cn.albumenj.switchmonitor.dto.BriefStatusDto;
 import cn.albumenj.switchmonitor.dto.SwitchesDetailDto;
 import cn.albumenj.switchmonitor.dto.SwitchesPortDetailDto;
 import cn.albumenj.switchmonitor.dto.WarningDto;
+import cn.albumenj.switchmonitor.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -130,9 +131,9 @@ public class SwitchesBriefFetch {
                 }
             }
             if (list.size() == entry.getValue().size()) {
-                String[] ips = entry.getValue().get(0).getOriginIp().split("\\.");
                 WarningDto warningDto = new WarningDto("devices_down",
-                        ips[0] + "." + ips[1] + "." + ips[2] + "网段", "全部设备", entry.getKey());
+                        IpUtil.getSegment(entry.getValue().get(0).getOriginIp(),3),
+                        "全部设备", entry.getKey());
                 warningDto.setDownTime(entry.getValue().get(0).getDownTime().getTime());
                 warning.add(warningDto);
                 reach.add(warningDto);
