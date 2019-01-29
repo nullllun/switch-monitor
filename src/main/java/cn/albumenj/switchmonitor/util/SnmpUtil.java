@@ -50,12 +50,17 @@ public class SnmpUtil {
     }
 
     public Map<Integer, String> walk(String ip, String community, String targetOid) {
+        Map<Integer, String> result = new HashMap<>(16);
+        return walk(ip, community, targetOid, result);
+    }
+
+    public Map<Integer, String> walk(String ip, String community, String targetOid, Map<Integer, String> result) {
         String address = PROTOCOL + ":" + ip + "/" + PORT;
         target = createCommunityTarget(address, community, VERSION, 1500, 2);
 
         OID targetOID = new OID(targetOid);
         try {
-            return snmpWalk(snmp, target, targetOID);
+            return snmpWalk(snmp, target, targetOID, result);
         } catch (Exception e) {
             logger.warn("SNMP walk Exception: " + e);
             return null;
@@ -79,9 +84,7 @@ public class SnmpUtil {
         }
     }
 
-    private Map<Integer, String> snmpWalk(Snmp snmp, CommunityTarget target, OID targetOID) throws Exception {
-        Map<Integer, String> result = new HashMap<>(16);
-
+    private Map<Integer, String> snmpWalk(Snmp snmp, CommunityTarget target, OID targetOID, Map<Integer, String> result) throws Exception {
         List<TreeEvent> events = treeUtils.getSubtree(target, targetOID);
         if (events == null || events.size() == 0) {
             logger.warn("Error: Unable to read table...");

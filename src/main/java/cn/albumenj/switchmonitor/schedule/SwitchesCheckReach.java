@@ -7,6 +7,7 @@ import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
+import org.apache.tomcat.jni.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,19 +92,28 @@ public class SwitchesCheckReach {
 
     private void check(SwitchesList switchesList, int times) {
         try {
-            final Process process = Runtime.getRuntime().exec("ping -c 1 -W 50 " + switchesList.getIp());
-            ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
-            executorService.execute(()->{printMessage(process.getInputStream());});
-            executorService.execute(()->{printMessage(process.getErrorStream());});
-            executorService.shutdown();
-
-            boolean end = process.waitFor(100, TimeUnit.MILLISECONDS);
             boolean reachable;
-            if (end) {
-                reachable = (0 == process.exitValue());
+            if (OS.IS_LINUX) {
+                final Process process = Runtime.getRuntime().exec("ping -n 1 -w 50 " + switchesList.getIp());
+                ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
+                executorService.execute(() -> {
+                    printMessage(process.getInputStream());
+                });
+                executorService.execute(() -> {
+                    printMessage(process.getErrorStream());
+                });
+                executorService.shutdown();
+
+                boolean end = process.waitFor(100, TimeUnit.MILLISECONDS);
+                if (end) {
+                    reachable = (0 == process.exitValue());
+                } else {
+                    process.destroy();
+                    reachable = false;
+                }
             } else {
-                process.destroy();
-                reachable = false;
+                InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
+                reachable = inetAddress.isReachable(50);
             }
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {

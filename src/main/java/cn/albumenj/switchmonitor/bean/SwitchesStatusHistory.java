@@ -1,7 +1,6 @@
 package cn.albumenj.switchmonitor.bean;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 交换机状态（历史）
@@ -9,24 +8,11 @@ import java.util.UUID;
  * @author Albumen
  */
 public class SwitchesStatusHistory {
-    private String id;
     private Integer switchId;
     private Integer cpuLoad;
     private Integer memoryUsed;
     private Integer temp;
     private Date timeStamp;
-
-    public SwitchesStatusHistory() {
-        this.id = UUID.randomUUID().toString();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Integer getSwitchId() {
         return switchId;

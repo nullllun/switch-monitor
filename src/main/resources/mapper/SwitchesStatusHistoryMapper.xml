@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.albumenj.switchmonitor.dao.SwitchesStatusHistoryMapper">
     <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.SwitchesStatusHistory">
-        <result column="id" property="id" jdbcType="VARCHAR"/>
         <result column="switch_id" property="switchId" jdbcType="INTEGER"/>
         <result column="cpu_load" property="cpuLoad" jdbcType="INTEGER"/>
         <result column="memory_used" property="memoryUsed" jdbcType="INTEGER"/>
@@ -11,7 +10,6 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,
         switch_id,
         cpu_load,
         memory_used,
@@ -19,10 +17,9 @@
         time_stamp
     </sql>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="switchesStatusHistory.id">
+    <insert id="insert">
         INSERT INTO switches_status_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="switchesStatusHistory.id!=null"> id,</if>
             <if test="switchesStatusHistory.switchId!=null"> switch_id,</if>
             <if test="switchesStatusHistory.cpuLoad!=null"> cpu_load,</if>
             <if test="switchesStatusHistory.memoryUsed!=null"> memory_used,</if>
@@ -31,8 +28,6 @@
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="switchesStatusHistory.id!=null">#{switchesStatusHistory.id,jdbcType=VARCHAR},
-            </if>
             <if test="switchesStatusHistory.switchId!=null">#{switchesStatusHistory.switchId,jdbcType=INTEGER},
             </if>
             <if test="switchesStatusHistory.cpuLoad!=null">#{switchesStatusHistory.cpuLoad,jdbcType=INTEGER},
@@ -48,7 +43,6 @@
 
     <insert id="insertList">
         INSERT INTO switches_status_history (
-            id,
             switch_id,
             cpu_load,
             memory_used,
@@ -57,7 +51,6 @@
         )VALUES
         <foreach collection="switchesStatusHistorys" item="switchesStatusHistory" index="index" separator=",">
             (
-            #{switchesStatusHistory.id,jdbcType=VARCHAR},
             #{switchesStatusHistory.switchId,jdbcType=INTEGER},
             #{switchesStatusHistory.cpuLoad,jdbcType=INTEGER},
             #{switchesStatusHistory.memoryUsed,jdbcType=INTEGER},

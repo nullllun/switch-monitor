@@ -56,6 +56,7 @@ public class SwitchUpdate {
     }
 
     public boolean submit(SwitchesList s) {
+        Long time = (System.currentTimeMillis());
         boolean ret = true;
         SwitchesStatus switchesStatus = new SwitchesStatus();
         SwitchesStatusHistory switchesStatusHistory = new SwitchesStatusHistory();
@@ -63,6 +64,7 @@ public class SwitchUpdate {
         OidList oidList = new OidList(s.getModel());
 
         switchesStatus.setSwitchId(s.getId());
+
         switchesStatus.setUpTime(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getUpTime())));
         switchesStatus.setName(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getNAME())));
         switchesStatus.setCpuLoad(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getCpuLoad())));
@@ -94,14 +96,23 @@ public class SwitchUpdate {
     private boolean submitPort(SwitchesList s, OidList oidList) {
         boolean ret = true;
 
-        Map<Integer, String> portName = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfName());
-        Map<Integer, String> portIndex = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIndex());
-        Map<Integer, String> portStatusG = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfStatus());
-        Map<Integer, String> portIn = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIn());
-        Map<Integer, String> portOut = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfOut());
-        Map<Integer, String> portUptime = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfUptime());
-        Map<Integer, String> portDesc = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfDescr());
-        Map<Integer, String> portSpeed = snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfSpeed());
+        Map<Integer, String> portName = new LinkedHashMap<>();
+        Map<Integer, String> portIndex = new LinkedHashMap<>();
+        Map<Integer, String> portStatusG = new LinkedHashMap<>();
+        Map<Integer, String> portIn = new LinkedHashMap<>();
+        Map<Integer, String> portOut = new LinkedHashMap<>();
+        Map<Integer, String> portUptime = new LinkedHashMap<>();
+        Map<Integer, String> portDesc = new LinkedHashMap<>();
+        Map<Integer, String> portSpeed = new LinkedHashMap<>();
+
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfName(), portName);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIndex(), portIndex);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfStatus(), portStatusG);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfIn(), portIn);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfOut(), portOut);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfUptime(), portUptime);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfDescr(), portDesc);
+        snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getIfSpeed(), portSpeed);
 
         Set<Map.Entry<Integer, String>> portNameEntries = portName.entrySet();
         List<PortSpeedHistory> portSpeedHistories = new LinkedList<>();
@@ -160,48 +171,36 @@ public class SwitchUpdate {
                                  List<PortSpeedHistoryBlank> portSpeedBlankUpdate,
                                  List<PortSpeedHistoryBlank> portSpeedBlankInsert) {
         PortStatus portStatusOld = portStatusConcurrentHashMap.get(portStatus.getSwitchPort());
-        // TODO: NPE检测优化
         boolean npeCheck = portStatusOld != null && portStatusOld.getInData() != null
                 && portStatus.getInData() != null && portStatusOld.getOutData() != null
-                && portStatus.getOutData() != null && portStatus.getSpeed() != null
-                && !"".equals(portStatusOld.getInData())
-                && !"".equals(portStatusOld.getOutData())
-                && !"".equals(portStatus.getInData())
-                && !"".equals(portStatus.getOutData());
+                && portStatus.getOutData() != null && portStatus.getSpeed() != null;
         if (npeCheck) {
-            Long inOld = Long.valueOf(portStatusOld.getInData());
-            Long inNow = Long.valueOf(portStatus.getInData());
-            Long outOld = Long.valueOf(portStatusOld.getOutData());
-            Long outNow = Long.valueOf(portStatus.getOutData());
 
-            Long in = inNow - inOld;
-            Long out = outNow - outOld;
+            Long in = portStatus.getInData() - portStatusOld.getInData();
+            Long out = portStatus.getOutData() - portStatusOld.getOutData();
             Long time = (portStatus.getTimeStamp().getTime() - portStatusOld.getTimeStamp().getTime()) / 1000;
-            Long speedMax = time * (Long.valueOf(portStatus.getSpeed()) * 125000);
+            Long speedMax = time * (portStatus.getSpeed() * 125000L);
 
-            boolean valid;
-            valid = in <= speedMax;
-            valid = valid && out <= speedMax;
-            valid = valid && in.longValue() >= 0L;
-            valid = valid && out.longValue() >= 0L;
+            boolean valid = in <= speedMax && out <= speedMax && in >= 0L && out >= 0L;
 
             if (valid) {
-                Long divide = time;
-                Long inB = in / divide;
-                Long outB = out / divide;
-
                 PortSpeed portSpeedSubmit = new PortSpeed();
-                portSpeedSubmit.setInSpeed(inB);
-                portSpeedSubmit.setOutSpeed(outB);
-                portSpeedSubmit.setSwitchId(portStatus.getSwitchId());
-                portSpeedSubmit.setPortIndex(portStatus.getPortIndex());
-                portSpeedSubmit.setSwitchPort(portStatus.getSwitchPort());
 
                 Integer up = 2;
                 if (up.equals(portStatus.getStatus())) {
                     portSpeedSubmit.setInSpeed(0L);
                     portSpeedSubmit.setOutSpeed(0L);
+                } else {
+                    Long inB = in / time;
+                    Long outB = out / time;
+                    portSpeedSubmit.setInSpeed(inB);
+                    portSpeedSubmit.setOutSpeed(outB);
                 }
+
+                portSpeedSubmit.setSwitchId(portStatus.getSwitchId());
+                portSpeedSubmit.setPortIndex(portStatus.getPortIndex());
+                portSpeedSubmit.setSwitchPort(portStatus.getSwitchPort());
+
                 portSpeeds.add(portSpeedSubmit);
                 submitSpeedHistory(portSpeedSubmit, portSpeedHistories, portSpeedBlankUpdate, portSpeedBlankInsert);
             }
@@ -213,36 +212,26 @@ public class SwitchUpdate {
                                     List<PortSpeedHistoryBlank> portSpeedBlankUpdate,
                                     List<PortSpeedHistoryBlank> portSpeedBlankInsert) {
         if (!portSpeedSubmit.getInSpeed().equals(0L) || !portSpeedSubmit.getOutSpeed().equals(0L)) {
+            // 当前有流量
             PortSpeedHistory portSpeedHistory = new PortSpeedHistory();
             BeanUtils.copyProperties(portSpeedSubmit, portSpeedHistory);
             portSpeedHistories.add(portSpeedHistory);
-            PortSpeed portSpeedOld = portSpeedConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
+
+            // 若以前有空流量则置无效
             PortSpeedHistoryBlank portSpeedHistoryBlankOld = portSpeedHistoryBlankConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
             if (portSpeedHistoryBlankOld != null) {
                 portSpeedHistoryBlankOld.setLatest(0);
                 portSpeedBlankUpdate.add(portSpeedHistoryBlankOld);
             }
         } else {
-            PortSpeed portSpeedOld = portSpeedConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
-            if (portSpeedOld != null) {
-                if (portSpeedOld.getInSpeed().equals(0L) || portSpeedOld.getOutSpeed().equals(0L)) {
-                    PortSpeedHistoryBlank portSpeedHistoryBlank = portSpeedHistoryBlankConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
-                    if (portSpeedHistoryBlank != null) {
-                        portSpeedHistoryBlank.setTimeEnd(new Date());
-                        portSpeedBlankUpdate.add(portSpeedHistoryBlank);
-                    } else {
-                        portSpeedHistoryBlank = initBlank(portSpeedSubmit.getSwitchPort());
-                        portSpeedBlankInsert.add(portSpeedHistoryBlank);
-                    }
-                } else {
-                    PortSpeedHistoryBlank portSpeedHistoryBlankOld = portSpeedHistoryBlankConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
-                    if (portSpeedHistoryBlankOld != null) {
-                        portSpeedHistoryBlankOld.setLatest(0);
-                        portSpeedBlankUpdate.add(portSpeedHistoryBlankOld);
-                    }
-                    PortSpeedHistoryBlank portSpeedHistoryBlank = initBlank(portSpeedSubmit.getSwitchPort());
-                    portSpeedBlankInsert.add(portSpeedHistoryBlank);
-                }
+            // 当前无流量
+            PortSpeedHistoryBlank portSpeedHistoryBlank = portSpeedHistoryBlankConcurrentHashMap.get(portSpeedSubmit.getSwitchPort());
+            if (portSpeedHistoryBlank != null) {
+                portSpeedHistoryBlank.setTimeEnd(new Date());
+                portSpeedBlankUpdate.add(portSpeedHistoryBlank);
+            } else {
+                portSpeedHistoryBlank = initBlank(portSpeedSubmit.getSwitchPort());
+                portSpeedBlankInsert.add(portSpeedHistoryBlank);
             }
         }
     }

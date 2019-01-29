@@ -2,7 +2,7 @@ package cn.albumenj.switchmonitor.schedule;
 
 import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.service.*;
-import cn.albumenj.switchmonitor.util.CustomThreadFactory;
+import cn.albumenj.switchmonitor.util.CustomExecutors;
 import cn.albumenj.switchmonitor.util.SnmpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 交换机信息刷新
@@ -37,27 +34,35 @@ public class SwitchesUpdate {
     PortSpeedHistoryService portSpeedHistoryService;
 
     public void execute() {
+        Long time = System.currentTimeMillis();
         SnmpUtil snmpUtil = new SnmpUtil();
-        SwitchUpdate.getSwitchesStatusHistories().clear();
-        SwitchUpdate.getSwitchesStatuses().clear();
-        switchUpdate.updatePortStatusMap();
-        switchUpdate.updatePortSpeedMap();
-        switchUpdate.updateSpeedBlankMap();
+        ExecutorService executorService = CustomExecutors.newFixExecutorService(4);
+        executorService.execute(() -> {
+            SwitchUpdate.getSwitchesStatusHistories().clear();
+        });
+        executorService.execute(() -> {
+            SwitchUpdate.getSwitchesStatuses().clear();
+        });
+        executorService.execute(() -> {
+            switchUpdate.updatePortStatusMap();
+        });
+        executorService.execute(() -> {
+            switchUpdate.updateSpeedBlankMap();
+        });
+        CustomExecutors.waitExecutor(executorService);
+
         switchUpdate.setSnmpUtil(snmpUtil);
 
         List<SwitchesList> switchesLists = switchesListService.selectOnline(new SwitchesList());
-        ExecutorService executorService = new ThreadPoolExecutor(1000,1000,5,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>(),new CustomThreadFactory());
+        executorService = CustomExecutors.newFixExecutorService(switchesLists.size());
         for(SwitchesList s:switchesLists) {
             executorService.execute(() -> {
                 switchUpdate.submit(s);
             });
         }
-        executorService.shutdown();
-        try {//等待直到所有任务完成
-            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            logger.warn("SwitchesUpdate Interrupted!");
-        }
+        CustomExecutors.waitExecutor(executorService);
+
+        System.out.println(System.currentTimeMillis() - time);
         synchronized (SwitchUpdate.getSwitchesStatusHistories()) {
             if(SwitchUpdate.getSwitchesStatusHistories().size()>0) {
                 switchesStatusHistoryService.insertList(SwitchUpdate.getSwitchesStatusHistories());
@@ -72,4 +77,5 @@ public class SwitchesUpdate {
         }
         snmpUtil.close();
     }
+
 }

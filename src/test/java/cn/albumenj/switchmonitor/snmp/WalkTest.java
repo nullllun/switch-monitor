@@ -31,7 +31,7 @@ public class WalkTest {
     @Autowired
     SwitchesListService switchesListService;
 
-    //@Test
+    @Test
     public void test(){
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
 
