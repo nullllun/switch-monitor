@@ -3,6 +3,7 @@ package cn.albumenj.switchmonitor.schedule;
 import cn.albumenj.switchmonitor.dto.WarningDto;
 import cn.albumenj.switchmonitor.util.DateUtil;
 import cn.albumenj.switchmonitor.util.IpUtil;
+import cn.albumenj.switchmonitor.util.WechatServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+
 
 /**
  * 微信公众号推送服务
@@ -22,6 +24,8 @@ public class WechatPush {
     private final static Logger logger = LoggerFactory.getLogger(WechatPush.class);
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
+    @Autowired
+    WechatServer wechatServer;
 
     @Value("${threshold.reach}")
     Integer reachThreshold;
@@ -30,7 +34,15 @@ public class WechatPush {
     private static ConcurrentHashMap<String, ExpireRecovery> recoveryMessage = new ConcurrentHashMap<>(16);
     List<String> push = new LinkedList<>();
 
-    public void deviceReachable() {
+    public void deviceReachable(){
+        push.clear();
+        manageReachable();
+        for(String str:push){
+            wechatServer.sendDebugMessage(str);
+        }
+    }
+
+    public void manageReachable() {
         List<WarningDto> reach = switchesBriefFetch.getBriefStatusDtoReach().getWarning();
         HashMap<String, WarningDto> send = new HashMap<>(reachSend.size());
         send.putAll(reachSend);
@@ -73,7 +85,7 @@ public class WechatPush {
                             entry.getValue().getWarningDto().getBuilding() + " " +
                             entry.getValue().getWarningDto().getIp() + "(" +
                             entry.getValue().getWarningDto().getModel() + ")"
-                            + "总掉线时间：" + time;
+                            + "\r\n总掉线时间：" + time;
                     push.add(msg);
 
                     logger.info(msg);

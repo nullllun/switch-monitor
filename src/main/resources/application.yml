@@ -36,7 +36,7 @@ threshold:
   mem: 80
   temp: 60
   speed: 95
-  reach: 0
+  reach: 5
 
 server:
   address: 0.0.0.0
