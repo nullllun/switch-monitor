@@ -37,6 +37,7 @@ threshold:
   temp: 60
   speed: 95
   reach: 5
+  pushRecovery: 2
 
 server:
   address: 0.0.0.0

@@ -29,16 +29,37 @@ public class WechatPush {
 
     @Value("${threshold.reach}")
     Integer reachThreshold;
+    @Value("${threshold.pushRecovery}")
+    Integer pushRecoveryTime;
 
     private static ConcurrentHashMap<String, WarningDto> reachSend = new ConcurrentHashMap<>(16);
     private static ConcurrentHashMap<String, ExpireRecovery> recoveryMessage = new ConcurrentHashMap<>(16);
-    List<String> push = new LinkedList<>();
+    List<String> pushBroke = new LinkedList<>();
+    List<String> pushRecovery = new LinkedList<>();
 
-    public void deviceReachable(){
-        push.clear();
+    public void deviceReachable() {
+        pushBroke.clear();
+        pushRecovery.clear();
+
         manageReachable();
-        for(String str:push){
-            wechatServer.sendDebugMessage(str);
+
+        push(pushBroke, "[监控消息]交换机炸了！");
+        push(pushRecovery, "[监控消息]交换机上线了！");
+
+    }
+
+    private void push(List<String> stringList, String head) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(head + "\r\n\r\n");
+        for (String str : stringList) {
+            stringBuilder.append(str);
+            if (stringBuilder.length() > 400) {
+                wechatServer.sendDebugMessage(stringBuilder.toString());
+                stringBuilder.setLength(0);
+                stringBuilder.append(head + "\r\n\r\n");
+            } else {
+                stringBuilder.append("\r\n");
+            }
         }
     }
 
@@ -50,11 +71,10 @@ public class WechatPush {
         if (reach != null && reach.size() > 0) {
             for (WarningDto warningDto : reach) {
                 if (warningDto.getDownTime() < DateUtil.beforeNowMinute(reachThreshold).getTime()) {
-                    if (send.get(warningDto.getIp()) == null && !recoveryMessage.containsKey(IpUtil.getSegment(warningDto.getIp(),3))) {
+                    if (send.get(warningDto.getIp()) == null && !recoveryMessage.containsKey(IpUtil.getSegment(warningDto.getIp(), 3))) {
                         reachSend.put(warningDto.getIp(), warningDto);
-                        String msg = "[监控消息]交换机炸了！\r\n" +
-                                warningDto.getBuilding() + " " + warningDto.getIp() + "(" + warningDto.getModel() + ")";
-                        push.add(msg);
+                        String msg = warningDto.getBuilding() + " " + warningDto.getIp() + "(" + warningDto.getModel() + ")";
+                        pushBroke.add(msg);
 
                         logger.info(msg);
                     } else {
@@ -67,26 +87,26 @@ public class WechatPush {
             Set<Map.Entry<String, WarningDto>> entries = send.entrySet();
             for (Map.Entry<String, WarningDto> entry : entries) {
                 reachSend.remove(entry.getKey());
-                recoveryMessage.put(entry.getKey(),new ExpireRecovery(new Date(),entry.getValue()));
+                recoveryMessage.put(entry.getKey(), new ExpireRecovery(new Date(), entry.getValue()));
             }
         }
-        if(recoveryMessage.size()>0){
+        if (recoveryMessage.size() > 0) {
             // 信息沉淀
             Set<Map.Entry<String, ExpireRecovery>> entries = recoveryMessage.entrySet();
             for (Map.Entry<String, ExpireRecovery> entry : entries) {
                 // 非网段IP或沉淀时间已过
-                if(!IpUtil.isSegment(entry.getKey()) || entry.getValue().getTime().getTime() < DateUtil.beforeNowMinute(2).getTime()) {
+                if (!IpUtil.isSegment(entry.getKey()) ||
+                        entry.getValue().getTime().getTime() < DateUtil.beforeNowMinute(pushRecoveryTime).getTime()) {
                     recoveryMessage.remove(entry.getKey());
 
                     String time = DateUtil.getTime(System.currentTimeMillis() -
                             entry.getValue().getWarningDto().getDownTime());
 
-                    String msg = "[监控消息]交换机上线了！\r\n" +
-                            entry.getValue().getWarningDto().getBuilding() + " " +
+                    String msg = entry.getValue().getWarningDto().getBuilding() + " " +
                             entry.getValue().getWarningDto().getIp() + "(" +
                             entry.getValue().getWarningDto().getModel() + ")"
-                            + "\r\n总掉线时间：" + time;
-                    push.add(msg);
+                            + "\r\n总掉线时间：" + time + "\r\n";
+                    pushRecovery.add(msg);
 
                     logger.info(msg);
                 }
@@ -94,7 +114,7 @@ public class WechatPush {
         }
     }
 
-    private class ExpireRecovery{
+    private class ExpireRecovery {
         private Date time;
         private WarningDto warningDto;
 
