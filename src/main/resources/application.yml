@@ -52,3 +52,5 @@ sync:
 wechat:
   appid: ENC(eOr8TLUhfO8bIfuc8Vfdtbog/C2tmmZOGdZ/f6rpPAM=)
   appSecret: ENC(iqQZaIBMb3BvJzG28NPBmzIMBO5qGDar2Pwm1mKAXwnhCxfCi04SVCU2U1kPNspr)
+  corpId: ENC(SyGmyVQ6KdoFkTfcdNzpqh07i81BdmQN/VibBAtu1y8=)
+  debugSecret: ENC(zP0PudNLv7ay+3i7/TndZfGHXTlG9AGPfnFjS0p4pLy5qJ9EsxQv9I6RlLVJxGzv20mFcBYGulA=)

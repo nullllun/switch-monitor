@@ -28,9 +28,9 @@ public class WechatPush {
 
     private static ConcurrentHashMap<String, WarningDto> reachSend = new ConcurrentHashMap<>(16);
     private static ConcurrentHashMap<String, ExpireRecovery> recoveryMessage = new ConcurrentHashMap<>(16);
+    List<String> push = new LinkedList<>();
 
     public void deviceReachable() {
-        List<String> message = new LinkedList<>();
         List<WarningDto> reach = switchesBriefFetch.getBriefStatusDtoReach().getWarning();
         HashMap<String, WarningDto> send = new HashMap<>(reachSend.size());
         send.putAll(reachSend);
@@ -42,7 +42,7 @@ public class WechatPush {
                         reachSend.put(warningDto.getIp(), warningDto);
                         String msg = "[监控消息]交换机炸了！\r\n" +
                                 warningDto.getBuilding() + " " + warningDto.getIp() + "(" + warningDto.getModel() + ")";
-                        message.add(msg);
+                        push.add(msg);
 
                         logger.info(msg);
                     } else {
@@ -62,7 +62,8 @@ public class WechatPush {
             // 信息沉淀
             Set<Map.Entry<String, ExpireRecovery>> entries = recoveryMessage.entrySet();
             for (Map.Entry<String, ExpireRecovery> entry : entries) {
-                if(entry.getValue().getTime().getTime() < DateUtil.beforeNowMinute(2).getTime()) {
+                // 非网段IP或沉淀时间已过
+                if(!IpUtil.isSegment(entry.getKey()) || entry.getValue().getTime().getTime() < DateUtil.beforeNowMinute(2).getTime()) {
                     recoveryMessage.remove(entry.getKey());
 
                     String time = DateUtil.getTime(System.currentTimeMillis() -
@@ -73,7 +74,7 @@ public class WechatPush {
                             entry.getValue().getWarningDto().getIp() + "(" +
                             entry.getValue().getWarningDto().getModel() + ")"
                             + "总掉线时间：" + time;
-                    message.add(msg);
+                    push.add(msg);
 
                     logger.info(msg);
                 }

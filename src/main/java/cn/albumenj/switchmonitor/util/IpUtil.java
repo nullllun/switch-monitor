@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
  */
 public class IpUtil {
     private final static Logger logger = LoggerFactory.getLogger(IpUtil.class);
+    private final static String SUFFIX = " 网段";
     public static String getSegment(String ip,int reg){
         String[] ips = ip.split("\\.");
-        String suffix = " 网段";
-        if(ip.endsWith(suffix)){
+        if(ip.endsWith(SUFFIX)){
             return ip;
         }
         else if(ips.length!=4){
@@ -26,8 +26,11 @@ public class IpUtil {
                 stringBuilder.append(".");
                 stringBuilder.append(ips[i]);
             }
-            stringBuilder.append(suffix);
+            stringBuilder.append(SUFFIX);
             return stringBuilder.toString();
         }
+    }
+    public static boolean isSegment(String ip){
+        return ip.endsWith(SUFFIX);
     }
 }

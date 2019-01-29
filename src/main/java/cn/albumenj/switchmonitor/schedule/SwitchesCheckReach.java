@@ -97,7 +97,7 @@ public class SwitchesCheckReach {
         try {
             boolean reachable;
             if (systemConst.isLinux()) {
-                final Process process = Runtime.getRuntime().exec("ping -c 1 -W 300 " + switchesList.getIp());
+                final Process process = Runtime.getRuntime().exec("ping -c 1 " + switchesList.getIp());
                 ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
                 executorService.execute(() -> {
                     printMessage(process.getInputStream());
@@ -107,7 +107,7 @@ public class SwitchesCheckReach {
                 });
                 executorService.shutdown();
 
-                boolean end = process.waitFor(100, TimeUnit.MILLISECONDS);
+                boolean end = process.waitFor(500, TimeUnit.MILLISECONDS);
                 if (end) {
                     reachable = (0 == process.exitValue());
                 } else {
