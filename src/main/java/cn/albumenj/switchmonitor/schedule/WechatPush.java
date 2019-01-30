@@ -55,7 +55,7 @@ public class WechatPush {
             for (String str : stringList) {
                 stringBuilder.append(str);
                 if (stringBuilder.length() > 400) {
-                    wechatServer.sendDebugMessage(stringBuilder.toString());
+                    //wechatServer.sendDebugMessage(stringBuilder.toString());
                     System.out.println(stringBuilder.toString());
                     stringBuilder.setLength(0);
                     stringBuilder.append(head + "\r\n\r\n");
@@ -64,7 +64,7 @@ public class WechatPush {
                 }
             }
             if (stringBuilder.length() > 0) {
-                wechatServer.sendDebugMessage(stringBuilder.toString());
+                //wechatServer.sendDebugMessage(stringBuilder.toString());
                 System.out.println(stringBuilder.toString());
                 stringBuilder.setLength(0);
                 stringBuilder.append(head + "\r\n\r\n");
@@ -82,7 +82,7 @@ public class WechatPush {
                 if (warningDto.getDownTime() < DateUtil.beforeNowMinute(reachThreshold).getTime()) {
                     if (send.get(warningDto.getIp()) == null && !recoveryMessage.containsKey(IpUtil.getSegment(warningDto.getIp(), 3))) {
                         reachSend.put(warningDto.getIp(), warningDto);
-                        String msg = warningDto.getBuilding() + " " + warningDto.getIp() + "(" + warningDto.getModel() + ")";
+                        String msg = warningDto.getBuilding() + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")";
                         pushBroke.add(msg);
 
                         logger.info(msg);
@@ -112,7 +112,7 @@ public class WechatPush {
                             entry.getValue().getWarningDto().getDownTime());
 
                     String msg = entry.getValue().getWarningDto().getBuilding() + " " +
-                            entry.getValue().getWarningDto().getIp() + "(" +
+                            entry.getValue().getWarningDto().getIp() + " (" +
                             entry.getValue().getWarningDto().getModel() + ")"
                             + "\r\n总掉线时间：" + time + "\r\n";
                     pushRecovery.add(msg);

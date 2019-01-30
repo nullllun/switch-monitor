@@ -8,7 +8,7 @@ import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
-import org.apache.tomcat.jni.OS;
+import cn.albumenj.switchmonitor.util.IpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,23 +97,7 @@ public class SwitchesCheckReach {
         try {
             boolean reachable;
             if (systemConst.isLinux()) {
-                final Process process = Runtime.getRuntime().exec("ping -c 1 " + switchesList.getIp());
-                ExecutorService executorService = new ThreadPoolExecutor(2, 2, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
-                executorService.execute(() -> {
-                    printMessage(process.getInputStream());
-                });
-                executorService.execute(() -> {
-                    printMessage(process.getErrorStream());
-                });
-                executorService.shutdown();
-
-                boolean end = process.waitFor(500, TimeUnit.MILLISECONDS);
-                if (end) {
-                    reachable = (0 == process.exitValue());
-                } else {
-                    process.destroy();
-                    reachable = false;
-                }
+                reachable = IpUtil.execPingCommand(switchesList.getIp());
             }
             else {
                 InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
@@ -139,25 +123,9 @@ public class SwitchesCheckReach {
             } else {
                 check(switchesList, times - 1);
             }
-        } catch (InterruptedException e) {
-            logger.warn("Check " + e.toString());
         } catch (IOException e) {
             logger.warn("Check " + e.toString());
         }
     }
-
-    private static void printMessage(final InputStream input) {
-
-        Reader reader = new InputStreamReader(input);
-        BufferedReader bf = new BufferedReader(reader);
-        String line = null;
-        try {
-            while ((line = bf.readLine()) != null) {
-            }
-        } catch (IOException e) {
-            //logger.trace("PrintPingMessage " + e.toString());
-        }
-    }
-
 
 }

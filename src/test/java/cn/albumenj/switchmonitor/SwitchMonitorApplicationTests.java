@@ -1,6 +1,5 @@
 package cn.albumenj.switchmonitor;
 
-import cn.albumenj.switchmonitor.service.PortStatusService;
 import cn.albumenj.switchmonitor.util.WechatServer;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
@@ -21,7 +20,6 @@ public class SwitchMonitorApplicationTests {
     @Test
     public void contextLoads() {
         System.out.println(stringEncryptor.encrypt(""));
-        wechatServer.sendDebugMessage("SpringBoot Test Runner");
     }
 
 }
