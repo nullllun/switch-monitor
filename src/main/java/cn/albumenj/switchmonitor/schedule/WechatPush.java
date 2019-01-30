@@ -55,11 +55,18 @@ public class WechatPush {
             stringBuilder.append(str);
             if (stringBuilder.length() > 400) {
                 wechatServer.sendDebugMessage(stringBuilder.toString());
+                System.out.println(stringBuilder.toString());
                 stringBuilder.setLength(0);
                 stringBuilder.append(head + "\r\n\r\n");
             } else {
                 stringBuilder.append("\r\n");
             }
+        }
+        if (stringBuilder.length() > 0) {
+            wechatServer.sendDebugMessage(stringBuilder.toString());
+            System.out.println(stringBuilder.toString());
+            stringBuilder.setLength(0);
+            stringBuilder.append(head + "\r\n\r\n");
         }
     }
 
