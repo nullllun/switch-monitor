@@ -1,9 +1,10 @@
 package cn.albumenj.switchmonitor.schedule;
 
+import cn.albumenj.switchmonitor.bean.Log;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
+import cn.albumenj.switchmonitor.constant.LogConst;
 import cn.albumenj.switchmonitor.service.*;
 import cn.albumenj.switchmonitor.util.CustomExecutors;
-import cn.albumenj.switchmonitor.util.SnmpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class SwitchesUpdate {
     PortStatusService portStatusService;
     @Autowired
     PortSpeedHistoryService portSpeedHistoryService;
+    @Autowired
+    LogService logService;
 
     public void execute() {
         Long time = System.currentTimeMillis();
@@ -50,6 +53,7 @@ public class SwitchesUpdate {
         });
         CustomExecutors.waitExecutor(executorService);
 
+        // 仅获取在线机器，防止过多的UDP发包阻塞网络
         List<SwitchesList> switchesLists = switchesListService.selectOnline(new SwitchesList());
         if (switchesLists.size() == 0) {
             return;
@@ -63,7 +67,6 @@ public class SwitchesUpdate {
         }
         CustomExecutors.waitExecutor(executorService);
 
-        System.out.println(System.currentTimeMillis() - time);
         synchronized (SwitchUpdate.getSwitchesStatusHistories()) {
             if (SwitchUpdate.getSwitchesStatusHistories().size() > 0) {
                 switchesStatusHistoryService.insertList(SwitchUpdate.getSwitchesStatusHistories());
@@ -76,6 +79,11 @@ public class SwitchesUpdate {
             }
             SwitchUpdate.getSwitchesStatuses().clear();
         }
+
+        Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
+                "Switches Information Update End Using " + (System.currentTimeMillis() - time) + "ms", "");
+        log.setOperator("System");
+        logService.insert(log);
     }
 
 }

@@ -114,4 +114,17 @@ public class WechatUserServiceImpl implements WechatUserService {
         wechatUser = wechatUserMapper.selectByToken(wechatUser);
         return wechatUser;
     }
+
+    /**
+     * 查找姓名
+     *
+     * @param openId
+     * @return
+     */
+    @Override
+    public String selectName(String openId) {
+        WechatUser wechatUser = new WechatUser();
+        wechatUser.setOpenId(openId);
+        return wechatUserMapper.selectName(wechatUser).getUsername();
+    }
 }

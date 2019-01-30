@@ -53,4 +53,12 @@ public interface WechatUserService {
      * @return 成功：对应用户信息 失败：null
      */
     WechatUser checkToken(String token);
+
+    /**
+     * 查找姓名
+     *
+     * @param openId
+     * @return
+     */
+    String selectName(String openId);
 }

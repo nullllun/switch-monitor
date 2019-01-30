@@ -3,9 +3,11 @@ package cn.albumenj.switchmonitor.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.InetAddress;
 
 /**
  * IP地址工具类
@@ -84,5 +86,42 @@ public class IpUtil {
             }
         }
         return networkUseable;
+    }
+
+
+    /**
+     * @Description: 获取客户端IP地址
+     */
+    public static String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        String unknown = "unknown";
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            String localhost = "127.0.0.1";
+            if (ip.equals(localhost)) {
+                //根据网卡取本机配置的IP
+                InetAddress inet = null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                ip = inet.getHostAddress();
+            }
+        }
+        // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if (ip != null && ip.length() > 15) {
+            String separator = ",";
+            if (ip.indexOf(separator) > 0) {
+                ip = ip.substring(0, ip.indexOf(","));
+            }
+        }
+        return ip;
     }
 }

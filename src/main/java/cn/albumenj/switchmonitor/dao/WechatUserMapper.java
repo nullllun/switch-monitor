@@ -52,4 +52,12 @@ public interface WechatUserMapper {
      * @return
      */
     WechatUser selectByToken(@Param("wechatUser") WechatUser wechatUser);
+
+    /**
+     * 查找姓名
+     *
+     * @param wechatUser
+     * @return
+     */
+    WechatUser selectName(@Param("wechatUser") WechatUser wechatUser);
 }

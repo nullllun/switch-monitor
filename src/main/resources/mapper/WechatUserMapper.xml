@@ -86,5 +86,12 @@
         limit 1
     </select>
 
+    <select id="selectName" resultMap="BaseResultMap">
+        select username
+        from wechat_user
+        where open_id = #{wechatUser.openId,jdbcType=VARCHAR}
+        limit 1
+    </select>
+
 </mapper>
 

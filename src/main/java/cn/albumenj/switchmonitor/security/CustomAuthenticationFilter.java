@@ -2,7 +2,6 @@ package cn.albumenj.switchmonitor.security;
 
 import cn.albumenj.switchmonitor.constant.HttpConst;
 import cn.albumenj.switchmonitor.constant.PageCodeEnum;
-import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import cn.albumenj.switchmonitor.service.impl.GrantedAuthorityImpl;
 import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.PageCodeUtil;
@@ -46,7 +45,8 @@ public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
             String token = request.getHeader(HttpConst.AUTHORIZATION);
 
             if (token != null && !token.isEmpty()) {
-                String[] ret = jwtUtil.verify(token.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
+                String jwt = token.substring(HttpConst.AUTHORIZATION_PREFIX.length());
+                String[] ret = jwtUtil.verify(jwt);
 
                 if (ret != null && ret[0] != null) {
                     String tokenRedis = redisUtil.get(ret[0]);
@@ -58,7 +58,7 @@ public class CustomAuthenticationFilter extends BasicAuthenticationFilter {
                                 authorities.add(new GrantedAuthorityImpl(permission));
                             }
                         }
-                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(ret[0], null, authorities);
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwtUtil.getName(jwt), null, authorities);
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                         chain.doFilter(request, response);
                         return;

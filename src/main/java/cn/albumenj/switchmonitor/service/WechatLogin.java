@@ -2,6 +2,8 @@ package cn.albumenj.switchmonitor.service;
 
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 微信登陆接口
  *
@@ -33,4 +35,12 @@ public interface WechatLogin {
      * @return
      */
     LoginStatusDto tokenSubmit(String token, String uuid);
+
+    /**
+     * 填充用户访问的Servlet信息
+     * 用于记录IP
+     *
+     * @param request
+     */
+    void setRequest(HttpServletRequest request);
 }

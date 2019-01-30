@@ -21,6 +21,8 @@ public class HistoryClean {
     PortSpeedHistoryService portSpeedHistoryService;
     @Autowired
     SwitchesReachableHistoryService switchesReachableHistoryService;
+    @Autowired
+    LogService logService;
 
     public void clean() {
         switchesStatusHistoryService.delete();
@@ -28,5 +30,6 @@ public class HistoryClean {
         portSpeedHistoryService.delete();
         switchesReachableHistoryService.delete();
         portSpeedHistoryBlankService.delete();
+        logService.deleteHistory();
     }
 }

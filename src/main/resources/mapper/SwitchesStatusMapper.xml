@@ -221,7 +221,7 @@
         FROM switches_status
     </select>
 
-    <select id="selectDetail" resultMap="DetailResultMap" fetchSize="-2147483648">
+    <select id="selectDetail" resultMap="DetailResultMap">
         SELECT
             switches_status.id,
             switches_status.switch_id,

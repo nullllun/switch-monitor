@@ -5,7 +5,6 @@ import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.dao.PortStatusMapper;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
-import cn.albumenj.switchmonitor.security.CustomLoginHandler;
 import cn.albumenj.switchmonitor.service.PortStatusService;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
@@ -137,7 +136,7 @@ public class PortStatusServiceImpl implements PortStatusService {
 
     @Override
     public void updateVlan() {
-        List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
+        List<SwitchesList> switchesLists = switchesListService.selectOnline(new SwitchesList());
         ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
 
         for (SwitchesList s : switchesLists) {

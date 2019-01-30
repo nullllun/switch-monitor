@@ -1,23 +1,24 @@
 package cn.albumenj.switchmonitor.service.impl;
 
+import cn.albumenj.switchmonitor.bean.Log;
 import cn.albumenj.switchmonitor.bean.WechatUser;
 import cn.albumenj.switchmonitor.constant.HttpConst;
+import cn.albumenj.switchmonitor.constant.LogConst;
 import cn.albumenj.switchmonitor.constant.PermissionConst;
 import cn.albumenj.switchmonitor.dto.LoginCodeDto;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 import cn.albumenj.switchmonitor.security.CustomLoginHandler;
+import cn.albumenj.switchmonitor.service.LogService;
 import cn.albumenj.switchmonitor.service.WechatLogin;
 import cn.albumenj.switchmonitor.service.WechatUserService;
-import cn.albumenj.switchmonitor.util.JSONUtil;
-import cn.albumenj.switchmonitor.util.JwtUtil;
-import cn.albumenj.switchmonitor.util.RedisUtil;
-import cn.albumenj.switchmonitor.util.WechatServer;
+import cn.albumenj.switchmonitor.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +35,10 @@ public class WechatLoginImpl implements WechatLogin {
     WechatServer wechatServer;
     @Autowired
     WechatUserService wechatUserService;
+    @Autowired
+    LogService logService;
+
+    private HttpServletRequest request;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -62,6 +67,9 @@ public class WechatLoginImpl implements WechatLogin {
                  * 认证成功
                  */
                 loginStatusDto = fillUser(wechatUser);
+
+                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Login", IpUtil.getIpAddr(request));
+                logService.insert(log);
             } else {
                 /**
                  * 认证失败，下一步需提交 Token 确认
@@ -109,6 +117,9 @@ public class WechatLoginImpl implements WechatLogin {
                             response.getUnionid());
             if (wechatUser != null) {
                 loginStatusDto = fillUser(wechatUser);
+
+                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Register", IpUtil.getIpAddr(request));
+                logService.insert(log);
             } else {
                 loginStatusDto = new LoginStatusDto();
                 loginStatusDto.setSuccess(false);
@@ -170,6 +181,9 @@ public class WechatLoginImpl implements WechatLogin {
 
             if (wechatUser != null) {
                 loginStatusDto = fillUser(wechatUser);
+
+                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Login", IpUtil.getIpAddr(request));
+                logService.insert(log);
             } else {
                 loginStatusDto = new LoginStatusDto();
                 loginStatusDto.setSuccess(false);
@@ -179,5 +193,16 @@ public class WechatLoginImpl implements WechatLogin {
             loginStatusDto.setSuccess(false);
         }
         return loginStatusDto;
+    }
+
+    /**
+     * 填充用户访问的Servlet信息
+     * 用于记录IP
+     *
+     * @param request
+     */
+    @Override
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
     }
 }

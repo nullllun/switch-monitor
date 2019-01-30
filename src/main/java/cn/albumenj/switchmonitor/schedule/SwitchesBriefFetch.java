@@ -1,10 +1,13 @@
 package cn.albumenj.switchmonitor.schedule;
 
+import cn.albumenj.switchmonitor.bean.Log;
+import cn.albumenj.switchmonitor.constant.LogConst;
 import cn.albumenj.switchmonitor.dao.SwitchesStatusMapper;
 import cn.albumenj.switchmonitor.dto.BriefStatusDto;
 import cn.albumenj.switchmonitor.dto.SwitchesDetailDto;
 import cn.albumenj.switchmonitor.dto.SwitchesPortDetailDto;
 import cn.albumenj.switchmonitor.dto.WarningDto;
+import cn.albumenj.switchmonitor.service.LogService;
 import cn.albumenj.switchmonitor.util.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +34,8 @@ public class SwitchesBriefFetch {
     Integer speedThreshold;
     @Autowired
     SwitchesStatusMapper switchesStatusMapper;
+    @Autowired
+    LogService logService;
 
     private volatile static BriefStatusDto briefStatusDtoCpu = new BriefStatusDto();
     private volatile static BriefStatusDto briefStatusDtoMem = new BriefStatusDto();
@@ -128,18 +133,29 @@ public class SwitchesBriefFetch {
                             switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
                     warningDto.setDownTime(switchesDetailDto.getDownTime().getTime());
                     list.add(warningDto);
+
                 }
             }
             if (list.size() == entry.getValue().size()) {
                 WarningDto warningDto = new WarningDto("devices_down",
-                        IpUtil.getSegment(entry.getValue().get(0).getOriginIp(),3),
+                        IpUtil.getSegment(entry.getValue().get(0).getOriginIp(), 3),
                         "全部设备", entry.getKey());
                 warningDto.setDownTime(entry.getValue().get(0).getDownTime().getTime());
                 warning.add(warningDto);
                 reach.add(warningDto);
+
+                String msg = "Device Down " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                        warningDto.getBuilding() + "Down Time: " + warningDto.getDownTime();
+                submitLog(msg);
             } else {
                 warning.addAll(list);
                 reach.addAll(list);
+
+                for(WarningDto warningDto:list){
+                    String msg = "Device Down " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                            warningDto.getBuilding() + "Down Time: " + warningDto.getDownTime();
+                    submitLog(msg);
+                }
             }
         }
     }
@@ -153,18 +169,27 @@ public class SwitchesBriefFetch {
                     switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
             warningDto.setTemp(switchesDetailDto.getTemp().toString());
             warning.add(warningDto);
+            String msg = "Heat " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                    warningDto.getBuilding() + " " + warningDto.getTemp() + "℃";
+            submitLog(msg);
         }
         if (switchesDetailDto.getCpuLoad() != null && switchesDetailDto.getCpuLoad() > cpuThreshold) {
             WarningDto warningDto = new WarningDto("cpu_overload",
                     switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
             warningDto.setCpuLoad(switchesDetailDto.getCpuLoad().toString());
             warning.add(warningDto);
+            String msg = "Cpu Overload " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                    warningDto.getBuilding() + " " + warningDto.getCpuLoad() + "%";
+            submitLog(msg);
         }
         if (switchesDetailDto.getMemoryUsed() != null && switchesDetailDto.getMemoryUsed() > memThreshold) {
             WarningDto warningDto = new WarningDto("mem_overload",
                     switchesDetailDto.getOriginIp(), switchesDetailDto.getModel(), switchesDetailDto.getBuilding());
             warningDto.setMemUsed(switchesDetailDto.getMemoryUsed().toString());
             warning.add(warningDto);
+            String msg = "Mem Overload " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                    warningDto.getBuilding() + " " + warningDto.getTemp() + "%";
+            submitLog(msg);
         }
         for (SwitchesPortDetailDto switchesPortDetailDto : switchesDetailDto.getSwitchesPortDetailDto()) {
             if (switchesPortDetailDto.getInSpeed() != null
@@ -179,6 +204,11 @@ public class SwitchesBriefFetch {
                 warningDto.setCvlan(switchesPortDetailDto.getCvlan());
                 warningDto.setPvlan(switchesPortDetailDto.getPvlan());
                 warning.add(warningDto);
+
+                String msg = "Port In " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                        warningDto.getBuilding() + " " + warningDto.getPortName() + " ( CVLAN: " + warningDto.getCvlan()
+                        + " PVLAN: " + warningDto.getPvlan() + ") " + warningDto.getPortSpeed() + " Mbps";
+                submitLog(msg);
             }
             if (switchesPortDetailDto.getOutSpeed() != null
                     && switchesPortDetailDto.getOutSpeed() >
@@ -192,7 +222,19 @@ public class SwitchesBriefFetch {
                 warningDto.setCvlan(switchesPortDetailDto.getCvlan());
                 warningDto.setPvlan(switchesPortDetailDto.getPvlan());
                 warning.add(warningDto);
+
+                String msg = "Port Out " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
+                        warningDto.getBuilding() + " " + warningDto.getPortName() + " ( CVLAN: " + warningDto.getCvlan()
+                        + " PVLAN: " + warningDto.getPvlan() + ") " + warningDto.getPortSpeed() + " Mbps";
+                submitLog(msg);
             }
         }
+    }
+
+    private void submitLog(String msg) {
+        Log log = new Log(LogConst.WARN, LogConst.SYSTEM, "System",
+                msg, "");
+        log.setOperator("System");
+        logService.insert(log);
     }
 }

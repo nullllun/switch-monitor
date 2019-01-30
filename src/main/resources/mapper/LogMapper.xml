@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.albumenj.switchmonitor.dao.LogMapper">
+    <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.Log">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operation" property="operation" jdbcType="VARCHAR"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="BIGINT"/>
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+            id,
+            level,
+            type,
+            open_id,
+            operator,
+            operation,
+            time_stamp,
+            ip
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="log.id!=null">id,</if>
+            <if test="log.level!=null">level,</if>
+            <if test="log.type!=null">type,</if>
+            <if test="log.openId!=null">open_id,</if>
+            <if test="log.operator!=null">operator,</if>
+            <if test="log.operation!=null">operation,</if>
+            <if test="log.timeStamp!=null">time_stamp,</if>
+            <if test="log.ip!=null">ip,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="log.id!=null">#{log.id,jdbcType=BIGINT},
+            </if>
+            <if test="log.level!=null">#{log.level,jdbcType=INTEGER},
+            </if>
+            <if test="log.type!=null">#{log.type,jdbcType=INTEGER},
+            </if>
+            <if test="log.openId!=null">#{log.openId,jdbcType=VARCHAR},
+            </if>
+            <if test="log.operator!=null">#{log.operator,jdbcType=VARCHAR},
+            </if>
+            <if test="log.operation!=null">#{log.operation,jdbcType=VARCHAR},
+            </if>
+            <if test="log.timeStamp!=null">#{log.timeStamp,jdbcType=BIGINT},
+            </if>
+            <if test="log.ip!=null">#{log.ip,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO log (
+        id,
+        level,
+        type,
+        open_id,
+        operator,
+        operation,
+        time_stamp,
+        ip
+        )VALUES
+        <foreach collection="logs" item="log" index="index" separator=",">
+            (
+            #{log.id,jdbcType=BIGINT},
+            #{log.level,jdbcType=INTEGER},
+            #{log.type ,jdbcType=INTEGER},
+            #{log.openId,jdbcType=VARCHAR},
+            #{log.operator,jdbcType=VARCHAR},
+            #{log.operation,jdbcType=VARCHAR},
+            #{log.timeStamp,jdbcType=BIGINT},
+            #{log.ip,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteHistory">
+        delete
+        from log
+        where time_stamp &lt;= #{log.timeStamp,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectByLevel">
+        select level,type,open_id,operator,operation,time_stamp,ip
+        from log
+        where level = #{log.level,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByType">
+        select level,type,open_id,operator,operation,time_stamp,ip
+        from log
+        where type = #{log.type ,jdbcType=INTEGER}
+    </select>
+</mapper>
+

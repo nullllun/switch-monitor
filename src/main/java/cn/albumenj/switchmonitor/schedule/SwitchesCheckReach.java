@@ -1,9 +1,12 @@
 package cn.albumenj.switchmonitor.schedule;
 
+import cn.albumenj.switchmonitor.bean.Log;
 import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.bean.SwitchesReachable;
 import cn.albumenj.switchmonitor.bean.SwitchesReachableHistory;
+import cn.albumenj.switchmonitor.constant.LogConst;
 import cn.albumenj.switchmonitor.constant.SystemConst;
+import cn.albumenj.switchmonitor.service.LogService;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableHistoryService;
 import cn.albumenj.switchmonitor.service.SwitchesReachableService;
@@ -15,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.LinkedList;
@@ -40,6 +43,8 @@ public class SwitchesCheckReach {
     SwitchesBriefFetch switchesBriefFetch;
     @Autowired
     SystemConst systemConst;
+    @Autowired
+    LogService logService;
 
     @Value("${commit.switchesReachables-update}")
     Integer switchesReachablesLimit;
@@ -51,16 +56,16 @@ public class SwitchesCheckReach {
     private List<SwitchesReachable> switchesReachables = new CopyOnWriteArrayList<>();
 
     public void submit() {
+        Long time = System.currentTimeMillis();
 
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
         switchesReachables.clear();
 
-        Long time = System.currentTimeMillis();
         ExecutorService executorService = new ThreadPoolExecutor(1000, 1000, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
 
         for (SwitchesList switchesList : switchesLists) {
             executorService.submit(() -> {
-                check(switchesList, 5);
+                check(switchesList);
             });
         }
         executorService.shutdown();
@@ -91,15 +96,19 @@ public class SwitchesCheckReach {
             switchesReachableSubmit.clear();
         }
         switchesBriefFetch.refresh();
+
+        Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
+                "Switches Reach Check End Using " + (System.currentTimeMillis() - time) + "ms", "");
+        log.setOperator("System");
+        logService.insert(log);
     }
 
-    private void check(SwitchesList switchesList, int times) {
+    private void check(SwitchesList switchesList) {
         try {
             boolean reachable;
             if (systemConst.isLinux()) {
                 reachable = IpUtil.execPingCommand(switchesList.getIp());
-            }
-            else {
+            } else {
                 InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
                 reachable = inetAddress.isReachable(50);
             }
@@ -109,7 +118,7 @@ public class SwitchesCheckReach {
                 switchesReachable.setReachable(1);
 
                 switchesReachables.add(switchesReachable);
-            } else if (times == 0) {
+            } else {
                 switchesReachable.setSwitchId(switchesList.getId());
                 switchesReachable.setReachable(0);
                 SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
@@ -120,8 +129,6 @@ public class SwitchesCheckReach {
                 }
 
                 switchesReachables.add(switchesReachable);
-            } else {
-                check(switchesList, times - 1);
             }
         } catch (IOException e) {
             logger.warn("Check " + e.toString());

@@ -20,6 +20,7 @@ mybatis:
   mapper-locations: classpath:mapper/*.xml
 
 history:
+  log-saveTime: 7
   port-saveTime: 7
   switch-saveTime: 7
   port-speed-saveTime: 7
