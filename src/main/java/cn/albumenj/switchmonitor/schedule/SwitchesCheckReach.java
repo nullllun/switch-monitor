@@ -111,6 +111,8 @@ public class SwitchesCheckReach {
             } else {
                 InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
                 reachable = inetAddress.isReachable(50);
+                reachable = reachable || inetAddress.isReachable(50);
+                reachable = reachable || inetAddress.isReachable(50);
             }
             SwitchesReachable switchesReachable = new SwitchesReachable();
             if (reachable) {
