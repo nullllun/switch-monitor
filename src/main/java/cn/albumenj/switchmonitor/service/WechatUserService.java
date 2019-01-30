@@ -13,9 +13,9 @@ public interface WechatUserService {
      * 插入用户
      *
      * @param wechatUser
-     * @return 用户Token
+     * @return
      */
-    String insert(WechatUser wechatUser);
+    int insert(WechatUser wechatUser);
 
     /**
      * 验证用户

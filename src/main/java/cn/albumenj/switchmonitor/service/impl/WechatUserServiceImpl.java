@@ -6,7 +6,6 @@ import cn.albumenj.switchmonitor.service.WechatUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.UUID;
 
 /**
  * 微信用户
@@ -23,15 +22,11 @@ public class WechatUserServiceImpl implements WechatUserService {
      * 插入用户
      *
      * @param wechatUser
-     * @return 用户Token
+     * @return
      */
     @Override
-    public String insert(WechatUser wechatUser) {
-        wechatUser.setToken(UUID.randomUUID().toString());
-        if (wechatUserMapper.insert(wechatUser) == 1) {
-            return wechatUser.getToken();
-        }
-        return null;
+    public int insert(WechatUser wechatUser) {
+        return wechatUserMapper.insert(wechatUser);
     }
 
     /**

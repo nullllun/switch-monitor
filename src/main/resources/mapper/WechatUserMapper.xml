@@ -93,5 +93,23 @@
         limit 1
     </select>
 
+    <delete id="delete">
+        delete
+        from wechat_user
+        where no = #{wechatUser.no,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select no,
+               username,
+               open_id,
+               session_key,
+               union_id,
+               token,
+               permission,
+               group_name
+        from wechat_user
+    </select>
+
 </mapper>
 

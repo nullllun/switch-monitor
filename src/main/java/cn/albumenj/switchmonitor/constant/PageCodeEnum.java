@@ -32,6 +32,30 @@ public enum PageCodeEnum {
      * 系统错误
      */
     SYSTEM_ERROR(2003, "系统错误"),
+    /**
+     * 系统错误
+     */
+    ADD_SUCCESS(3001, "添加成功"),
+    /**
+     * 系统错误
+     */
+    ADD_FAILED(3002, "添加失败"),
+    /**
+     * 系统错误
+     */
+    MODIFY_SUCCESS(3002, "修改成功"),
+    /**
+     * 系统错误
+     */
+    MODIFY_FAILED(3002, "修改失败"),
+    /**
+     * 系统错误
+     */
+    DELETE_SUCCESS(3002, "删除成功"),
+    /**
+     * 系统错误
+     */
+    DELETE_FAILED(3002, "删除失败"),
     ;
 
     private Integer code;

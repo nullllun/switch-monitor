@@ -4,6 +4,8 @@ import cn.albumenj.switchmonitor.bean.WechatUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 微信用户
  *
@@ -60,4 +62,19 @@ public interface WechatUserMapper {
      * @return
      */
     WechatUser selectName(@Param("wechatUser") WechatUser wechatUser);
+
+    /**
+     *  删除数据
+     *
+     * @param wechatUser
+     * @return
+     */
+    int delete(@Param("wechatUser") WechatUser wechatUser);
+
+    /**
+     * 查找所有
+     *
+     * @return
+     */
+    List<WechatUser> selectAll();
 }
