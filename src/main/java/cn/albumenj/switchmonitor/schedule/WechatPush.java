@@ -50,7 +50,7 @@ public class WechatPush {
 
     private void push(List<String> stringList, String head) {
         StringBuilder stringBuilder = new StringBuilder();
-        if(stringList.size()>0) {
+        if (stringList.size() > 0) {
             stringBuilder.append(head + "\r\n\r\n");
             for (String str : stringList) {
                 stringBuilder.append(str);
@@ -80,7 +80,9 @@ public class WechatPush {
         if (reach != null && reach.size() > 0) {
             for (WarningDto warningDto : reach) {
                 if (warningDto.getDownTime() < DateUtil.beforeNowMinute(reachThreshold).getTime()) {
-                    if (send.get(warningDto.getIp()) == null && !recoveryMessage.containsKey(IpUtil.getSegment(warningDto.getIp(), 3))) {
+                    String prefix = IpUtil.getSegment(warningDto.getIp(), 3);
+                    if (send.get(warningDto.getIp()) == null &&
+                            !(recoveryMessage.containsKey(prefix) || reachSend.containsKey(prefix))) {
                         reachSend.put(warningDto.getIp(), warningDto);
                         String msg = warningDto.getBuilding() + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")";
                         pushBroke.add(msg);
