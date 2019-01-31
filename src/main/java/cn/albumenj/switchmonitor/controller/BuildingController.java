@@ -23,17 +23,17 @@ public class BuildingController {
     SwitchesStatusService switchesStatusService;
 
     @RequestMapping("/api/buildings_list")
-    public List<String> buildingList(){
+    public List<String> buildingList() {
         return switchesListService.selectBuilding();
     }
 
     @RequestMapping("/api/building/{building}")
-    public List<SwitchesStatusDto> building(@PathVariable("building") String building){
+    public List<SwitchesStatusDto> building(@PathVariable("building") String building) {
         return switchesStatusService.selectByBuilding(building);
     }
 
     @RequestMapping("/api/ports")
-    public String ports(){
+    public String ports() {
         return "[\"172.16.101.7,GigabitEthernet1/0/49,172.16.101.7上联口\", \"172.16.101.253,XGigabitEthernet0/0/1,东一汇聚上联口\", \"172.16.254.1,Eth-Trunk1,东区Trunk\", \"172.16.254.1,Eth-Trunk2,西区Trunk\", \"172.16.254.1,Eth-Trunk3,生活区Trunk\", \"172.16.254.1,Eth-Trunk10,生活区Trunk\"]";
     }
 }

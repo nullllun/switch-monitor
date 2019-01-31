@@ -14,7 +14,7 @@ import java.util.List;
  * @author Albumen
  */
 @Service
-public class SwitchesReachableServiceImpl implements SwitchesReachableService{
+public class SwitchesReachableServiceImpl implements SwitchesReachableService {
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
 
@@ -22,21 +22,21 @@ public class SwitchesReachableServiceImpl implements SwitchesReachableService{
     private SwitchesReachableMapper switchesReachableMapper;
 
     @Override
-    public int insert(SwitchesReachable switchesReachable){
+    public int insert(SwitchesReachable switchesReachable) {
         return switchesReachableMapper.insert(switchesReachable);
     }
 
 
     @Override
-    public int insertList(List<SwitchesReachable> switchesReachables){
+    public int insertList(List<SwitchesReachable> switchesReachables) {
         return switchesReachableMapper.insertList(switchesReachables);
     }
 
     @Override
     public int update(SwitchesReachable switchesReachable) {
-        if(switchesReachableMapper.update(switchesReachable) == 0){
+        if (switchesReachableMapper.update(switchesReachable) == 0) {
             return switchesReachableMapper.insert(switchesReachable);
-        } else{
+        } else {
             return 1;
         }
     }

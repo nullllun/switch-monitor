@@ -10,21 +10,21 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,
-        switch_id,
-        reachable,
-        down_time,
-        time_stamp
+            id,
+            switch_id,
+            reachable,
+            down_time,
+            time_stamp
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="switchesReachable.id">
         INSERT INTO switches_reachable
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="switchesReachable.id!=null"> id,</if>
-            <if test="switchesReachable.switchId!=null"> switch_id,</if>
-            <if test="switchesReachable.reachable!=null"> reachable,</if>
-            <if test="switchesReachable.downTime!=null"> down_time,</if>
-            <if test="switchesReachable.timeStamp!=null"> time_stamp,</if>
+            <if test="switchesReachable.id!=null">id,</if>
+            <if test="switchesReachable.switchId!=null">switch_id,</if>
+            <if test="switchesReachable.reachable!=null">reachable,</if>
+            <if test="switchesReachable.downTime!=null">down_time,</if>
+            <if test="switchesReachable.timeStamp!=null">time_stamp,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -43,11 +43,11 @@
 
     <insert id="insertList">
         INSERT INTO switches_reachable (
-            id,
-            switch_id,
-            reachable,
-            down_time,
-            time_stamp
+        id,
+        switch_id,
+        reachable,
+        down_time,
+        time_stamp
         )VALUES
         <foreach collection="switchesReachables" item="switchesReachable" index="index" separator=",">
             (
@@ -64,10 +64,15 @@
         UPDATE switches_reachable
         <set>
             <if test="switchesReachable.id!=null">id=#{switchesReachable.id,jdbcType=VARCHAR},</if>
-            <if test="switchesReachable.switchId != null"> switch_id= #{switchesReachable.switchId,jdbcType=INTEGER},</if>
-            <if test="switchesReachable.reachable != null"> reachable= #{switchesReachable.reachable,jdbcType=INTEGER},</if>
-            <if test="switchesReachable.downTime != null"> down_time= #{switchesReachable.downTime,jdbcType=TIMESTAMP},</if>
-            <if test="switchesReachable.timeStamp != null"> time_stamp= #{switchesReachable.timeStamp,jdbcType=TIMESTAMP}</if>
+            <if test="switchesReachable.switchId != null">switch_id= #{switchesReachable.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachable.reachable != null">reachable= #{switchesReachable.reachable,jdbcType=INTEGER},
+            </if>
+            <if test="switchesReachable.downTime != null">down_time= #{switchesReachable.downTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="switchesReachable.timeStamp != null">time_stamp=
+                #{switchesReachable.timeStamp,jdbcType=TIMESTAMP}
+            </if>
         </set>
         WHERE switch_id= #{switchesReachable.switchId,jdbcType=INTEGER}
     </update>
@@ -97,24 +102,24 @@
         END
         WHERE switch_id
         IN
-        <foreach collection="switchesReachables" item="switchesReachable" index="index" separator="," open="(" close=")">
+        <foreach collection="switchesReachables" item="switchesReachable" index="index" separator="," open="("
+                 close=")">
             #{switchesReachable.switchId,jdbcType=INTEGER}
         </foreach>
     </update>
 
     <select id="selectBySwitch" resultMap="BaseResultMap">
-        select reachable,down_time
+        select reachable, down_time
         from switches_reachable
         where switch_id = #{switchesReachable.switchId,jdbcType=INTEGER}
     </select>
 
     <select id="select" resultMap="BaseResultMap">
-        select
-            id,
-            switch_id,
-            reachable,
-            down_time,
-            time_stamp
+        select id,
+               switch_id,
+               reachable,
+               down_time,
+               time_stamp
         from switches_reachable
     </select>
 </mapper>

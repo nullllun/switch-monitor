@@ -1,8 +1,8 @@
 package cn.albumenj.switchmonitor;
 
 import cn.albumenj.switchmonitor.service.WebLogin;
-import cn.albumenj.switchmonitor.util.QrCode.QrCodeGenWrapper;
 import cn.albumenj.switchmonitor.util.WechatServer;
+import cn.albumenj.switchmonitor.util.qrcode.QrCodeGenWrapper;
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Assert;
 import org.junit.Test;

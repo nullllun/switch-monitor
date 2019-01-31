@@ -68,7 +68,7 @@ public class WechatLoginImpl implements WechatLogin {
                  */
                 loginStatusDto = fillUser(wechatUser);
 
-                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Login", IpUtil.getIpAddr(request));
+                Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "User Login", IpUtil.getIpAddr(request));
                 logService.insert(log);
             } else {
                 /**
@@ -118,7 +118,7 @@ public class WechatLoginImpl implements WechatLogin {
             if (wechatUser != null) {
                 loginStatusDto = fillUser(wechatUser);
 
-                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Register", IpUtil.getIpAddr(request));
+                Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "User Register", IpUtil.getIpAddr(request));
                 logService.insert(log);
             } else {
                 loginStatusDto = new LoginStatusDto();
@@ -182,7 +182,7 @@ public class WechatLoginImpl implements WechatLogin {
             if (wechatUser != null) {
                 loginStatusDto = fillUser(wechatUser);
 
-                Log log = new Log(LogConst.INFO,LogConst.USER,wechatUser.getOpenId(),"User Login", IpUtil.getIpAddr(request));
+                Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "User Login", IpUtil.getIpAddr(request));
                 logService.insert(log);
             } else {
                 loginStatusDto = new LoginStatusDto();

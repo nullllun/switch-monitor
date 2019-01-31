@@ -29,7 +29,7 @@ public class PortStatus {
         this.id = UUID.randomUUID().toString();
         this.switchId = -2;
         this.portIndex = -2;
-        this.name="";
+        this.name = "";
         this.portId = -1;
         this.inData = -2L;
         this.outData = -2L;

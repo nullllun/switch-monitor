@@ -12,23 +12,23 @@ import java.util.List;
  * @author Albumen
  */
 @Service
-public class SwitchesListServiceImpl implements SwitchesListService{
+public class SwitchesListServiceImpl implements SwitchesListService {
 
     @Autowired
     private SwitchesListMapper switchesListMapper;
 
     @Override
-    public int insert(SwitchesList switchesList){
+    public int insert(SwitchesList switchesList) {
         return switchesListMapper.insert(switchesList);
     }
 
     @Override
-    public int insertList(List<SwitchesList> switchesLists){
+    public int insertList(List<SwitchesList> switchesLists) {
         return switchesListMapper.insertList(switchesLists);
     }
 
     @Override
-    public int update(SwitchesList switchesList){
+    public int update(SwitchesList switchesList) {
         return switchesListMapper.update(switchesList);
     }
 

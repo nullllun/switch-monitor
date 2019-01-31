@@ -23,30 +23,31 @@
 
     <script>
         function formatSeconds(value) {
-            var theTime = parseInt(value)/100;// 秒
+            var theTime = parseInt(value) / 100;// 秒
             var theTime1 = 0;// 分
             var theTime2 = 0;// 小时
             var theTime3 = 0;// 天
-            if(theTime >= 60) {
-                theTime1 = parseInt(theTime/60);
-                theTime = parseInt(theTime%60);
-                if(theTime1 >= 60) {
-                    theTime2 = parseInt(theTime1/60);
-                    theTime1 = parseInt(theTime1%60);
-                    if(theTime2 >= 24) {
-                        theTime3 = parseInt(theTime2/24);
-                        theTime2 = parseInt(theTime2%24);
+            if (theTime >= 60) {
+                theTime1 = parseInt(theTime / 60);
+                theTime = parseInt(theTime % 60);
+                if (theTime1 >= 60) {
+                    theTime2 = parseInt(theTime1 / 60);
+                    theTime1 = parseInt(theTime1 % 60);
+                    if (theTime2 >= 24) {
+                        theTime3 = parseInt(theTime2 / 24);
+                        theTime2 = parseInt(theTime2 % 24);
                     }
                 }
             }
-            var result = ""+parseInt(theTime)+"秒";
-            result = ""+parseInt(theTime1)+"分"+result;
-            result = ""+parseInt(theTime2)+"小时"+result;
-            result = ""+parseInt(theTime3)+"天"+result;
+            var result = "" + parseInt(theTime) + "秒";
+            result = "" + parseInt(theTime1) + "分" + result;
+            result = "" + parseInt(theTime2) + "小时" + result;
+            result = "" + parseInt(theTime3) + "天" + result;
             return result;
         }
 
         var LocString = String(window.document.location.href);
+
         function getQueryStr(str) {
             var rs = new RegExp("(^|)" + str + "=([^&]*)(&|$)", "gi").exec(LocString), tmp;
             if (tmp = rs) {
@@ -56,153 +57,155 @@
             return "";
         }
 
-        var ip=getQueryStr("ip").split("#")[0];
+        var ip = getQueryStr("ip").split("#")[0];
         var id = getQueryStr("ip").split("#")[1];
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             $("#ip").text(ip);
             chart_history = echarts.init(document.getElementById('chart_history'));
             setInterval(refresh_page, 60000);//60秒刷新一次
             refresh_page();
-            $("#unit_selected").change(function(){
-               refresh_table();
-           });
+            $("#unit_selected").change(function () {
+                refresh_table();
+            });
         });
 
         var all_multiple
         var speed_multiple
         var port_datas;
-        function refresh_table(){
-            var selected=$("#unit_selected").children('option:selected').val();
-           //alert(selected);
-           if(selected=="Gbps"){
-               $("#in_all").text("入方向总流量(GB)");
-               $("#out_all").text("出方向总流量(GB)");
-               $("#in_speed").text("入方向流量速率(Gbps)");
-               $("#out_speed").text("出方向流量速率(Gbps)");
-               all_multiple=1/(1024*1024*1024);
-               speed_multiple=8/(1024*1024*1024);
-           }else if(selected=="Mbps"){
-               $("#in_all").text("入方向总流量(MB)");
-               $("#out_all").text("出方向总流量(MB)");
-               $("#in_speed").text("入方向流量速率(Mbps)");
-               $("#out_speed").text("出方向流量速率(Mbps)");
-               all_multiple=1/(1024*1024);
-               speed_multiple=8/(1024*1024);
-           }else if(selected=="Kbps"){
-               $("#in_all").text("入方向总流量(KB)");
-               $("#out_all").text("出方向总流量(KB)");
-               $("#in_speed").text("入方向流量速率(Kbps)");
-               $("#out_speed").text("出方向流量速率(Kbps)");
-               all_multiple=1/(1024);
-               speed_multiple=8/(1024);
-           }else if(selected=="bps"){
-               $("#in_all").text("入方向总流量(Bytes)");
-               $("#out_all").text("出方向总流量(Bytes)");
-               $("#in_speed").text("入方向流量速率(bps)");
-               $("#out_speed").text("出方向流量速率(bps)");
-               all_multiple=1;
-               speed_multiple=8;
-           }else if(selected=="GB/s"){
-               $("#in_all").text("入方向总流量(GB)");
-               $("#out_all").text("出方向总流量(GB)");
-               $("#in_speed").text("入方向流量速率(GB/s)");
-               $("#out_speed").text("出方向流量速率(GB/s)");
-               all_multiple=1/(1024*1024*1024);
-               speed_multiple=1/(1024*1024*1024);
-           }else if(selected=="MB/s"){
-               $("#in_all").text("入方向总流量(MB)");
-               $("#out_all").text("出方向总流量(MB)");
-               $("#in_speed").text("入方向流量速率(MB/s)");
-               $("#out_speed").text("出方向流量速率(MB/s)");
-               all_multiple=1/(1024*1024);
-               speed_multiple=1/(1024*1024);
-           }else if(selected=="KB/s"){
-               $("#in_all").text("入方向总流量(KB)");
-               $("#out_all").text("出方向总流量(KB)");
-               $("#in_speed").text("入方向流量速率(KB/s)");
-               $("#out_speed").text("出方向流量速率(KB/s)");
-               all_multiple=1/(1024);
-               speed_multiple=1/(1024);
-           }else if(selected=="Byte/s"){
-               $("#in_all").text("入方向总流量(Bytes)");
-               $("#out_all").text("出方向总流量(Bytes)");
-               $("#in_speed").text("入方向流量速率(Bytes/s)");
-               $("#out_speed").text("出方向流量速率(Bytes/s)");
-               all_multiple=1;
-               speed_multiple=1;
-           }
 
-            data=$.extend(true , {} , port_datas);//jquery copy
+        function refresh_table() {
+            var selected = $("#unit_selected").children('option:selected').val();
+            //alert(selected);
+            if (selected == "Gbps") {
+                $("#in_all").text("入方向总流量(GB)");
+                $("#out_all").text("出方向总流量(GB)");
+                $("#in_speed").text("入方向流量速率(Gbps)");
+                $("#out_speed").text("出方向流量速率(Gbps)");
+                all_multiple = 1 / (1024 * 1024 * 1024);
+                speed_multiple = 8 / (1024 * 1024 * 1024);
+            } else if (selected == "Mbps") {
+                $("#in_all").text("入方向总流量(MB)");
+                $("#out_all").text("出方向总流量(MB)");
+                $("#in_speed").text("入方向流量速率(Mbps)");
+                $("#out_speed").text("出方向流量速率(Mbps)");
+                all_multiple = 1 / (1024 * 1024);
+                speed_multiple = 8 / (1024 * 1024);
+            } else if (selected == "Kbps") {
+                $("#in_all").text("入方向总流量(KB)");
+                $("#out_all").text("出方向总流量(KB)");
+                $("#in_speed").text("入方向流量速率(Kbps)");
+                $("#out_speed").text("出方向流量速率(Kbps)");
+                all_multiple = 1 / (1024);
+                speed_multiple = 8 / (1024);
+            } else if (selected == "bps") {
+                $("#in_all").text("入方向总流量(Bytes)");
+                $("#out_all").text("出方向总流量(Bytes)");
+                $("#in_speed").text("入方向流量速率(bps)");
+                $("#out_speed").text("出方向流量速率(bps)");
+                all_multiple = 1;
+                speed_multiple = 8;
+            } else if (selected == "GB/s") {
+                $("#in_all").text("入方向总流量(GB)");
+                $("#out_all").text("出方向总流量(GB)");
+                $("#in_speed").text("入方向流量速率(GB/s)");
+                $("#out_speed").text("出方向流量速率(GB/s)");
+                all_multiple = 1 / (1024 * 1024 * 1024);
+                speed_multiple = 1 / (1024 * 1024 * 1024);
+            } else if (selected == "MB/s") {
+                $("#in_all").text("入方向总流量(MB)");
+                $("#out_all").text("出方向总流量(MB)");
+                $("#in_speed").text("入方向流量速率(MB/s)");
+                $("#out_speed").text("出方向流量速率(MB/s)");
+                all_multiple = 1 / (1024 * 1024);
+                speed_multiple = 1 / (1024 * 1024);
+            } else if (selected == "KB/s") {
+                $("#in_all").text("入方向总流量(KB)");
+                $("#out_all").text("出方向总流量(KB)");
+                $("#in_speed").text("入方向流量速率(KB/s)");
+                $("#out_speed").text("出方向流量速率(KB/s)");
+                all_multiple = 1 / (1024);
+                speed_multiple = 1 / (1024);
+            } else if (selected == "Byte/s") {
+                $("#in_all").text("入方向总流量(Bytes)");
+                $("#out_all").text("出方向总流量(Bytes)");
+                $("#in_speed").text("入方向流量速率(Bytes/s)");
+                $("#out_speed").text("出方向流量速率(Bytes/s)");
+                all_multiple = 1;
+                speed_multiple = 1;
+            }
+
+            data = $.extend(true, {}, port_datas);//jquery copy
             //console.log(data);
-            table_html="";
-            up_time_string="";
-            for(var sw in data["ifDescr"]){
-                ifStatus=data["ifStatus"][sw];
-                if(ifStatus=="1"){
-                    ifStatus="UP";
-                }else if(ifStatus=="2"){
-                    ifStatus="DOWN";
+            table_html = "";
+            up_time_string = "";
+            for (var sw in data["ifDescr"]) {
+                ifStatus = data["ifStatus"][sw];
+                if (ifStatus == "1") {
+                    ifStatus = "UP";
+                } else if (ifStatus == "2") {
+                    ifStatus = "DOWN";
                 }
-                if(ifStatus=="1"){
-                    ifStatus="UP";
-                }else if(ifStatus=="2"){
-                    ifStatus="DOWN";
+                if (ifStatus == "1") {
+                    ifStatus = "UP";
+                } else if (ifStatus == "2") {
+                    ifStatus = "DOWN";
                 }
                 //up_time_string=data["ifUptime"][sw].split(':');
                 //data["ifUptime"][sw]=up_time_string[0]+"天"+up_time_string[1]+"小时"+up_time_string[2]+"分"+parseInt(up_time_string[3])+"秒";
                 //data["ifUptime"][sw]=formatSeconds(data["ifUptime"][sw]);
-                if(data["ifName"][sw] == "-1") {
+                if (data["ifName"][sw] == "-1") {
                     data["ifName"][sw] = "设备不支持";
                 }
-                if(data["ifDescr"][sw] == "-1") {
+                if (data["ifDescr"][sw] == "-1") {
                     data["ifDescr"][sw] = "设备不支持";
                 }
-                if(data["ifUptime"][sw] == "-1") {
+                if (data["ifUptime"][sw] == "-1") {
                     data["ifUptime"][sw] = "设备不支持";
                 }
-                if(data["ifIp"][sw] == "-1") {
+                if (data["ifIp"][sw] == "-1") {
                     data["ifIp"][sw] = "设备不支持";
                 }
-                if(data["ifSpeed"][sw] == "-1") {
+                if (data["ifSpeed"][sw] == "-1") {
                     data["ifSpeed"][sw] = "设备不支持";
                 }
-                table_html+="<tr><td><a id='"+data["ifName"][sw]
+                table_html += "<tr><td><a id='" + data["ifName"][sw]
                     //+ "' href='#"+data["ifName"][sw]+"'>"+data["ifName"][sw]
-                    + "' href='/port.html?ip="+ip+"&port="+data["ifName"][sw].replace(/\//g, '_')+"'>"+data["ifName"][sw]
-                    +"</a></td><td>"+data["ifDescr"][sw]+"</td><td>"
-                    +ifStatus+"</td><td>"+data["ifUptime"][sw]+"</td><td>"
-                    +data["ifIp"][sw]+"</td><td>"+data["ifSpeed"][sw]+"</td><td>";
-                if(speed_multiple==1 || speed_multiple==8){
-                    table_html+=(data["ifIn"][sw]*all_multiple)+"</td><td>"+(data["ifOut"][sw]*all_multiple)+"</td><td>"+(data["ifInSpeed"][sw]*speed_multiple)+"</td><td>"+(data["ifOutSpeed"][sw]*speed_multiple)+"</td></tr>";
-                }else{
-                    table_html+=(data["ifIn"][sw]*all_multiple).toFixed(4)+"</td><td>"+(data["ifOut"][sw]*all_multiple).toFixed(4)+"</td><td>"+(data["ifInSpeed"][sw]*speed_multiple).toFixed(4)+"</td><td>"+(data["ifOutSpeed"][sw]*speed_multiple).toFixed(4)+"</td></tr>";
+                    + "' href='/port.html?ip=" + ip + "&port=" + data["ifName"][sw].replace(/\//g, '_') + "'>" + data["ifName"][sw]
+                    + "</a></td><td>" + data["ifDescr"][sw] + "</td><td>"
+                    + ifStatus + "</td><td>" + data["ifUptime"][sw] + "</td><td>"
+                    + data["ifIp"][sw] + "</td><td>" + data["ifSpeed"][sw] + "</td><td>";
+                if (speed_multiple == 1 || speed_multiple == 8) {
+                    table_html += (data["ifIn"][sw] * all_multiple) + "</td><td>" + (data["ifOut"][sw] * all_multiple) + "</td><td>" + (data["ifInSpeed"][sw] * speed_multiple) + "</td><td>" + (data["ifOutSpeed"][sw] * speed_multiple) + "</td></tr>";
+                } else {
+                    table_html += (data["ifIn"][sw] * all_multiple).toFixed(4) + "</td><td>" + (data["ifOut"][sw] * all_multiple).toFixed(4) + "</td><td>" + (data["ifInSpeed"][sw] * speed_multiple).toFixed(4) + "</td><td>" + (data["ifOutSpeed"][sw] * speed_multiple).toFixed(4) + "</td></tr>";
                 }
             }
             $("#switch_info_tbody").html(table_html);
         }
 
-        function refresh_page(){
-            $.getJSON("/api/devices/"+ip,function(data){
-                table_html="";
+        function refresh_page() {
+            $.getJSON("/api/devices/" + ip, function (data) {
+                table_html = "";
                 console.log(data);
-                port_datas=data;
+                port_datas = data;
                 refresh_table();
             });
 
             //*******************************获取历史数据并显示图表*******************************
-            $.getJSON("/api/history/"+ip,function(data){ //"/test.json"
+            $.getJSON("/api/history/" + ip, function (data) { //"/test.json"
                 console.log(data);
-                var cpu_his=[];
-                var mem_his=[];
-                var temp_his=[];
-                var timeline=new Array();
-                for(v in data){
+                var cpu_his = [];
+                var mem_his = [];
+                var temp_his = [];
+                var timeline = new Array();
+                for (v in data) {
                     timeline.push(data[v].timestamp);
-                    cpu_his.push({value:[data[v].timestamp,data[v].cpu]});
-                    mem_his.push({value:[data[v].timestamp,data[v].mem]});
-                    temp_his.push({value:[data[v].timestamp,data[v].temp]});
-                };
+                    cpu_his.push({value: [data[v].timestamp, data[v].cpu]});
+                    mem_his.push({value: [data[v].timestamp, data[v].mem]});
+                    temp_his.push({value: [data[v].timestamp, data[v].temp]});
+                }
+                ;
                 option = {
                     title: {
                         text: 'CPU、内存使用率、温度历史',
@@ -211,12 +214,12 @@
                         },
                     },
                     legend: {
-                        data:['CPU使用率','内存使用率','温度']
+                        data: ['CPU使用率', '内存使用率', '温度']
                     },
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis'
                     },
-                    toolbox : {
+                    toolbox: {
                         show: true,
                         right: '4%',
                         feature: {
@@ -240,46 +243,46 @@
                             type: 'inside'
                         }
                     ],
-                    xAxis : [
+                    xAxis: [
                         {
-                            type : 'time',
-                            name : '时间'
+                            type: 'time',
+                            name: '时间'
                         }
                     ],
-                    yAxis : [
+                    yAxis: [
                         {
-                            type : 'value',
-                            name : '使用率',
-                            min : 0,
-                            max : 100
+                            type: 'value',
+                            name: '使用率',
+                            min: 0,
+                            max: 100
                         },
                         {
-                            type : 'value',
-                            name : '温度',
-                            min : 0,
-                            max : 100
+                            type: 'value',
+                            name: '温度',
+                            min: 0,
+                            max: 100
                         }
                     ],
-                    series : [
+                    series: [
                         {
-                            name:'CPU使用率',
-                            type:'line',
-                            data:cpu_his,
+                            name: 'CPU使用率',
+                            type: 'line',
+                            data: cpu_his,
                             showSymbol: false,
                             sampling: 'average'
                         },
                         {
-                            name:'内存使用率',
-                            type:'line',
-                            data:mem_his,
+                            name: '内存使用率',
+                            type: 'line',
+                            data: mem_his,
                             showSymbol: false,
                             sampling: 'average'
                         },
                         {
-                            name:'温度',
-                            type:'line',
+                            name: '温度',
+                            type: 'line',
                             yAxisIndex: 1,
-                            data:temp_his,
+                            data: temp_his,
                             showSymbol: false,
                             sampling: 'average'
                         }
@@ -288,7 +291,6 @@
                 chart_history.setOption(option);
             });
         };
-
 
 
     </script>

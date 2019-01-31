@@ -21,27 +21,27 @@ public class HomeStatusController {
     SwitchesReachableService switchesReachableService;
 
     @RequestMapping("/api/warnings")
-    public BriefStatusDto warnings(){
+    public BriefStatusDto warnings() {
         return switchesStatusService.fetchBriefDetail(StatusConst.WARNING);
     }
 
     @RequestMapping("/api/down_time")
-    public BriefStatusDto downTime(){
+    public BriefStatusDto downTime() {
         return switchesReachableService.fetchBrief();
     }
 
     @RequestMapping("/api/cpu_load")
-    public BriefStatusDto cpuLoad(){
+    public BriefStatusDto cpuLoad() {
         return switchesStatusService.fetchBriefDetail(StatusConst.CPU_LOAD);
     }
 
     @RequestMapping("/api/mem_used")
-    public BriefStatusDto memUsed(){
+    public BriefStatusDto memUsed() {
         return switchesStatusService.fetchBriefDetail(StatusConst.MEM_USED);
     }
 
     @RequestMapping("/api/temp")
-    public BriefStatusDto temp(){
+    public BriefStatusDto temp() {
         return switchesStatusService.fetchBriefDetail(StatusConst.TEMP);
     }
 }

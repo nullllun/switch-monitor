@@ -81,8 +81,9 @@ public class WechatPush {
             for (WarningDto warningDto : reach) {
                 if (warningDto.getDownTime() < DateUtil.beforeNowMinute(reachThreshold).getTime()) {
                     String prefix = IpUtil.getSegment(warningDto.getIp(), 3);
-                    if (send.get(warningDto.getIp()) == null &&
-                            !(recoveryMessage.containsKey(prefix) || reachSend.containsKey(prefix))) {
+                    boolean flag = send.get(warningDto.getIp()) == null &&
+                            !(recoveryMessage.containsKey(prefix) || reachSend.containsKey(prefix));
+                    if (flag) {
                         reachSend.put(warningDto.getIp(), warningDto);
                         String msg = warningDto.getBuilding() + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")";
                         pushBroke.add(msg);

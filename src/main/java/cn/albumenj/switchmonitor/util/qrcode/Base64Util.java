@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.util.QrCode;
+package cn.albumenj.switchmonitor.util.qrcode;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Base64;

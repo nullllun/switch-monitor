@@ -1,7 +1,6 @@
 package cn.albumenj.switchmonitor.constant;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -17,14 +16,14 @@ public class SystemConst {
     @Value("${system.os}")
     Integer os;
 
-    private final static Map<Integer,String> OS = new HashMap<>(2);
+    private final static Map<Integer, String> OS = new HashMap<>(2);
 
     static {
-        OS.put(1,"Linux");
-        OS.put(2,"Windows");
+        OS.put(1, "Linux");
+        OS.put(2, "Windows");
     }
 
-    public boolean isLinux(){
+    public boolean isLinux() {
         return "Linux".equals(OS.get(os));
     }
 }

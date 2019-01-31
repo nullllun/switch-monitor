@@ -14,7 +14,7 @@ import java.util.List;
  * @author Albumen
  */
 @Service
-public class PortStatusHistoryServiceImpl implements PortStatusHistoryService{
+public class PortStatusHistoryServiceImpl implements PortStatusHistoryService {
     @Autowired
     private PortStatusHistoryMapper portStatusHistoryMapper;
 
@@ -22,7 +22,7 @@ public class PortStatusHistoryServiceImpl implements PortStatusHistoryService{
     Integer portSaveTime;
 
     @Override
-    public int insert(PortStatusHistory portStatusHistory){
+    public int insert(PortStatusHistory portStatusHistory) {
         return portStatusHistoryMapper.insert(portStatusHistory);
     }
 

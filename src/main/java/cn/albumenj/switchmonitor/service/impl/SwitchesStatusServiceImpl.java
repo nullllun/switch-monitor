@@ -18,7 +18,7 @@ import java.util.List;
  * @author Albumen
  */
 @Service
-public class SwitchesStatusServiceImpl implements SwitchesStatusService{
+public class SwitchesStatusServiceImpl implements SwitchesStatusService {
     @Autowired
     SwitchesBriefFetch switchesBriefFetch;
 
@@ -29,15 +29,15 @@ public class SwitchesStatusServiceImpl implements SwitchesStatusService{
     private SwitchesListService switchesListService;
 
     @Override
-    public int insert(SwitchesStatus switchesStatus){
+    public int insert(SwitchesStatus switchesStatus) {
         return switchesStatusMapper.insert(switchesStatus);
     }
 
     @Override
-    public int update(SwitchesStatus switchesStatus){
-        if(switchesStatusMapper.update(switchesStatus)==0){
+    public int update(SwitchesStatus switchesStatus) {
+        if (switchesStatusMapper.update(switchesStatus) == 0) {
             return switchesStatusMapper.insert(switchesStatus);
-        } else{
+        } else {
             return 1;
         }
     }
@@ -70,7 +70,7 @@ public class SwitchesStatusServiceImpl implements SwitchesStatusService{
 
     @Override
     public BriefStatusDto fetchBriefDetail(Integer mode) {
-        switch (mode){
+        switch (mode) {
             case StatusConst.CPU_LOAD:
                 return switchesBriefFetch.getBriefStatusDtoCpu();
             case StatusConst.MEM_USED:
@@ -89,17 +89,17 @@ public class SwitchesStatusServiceImpl implements SwitchesStatusService{
         SwitchesList switchesList = new SwitchesList();
         switchesList.setBuilding(building);
         List<SwitchesStatusDto> switchesStatusDtos = switchesStatusMapper.selectByBuilding(switchesList);
-        for(SwitchesStatusDto switchesStatusDto:switchesStatusDtos){
-            if("-2".equals(switchesStatusDto.getTemp())){
+        for (SwitchesStatusDto switchesStatusDto : switchesStatusDtos) {
+            if ("-2".equals(switchesStatusDto.getTemp())) {
                 switchesStatusDto.setTemp("设备不支持");
             }
-            if("-2".equals(switchesStatusDto.getCpuLoad())){
+            if ("-2".equals(switchesStatusDto.getCpuLoad())) {
                 switchesStatusDto.setCpuLoad("设备不支持");
             }
-            if("-2".equals(switchesStatusDto.getMemUsed())){
+            if ("-2".equals(switchesStatusDto.getMemUsed())) {
                 switchesStatusDto.setMemUsed("设备不支持");
             }
-            if(switchesStatusDto.getReachable().equals(1)){
+            if (switchesStatusDto.getReachable().equals(1)) {
                 switchesStatusDto.setDownTime(0L);
             }
         }

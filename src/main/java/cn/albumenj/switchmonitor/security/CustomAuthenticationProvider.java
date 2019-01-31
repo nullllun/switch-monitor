@@ -2,7 +2,6 @@ package cn.albumenj.switchmonitor.security;
 
 import cn.albumenj.switchmonitor.bean.User;
 import cn.albumenj.switchmonitor.constant.PermissionConst;
-import cn.albumenj.switchmonitor.schedule.SwitchesUpdate;
 import cn.albumenj.switchmonitor.service.UserService;
 import cn.albumenj.switchmonitor.service.impl.GrantedAuthorityImpl;
 import org.slf4j.Logger;

@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface PortSpeedService{
+public interface PortSpeedService {
 
     /**
      * 插入单条数据

@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface PortStatusService{
+public interface PortStatusService {
 
     /**
      * 插入单条数据

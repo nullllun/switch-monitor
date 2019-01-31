@@ -27,7 +27,7 @@
         var chart_mem_used;
         var chart_temp;
 
-        $(document).ready(function(){
+        $(document).ready(function () {
             chart_down_time = echarts.init(document.getElementById('chart_down_time'));
             chart_cpu_load = echarts.init(document.getElementById('chart_cpu_load'));
             chart_mem_used = echarts.init(document.getElementById('chart_mem_used'));
@@ -36,89 +36,89 @@
             refresh_page();
         });
 
-        function refresh_page(){
+        function refresh_page() {
             //*******************************获取报警数据并输出到网页*******************************
-            $.getJSON("/api/warnings",function(data){
-                warnings_html="";
-                devices_down_html="";
-                devices_down_num=0;
-                cpu_overload_html="";
-                cpu_overload_num=0;
-                mem_overload_html="";
-                mem_overload_num=0;
-                heat_html="";
-                heat_num=0;
-                if_html="";
-                if_num=0;
-                for(var sw in data.warning){
-                    if(data.warning[sw].warning=="devices_down"){
-                        devices_down_num+=1;
-                        devices_down_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  掉线时间："+getLocalTime(data.warning[sw].downTime)+"</p>";
+            $.getJSON("/api/warnings", function (data) {
+                warnings_html = "";
+                devices_down_html = "";
+                devices_down_num = 0;
+                cpu_overload_html = "";
+                cpu_overload_num = 0;
+                mem_overload_html = "";
+                mem_overload_num = 0;
+                heat_html = "";
+                heat_num = 0;
+                if_html = "";
+                if_num = 0;
+                for (var sw in data.warning) {
+                    if (data.warning[sw].warning == "devices_down") {
+                        devices_down_num += 1;
+                        devices_down_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  掉线时间：" + getLocalTime(data.warning[sw].downTime) + "</p>";
                     }
-                    if(data.warning[sw].warning=="cpu_overload"){
-                        cpu_overload_num+=1;
-                        cpu_overload_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  CPU使用率："+data.warning[sw].cpuLoad+"</p>";
+                    if (data.warning[sw].warning == "cpu_overload") {
+                        cpu_overload_num += 1;
+                        cpu_overload_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  CPU使用率：" + data.warning[sw].cpuLoad + "</p>";
                     }
-                    if(data.warning[sw].warning=="mem_overload"){
-                        mem_overload_num+=1;
-                        mem_overload_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  内存使用率："+data.warning[sw].memUsed+"</p>";
+                    if (data.warning[sw].warning == "mem_overload") {
+                        mem_overload_num += 1;
+                        mem_overload_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  内存使用率：" + data.warning[sw].memUsed + "</p>";
                     }
-                    if(data.warning[sw].warning=="heat"){
-                        heat_num+=1;
-                        heat_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  温度："+data.warning[sw].temp+"</p>";
+                    if (data.warning[sw].warning == "heat") {
+                        heat_num += 1;
+                        heat_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  温度：" + data.warning[sw].temp + "</p>";
                     }
-                    if(data.warning[sw].warning=="if_in"){
-                        if_num+=1;
-                        if_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"#"+data.warning[sw].portName+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  "+data.warning[sw].portName+"  入流量："+data.warning[sw].portSpeed+"Mbps</p>";
+                    if (data.warning[sw].warning == "if_in") {
+                        if_num += 1;
+                        if_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "#" + data.warning[sw].portName + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  " + data.warning[sw].portName + "  入流量：" + data.warning[sw].portSpeed + "Mbps</p>";
                     }
-                    if(data.warning[sw].warning=="if_out"){
-                        if_num+=1;
-                        if_html+="<p><a href='/devices.html?ip="+data.warning[sw].ip+"#"+data.warning[sw].portName+"' target='_blank'>"+data.warning[sw].ip+"</a>（"+data.warning[sw].model+"）  "+data.warning[sw].portName+"  出流量："+data.warning[sw].portSpeed+"Mbps</p>";
+                    if (data.warning[sw].warning == "if_out") {
+                        if_num += 1;
+                        if_html += "<p><a href='/devices.html?ip=" + data.warning[sw].ip + "#" + data.warning[sw].portName + "' target='_blank'>" + data.warning[sw].ip + "</a>（" + data.warning[sw].model + "）  " + data.warning[sw].portName + "  出流量：" + data.warning[sw].portSpeed + "Mbps</p>";
                     }
                 }
-                if(devices_down_num!=0){
-                    devices_down_html="<p><strong>"+devices_down_num+"台设备掉线。</strong></p>"+devices_down_html;
+                if (devices_down_num != 0) {
+                    devices_down_html = "<p><strong>" + devices_down_num + "台设备掉线。</strong></p>" + devices_down_html;
                 }
-                if(cpu_overload_num!=0){
-                    cpu_overload_html="<p><strong>"+cpu_overload_num+"台设备CPU过载。</strong></p>"+cpu_overload_html;
+                if (cpu_overload_num != 0) {
+                    cpu_overload_html = "<p><strong>" + cpu_overload_num + "台设备CPU过载。</strong></p>" + cpu_overload_html;
                 }
-                if(mem_overload_num!=0){
-                    mem_overload_html="<p><strong>"+mem_overload_num+"台设备内存使用率过高。</strong></p>"+mem_overload_html;
+                if (mem_overload_num != 0) {
+                    mem_overload_html = "<p><strong>" + mem_overload_num + "台设备内存使用率过高。</strong></p>" + mem_overload_html;
                 }
-                if(heat_num!=0){
-                    heat_html="<p><strong>"+heat_num+"台设备温度过高。</strong></p>"+heat_html;
+                if (heat_num != 0) {
+                    heat_html = "<p><strong>" + heat_num + "台设备温度过高。</strong></p>" + heat_html;
                 }
-                if(if_num!=0){
-                    if_html="<p><strong>"+if_num+"个端口流量过大。</strong></p>"+if_html;
+                if (if_num != 0) {
+                    if_html = "<p><strong>" + if_num + "个端口流量过大。</strong></p>" + if_html;
                 }
-                warnings_html=devices_down_html+cpu_overload_html+mem_overload_html+heat_html+if_html;
-                if(warnings_html==""){
-                    $("#warnings-div").attr("class","alert alert-success");
+                warnings_html = devices_down_html + cpu_overload_html + mem_overload_html + heat_html + if_html;
+                if (warnings_html == "") {
+                    $("#warnings-div").attr("class", "alert alert-success");
                     $("#warnings-div").html("<p></strong>所有设备正常！</strong></p>");
-                }else{
-                    $("#warnings-div").attr("class","alert alert-warning");
+                } else {
+                    $("#warnings-div").attr("class", "alert alert-warning");
                     $("#warnings-div").html(warnings_html);
                 }
             });
             //*******************************获取统计数据并显示图表*******************************
             //*********************************down_time*******************************
-            $.getJSON("/api/down_time",function(data){
-                online_num=0;
-                just_down_num=0;
-                more_than_10min_num=0;
-                more_than_1h_num=0;
-                more_than_1d_num=0;
-                for(var t in data.stat){
-                    if(data.stat[t] == 1){
-                        online_num+=1;
-                    }else if(Date.parse(new Date())/1000-data.stat[t]>=60*60*24){
-                        more_than_1d_num+=1;
-                    }else if(Date.parse(new Date())/1000-data.stat[t]>=60*60){
-                        more_than_1h_num+=1;
-                    }else if(Date.parse(new Date()/1000-data.stat[t])>=60*10){
-                        more_than_10min_num+=1;
-                    }else{
-                        just_down_num+=1;
+            $.getJSON("/api/down_time", function (data) {
+                online_num = 0;
+                just_down_num = 0;
+                more_than_10min_num = 0;
+                more_than_1h_num = 0;
+                more_than_1d_num = 0;
+                for (var t in data.stat) {
+                    if (data.stat[t] == 1) {
+                        online_num += 1;
+                    } else if (Date.parse(new Date()) / 1000 - data.stat[t] >= 60 * 60 * 24) {
+                        more_than_1d_num += 1;
+                    } else if (Date.parse(new Date()) / 1000 - data.stat[t] >= 60 * 60) {
+                        more_than_1h_num += 1;
+                    } else if (Date.parse(new Date() / 1000 - data.stat[t]) >= 60 * 10) {
+                        more_than_10min_num += 1;
+                    } else {
+                        just_down_num += 1;
                     }
                 }
                 option = {
@@ -129,10 +129,10 @@
                         },
                     },
                     color: ['#3398DB'],
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis',
-                        axisPointer : {
-                            type : 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     grid: {
@@ -141,57 +141,57 @@
                         bottom: '2%',
                         containLabel: true
                     },
-                    xAxis : [
+                    xAxis: [
                         {
-                            type : 'category',
-                            data : ['在线','<10min','<1h','<1d','>=1d'],
+                            type: 'category',
+                            data: ['在线', '<10min', '<1h', '<1d', '>=1d'],
                             axisTick: {
                                 alignWithLabel: true
                             },
-                            name : '掉线时长'
+                            name: '掉线时长'
                         }
                     ],
-                    yAxis : [
+                    yAxis: [
                         {
-                            type : 'value',
-                            name : '数量'
+                            type: 'value',
+                            name: '数量'
                         }
                     ],
-                    series : [
+                    series: [
                         {
-                            name:'数量',
-                            type:'bar',
+                            name: '数量',
+                            type: 'bar',
                             barWidth: '60%',
-                            data:[online_num,just_down_num,more_than_10min_num,more_than_1h_num,more_than_1d_num]
+                            data: [online_num, just_down_num, more_than_10min_num, more_than_1h_num, more_than_1d_num]
                         }
                     ]
                 };
                 chart_down_time.setOption(option);
             });
             //*******************************cpu_load*******************************
-            $.getJSON("/api/cpu_load",function(data){
-                cpu_failed_num=0;
-                cpu_unsupported_num=0;
-                cpu_0_20_num=0;
-                cpu_21_40_num=0;
-                cpu_41_60_num=0;
-                cpu_61_80_num=0;
-                cpu_81_100_num=0;
-                for(var t in data.cpu){
-                    if(data.cpu[t]==-1){
-                        cpu_failed_num+=1;
-                    }else if(data.cpu[t]==-2){
-                        cpu_unsupported_num+=1;
-                    }else if(data.cpu[t]<=20){
-                        cpu_0_20_num+=1;
-                    }else if(data.cpu[t]<=40){
-                        cpu_21_40_num+=1;
-                    }else if(data.cpu[t]<=60){
-                        cpu_41_60_num+=1;
-                    }else if(data.cpu[t]<=80){
-                        cpu_61_80_num+=1;
-                    }else{
-                        cpu_81_100_num+=1;
+            $.getJSON("/api/cpu_load", function (data) {
+                cpu_failed_num = 0;
+                cpu_unsupported_num = 0;
+                cpu_0_20_num = 0;
+                cpu_21_40_num = 0;
+                cpu_41_60_num = 0;
+                cpu_61_80_num = 0;
+                cpu_81_100_num = 0;
+                for (var t in data.cpu) {
+                    if (data.cpu[t] == -1) {
+                        cpu_failed_num += 1;
+                    } else if (data.cpu[t] == -2) {
+                        cpu_unsupported_num += 1;
+                    } else if (data.cpu[t] <= 20) {
+                        cpu_0_20_num += 1;
+                    } else if (data.cpu[t] <= 40) {
+                        cpu_21_40_num += 1;
+                    } else if (data.cpu[t] <= 60) {
+                        cpu_41_60_num += 1;
+                    } else if (data.cpu[t] <= 80) {
+                        cpu_61_80_num += 1;
+                    } else {
+                        cpu_81_100_num += 1;
                     }
                 }
                 option = {
@@ -202,10 +202,10 @@
                         },
                     },
                     color: ['#3398DB'],
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis',
-                        axisPointer : {
-                            type : 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     grid: {
@@ -214,57 +214,57 @@
                         bottom: '2%',
                         containLabel: true
                     },
-                    xAxis : [
+                    xAxis: [
                         {
-                            type : 'category',
-                            data : ['0~20%','21~40%','41~60%','61~80%','81~100%','设备不支持','未知'],
+                            type: 'category',
+                            data: ['0~20%', '21~40%', '41~60%', '61~80%', '81~100%', '设备不支持', '未知'],
                             axisTick: {
                                 alignWithLabel: true
                             },
-                            name : 'CPU使用率'
+                            name: 'CPU使用率'
                         }
                     ],
-                    yAxis : [
+                    yAxis: [
                         {
-                            type : 'value',
-                            name : '数量'
+                            type: 'value',
+                            name: '数量'
                         }
                     ],
-                    series : [
+                    series: [
                         {
-                            name:'数量',
-                            type:'bar',
+                            name: '数量',
+                            type: 'bar',
                             barWidth: '60%',
-                            data:[cpu_0_20_num,cpu_21_40_num,cpu_41_60_num,cpu_61_80_num,cpu_81_100_num,cpu_unsupported_num,cpu_failed_num]
+                            data: [cpu_0_20_num, cpu_21_40_num, cpu_41_60_num, cpu_61_80_num, cpu_81_100_num, cpu_unsupported_num, cpu_failed_num]
                         }
                     ]
                 };
                 chart_cpu_load.setOption(option);
             });
             //*******************************mem_used*******************************
-            $.getJSON("/api/mem_used",function(data){
-                mem_failed_num=0;
-                mem_unsupported_num=0;
-                mem_0_20_num=0;
-                mem_21_40_num=0;
-                mem_41_60_num=0;
-                mem_61_80_num=0;
-                mem_81_100_num=0;
-                for(var t in data.mem){
-                    if(data.mem[t]==-1){
-                        mem_failed_num+=1;
-                    }else if(data.mem[t]==-2){
-                        mem_unsupported_num+=1;
-                    }else if(data.mem[t]<=20){
-                        mem_0_20_num+=1;
-                    }else if(data.mem[t]<=40){
-                        mem_21_40_num+=1;
-                    }else if(data.mem[t]<=60){
-                        mem_41_60_num+=1;
-                    }else if(data.mem[t]<=80){
-                        mem_61_80_num+=1;
-                    }else{
-                        mem_81_100_num+=1;
+            $.getJSON("/api/mem_used", function (data) {
+                mem_failed_num = 0;
+                mem_unsupported_num = 0;
+                mem_0_20_num = 0;
+                mem_21_40_num = 0;
+                mem_41_60_num = 0;
+                mem_61_80_num = 0;
+                mem_81_100_num = 0;
+                for (var t in data.mem) {
+                    if (data.mem[t] == -1) {
+                        mem_failed_num += 1;
+                    } else if (data.mem[t] == -2) {
+                        mem_unsupported_num += 1;
+                    } else if (data.mem[t] <= 20) {
+                        mem_0_20_num += 1;
+                    } else if (data.mem[t] <= 40) {
+                        mem_21_40_num += 1;
+                    } else if (data.mem[t] <= 60) {
+                        mem_41_60_num += 1;
+                    } else if (data.mem[t] <= 80) {
+                        mem_61_80_num += 1;
+                    } else {
+                        mem_81_100_num += 1;
                     }
                 }
                 option = {
@@ -275,10 +275,10 @@
                         },
                     },
                     color: ['#3398DB'],
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis',
-                        axisPointer : {
-                            type : 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     grid: {
@@ -287,57 +287,57 @@
                         bottom: '2%',
                         containLabel: true
                     },
-                    xAxis : [
+                    xAxis: [
                         {
-                            type : 'category',
-                            data : ['0~20%','21~40%','41~60%','61~80%','81~100%','设备不支持','未知'],
+                            type: 'category',
+                            data: ['0~20%', '21~40%', '41~60%', '61~80%', '81~100%', '设备不支持', '未知'],
                             axisTick: {
                                 alignWithLabel: true
                             },
-                            name : '内存使用率'
+                            name: '内存使用率'
                         }
                     ],
-                    yAxis : [
+                    yAxis: [
                         {
-                            type : 'value',
-                            name : '数量'
+                            type: 'value',
+                            name: '数量'
                         }
                     ],
-                    series : [
+                    series: [
                         {
-                            name:'数量',
-                            type:'bar',
+                            name: '数量',
+                            type: 'bar',
                             barWidth: '60%',
-                            data:[mem_0_20_num,mem_21_40_num,mem_41_60_num,mem_61_80_num,mem_81_100_num,mem_unsupported_num,mem_failed_num]
+                            data: [mem_0_20_num, mem_21_40_num, mem_41_60_num, mem_61_80_num, mem_81_100_num, mem_unsupported_num, mem_failed_num]
                         }
                     ]
                 };
                 chart_mem_used.setOption(option);
             });
             //*******************************mem_used*******************************
-            $.getJSON("/api/temp",function(data){
-                temp_failed_num=0;
-                temp_unsupported_num=0;
-                temp_less_than_40_num=0;
-                temp_41_50_num=0;
-                temp_51_60_num=0;
-                temp_61_70_num=0;
-                temp_more_than_70_num=0;
-                for(var t in data.temp){
-                    if(data.temp[t]==-1){
-                        temp_failed_num+=1;
-                    }else if(data.temp[t]==-2){
-                        temp_unsupported_num+=1;
-                    }else if(data.temp[t]<=40){
-                        temp_less_than_40_num+=1;
-                    }else if(data.temp[t]<=50){
-                        temp_41_50_num+=1;
-                    }else if(data.temp[t]<=60){
-                        temp_51_60_num+=1;
-                    }else if(data.temp[t]<=70){
-                        temp_61_70_num+=1;
-                    }else{
-                        temp_more_than_70_num+=1;
+            $.getJSON("/api/temp", function (data) {
+                temp_failed_num = 0;
+                temp_unsupported_num = 0;
+                temp_less_than_40_num = 0;
+                temp_41_50_num = 0;
+                temp_51_60_num = 0;
+                temp_61_70_num = 0;
+                temp_more_than_70_num = 0;
+                for (var t in data.temp) {
+                    if (data.temp[t] == -1) {
+                        temp_failed_num += 1;
+                    } else if (data.temp[t] == -2) {
+                        temp_unsupported_num += 1;
+                    } else if (data.temp[t] <= 40) {
+                        temp_less_than_40_num += 1;
+                    } else if (data.temp[t] <= 50) {
+                        temp_41_50_num += 1;
+                    } else if (data.temp[t] <= 60) {
+                        temp_51_60_num += 1;
+                    } else if (data.temp[t] <= 70) {
+                        temp_61_70_num += 1;
+                    } else {
+                        temp_more_than_70_num += 1;
                     }
                 }
                 option = {
@@ -348,10 +348,10 @@
                         },
                     },
                     color: ['#3398DB'],
-                    tooltip : {
+                    tooltip: {
                         trigger: 'axis',
-                        axisPointer : {
-                            type : 'shadow'
+                        axisPointer: {
+                            type: 'shadow'
                         }
                     },
                     grid: {
@@ -360,28 +360,28 @@
                         bottom: '2%',
                         containLabel: true
                     },
-                    xAxis : [
+                    xAxis: [
                         {
-                            type : 'category',
-                            data : ['<40','41~50','51~60','61~70','>70','设备不支持','未知'],
+                            type: 'category',
+                            data: ['<40', '41~50', '51~60', '61~70', '>70', '设备不支持', '未知'],
                             axisTick: {
                                 alignWithLabel: true
                             },
-                            name : '温度(℃)'
+                            name: '温度(℃)'
                         }
                     ],
-                    yAxis : [
+                    yAxis: [
                         {
-                            type : 'value',
-                            name : '数量'
+                            type: 'value',
+                            name: '数量'
                         }
                     ],
-                    series : [
+                    series: [
                         {
-                            name:'数量',
-                            type:'bar',
+                            name: '数量',
+                            type: 'bar',
                             barWidth: '60%',
-                            data:[temp_less_than_40_num,temp_41_50_num,temp_51_60_num,temp_61_70_num,temp_more_than_70_num,temp_unsupported_num,temp_failed_num]
+                            data: [temp_less_than_40_num, temp_41_50_num, temp_51_60_num, temp_61_70_num, temp_more_than_70_num, temp_unsupported_num, temp_failed_num]
                         }
                     ],
                     //tooltip: {
@@ -394,14 +394,14 @@
         }
 
         function getLocalTime(t) {
-            var date = new Date((t+28800)); //东八区
+            var date = new Date((t + 28800)); //东八区
             Y = date.getFullYear() + '-';
-            M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
             D = date.getDate() + ' ';
             h = date.getHours() + ':';
             m = date.getMinutes() + ':';
             s = date.getSeconds();
-            return Y+M+D+h+m+s;
+            return Y + M + D + h + m + s;
         }
 
     </script>

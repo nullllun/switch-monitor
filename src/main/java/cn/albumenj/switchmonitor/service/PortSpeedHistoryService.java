@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface PortSpeedHistoryService{
+public interface PortSpeedHistoryService {
 
     /**
      * 插入单条数据

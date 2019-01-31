@@ -39,64 +39,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,
-        switch_id,
-        port_index,
-        switch_port,
-        name,
-        port_id,
-        up_time,
-        speed,
-        time_stamp,
-        in_data,
-        out_data,
-        des,
-        status
-    </sql>
-
-    <insert id="insert" useGeneratedKeys="true" keyProperty="portStatus.id">
-        INSERT INTO port_status
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="portStatus.id!=null"> id,</if>
-            <if test="portStatus.switchId!=null"> switch_id,</if>
-            <if test="portStatus.portIndex!=null"> port_index,</if>
-            <if test="portStatus.switchPort!=null"> switch_port,</if>
-            <if test="portStatus.portId!=null"> port_id,</if>
-            <if test="portStatus.name!=null"> name,</if>
-            <if test="portStatus.upTime!=null"> up_time,</if>
-            <if test="portStatus.speed!=null"> speed,</if>
-            <if test="portStatus.timeStamp!=null"> time_stamp,</if>
-            <if test="portStatus.inData!=null"> in_data,</if>
-            <if test="portStatus.outData!=null"> out_data,</if>
-            <if test="portStatus.des!=null"> des,</if>
-            <if test="portStatus.status!=null"> status</if>
-        </trim>
-        VALUES
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="portStatus.id!=null"> #{portStatus.id,jdbcType=VARCHAR},</if>
-            <if test="portStatus.switchId!=null"> #{portStatus.switchId,jdbcType=INTEGER},</if>
-            <if test="portStatus.portIndex!=null"> #{portStatus.portIndex,jdbcType=INTEGER},</if>
-            <if test="portStatus.switchPort!=null"> #{portStatus.switchPort,jdbcType=VARCHAR},</if>
-            <if test="portStatus.portId!=null"> #{portStatus.portId,jdbcType=INTEGER},</if>
-            <if test="portStatus.name!=null"> #{portStatus.name,jdbcType=VARCHAR},</if>
-            <if test="portStatus.upTime!=null"> #{portStatus.upTime,jdbcType=VARCHAR},</if>
-            <if test="portStatus.speed!=null"> #{portStatus.speed,jdbcType=INTEGER},</if>
-            <if test="portStatus.timeStamp!=null"> #{portStatus.timeStamp,jdbcType=TIMESTAMP},</if>
-            <if test="portStatus.inData!=null"> #{portStatus.inData,jdbcType=BIGINT},</if>
-            <if test="portStatus.outData!=null"> #{portStatus.outData,jdbcType=BIGINT},</if>
-            <if test="portStatus.des!=null"> #{portStatus.des,jdbcType=VARCHAR},</if>
-            <if test="portStatus.status!=null"> #{portStatus.status,jdbcType=INTEGER}</if>
-        </trim>
-    </insert>
-
-    <insert id="insertList">
-        INSERT INTO port_status(
             id,
             switch_id,
             port_index,
             switch_port,
-            port_id,
             name,
+            port_id,
             up_time,
             speed,
             time_stamp,
@@ -104,9 +52,61 @@
             out_data,
             des,
             status
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="portStatus.id">
+        INSERT INTO port_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portStatus.id!=null">id,</if>
+            <if test="portStatus.switchId!=null">switch_id,</if>
+            <if test="portStatus.portIndex!=null">port_index,</if>
+            <if test="portStatus.switchPort!=null">switch_port,</if>
+            <if test="portStatus.portId!=null">port_id,</if>
+            <if test="portStatus.name!=null">name,</if>
+            <if test="portStatus.upTime!=null">up_time,</if>
+            <if test="portStatus.speed!=null">speed,</if>
+            <if test="portStatus.timeStamp!=null">time_stamp,</if>
+            <if test="portStatus.inData!=null">in_data,</if>
+            <if test="portStatus.outData!=null">out_data,</if>
+            <if test="portStatus.des!=null">des,</if>
+            <if test="portStatus.status!=null">status</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="portStatus.id!=null">#{portStatus.id,jdbcType=VARCHAR},</if>
+            <if test="portStatus.switchId!=null">#{portStatus.switchId,jdbcType=INTEGER},</if>
+            <if test="portStatus.portIndex!=null">#{portStatus.portIndex,jdbcType=INTEGER},</if>
+            <if test="portStatus.switchPort!=null">#{portStatus.switchPort,jdbcType=VARCHAR},</if>
+            <if test="portStatus.portId!=null">#{portStatus.portId,jdbcType=INTEGER},</if>
+            <if test="portStatus.name!=null">#{portStatus.name,jdbcType=VARCHAR},</if>
+            <if test="portStatus.upTime!=null">#{portStatus.upTime,jdbcType=VARCHAR},</if>
+            <if test="portStatus.speed!=null">#{portStatus.speed,jdbcType=INTEGER},</if>
+            <if test="portStatus.timeStamp!=null">#{portStatus.timeStamp,jdbcType=TIMESTAMP},</if>
+            <if test="portStatus.inData!=null">#{portStatus.inData,jdbcType=BIGINT},</if>
+            <if test="portStatus.outData!=null">#{portStatus.outData,jdbcType=BIGINT},</if>
+            <if test="portStatus.des!=null">#{portStatus.des,jdbcType=VARCHAR},</if>
+            <if test="portStatus.status!=null">#{portStatus.status,jdbcType=INTEGER}</if>
+        </trim>
+    </insert>
+
+    <insert id="insertList">
+        INSERT INTO port_status(
+        id,
+        switch_id,
+        port_index,
+        switch_port,
+        port_id,
+        name,
+        up_time,
+        speed,
+        time_stamp,
+        in_data,
+        out_data,
+        des,
+        status
         )VALUES
         <foreach collection="portStatuss" item="portStatus" index="index" separator=",">
-        (
+            (
             #{portStatus.id,jdbcType=VARCHAR},
             #{portStatus.switchId,jdbcType=INTEGER},
             #{portStatus.portIndex,jdbcType=INTEGER},
@@ -120,32 +120,32 @@
             #{portStatus.outData,jdbcType=BIGINT},
             #{portStatus.des,jdbcType=VARCHAR},
             #{portStatus.status,jdbcType=INTEGER}
-        )
+            )
         </foreach>
-</insert>
+    </insert>
 
     <update id="update">
         UPDATE port_status
         <set>
-                <if test="portStatus.id != null"> id = #{portStatus.id,jdbcType=VARCHAR},</if>
-                <if test="portStatus.name != null"> name = #{portStatus.name,jdbcType=VARCHAR},</if>
-                <if test="portStatus.upTime != null"> port_id = #{portStatus.portId,jdbcType=INTEGER},</if>
-                <if test="portStatus.upTime != null"> up_time = #{portStatus.upTime,jdbcType=VARCHAR},</if>
-                <if test="portStatus.speed != null"> speed = #{portStatus.speed,jdbcType=INTEGER},</if>
-                <if test="portStatus.timeStamp != null"> time_stamp = #{portStatus.timeStamp,jdbcType=TIMESTAMP},</if>
-                <if test="portStatus.inData != null"> in_data = #{portStatus.inData,jdbcType=BIGINT},</if>
-                <if test="portStatus.outData != null"> out_data = #{portStatus.outData,jdbcType=BIGINT},</if>
-                <if test="portStatus.des != null"> des = #{portStatus.des,jdbcType=VARCHAR},</if>
-                <if test="portStatus.status != null"> status = #{portStatus.status,jdbcType=INTEGER}</if>
+            <if test="portStatus.id != null">id = #{portStatus.id,jdbcType=VARCHAR},</if>
+            <if test="portStatus.name != null">name = #{portStatus.name,jdbcType=VARCHAR},</if>
+            <if test="portStatus.upTime != null">port_id = #{portStatus.portId,jdbcType=INTEGER},</if>
+            <if test="portStatus.upTime != null">up_time = #{portStatus.upTime,jdbcType=VARCHAR},</if>
+            <if test="portStatus.speed != null">speed = #{portStatus.speed,jdbcType=INTEGER},</if>
+            <if test="portStatus.timeStamp != null">time_stamp = #{portStatus.timeStamp,jdbcType=TIMESTAMP},</if>
+            <if test="portStatus.inData != null">in_data = #{portStatus.inData,jdbcType=BIGINT},</if>
+            <if test="portStatus.outData != null">out_data = #{portStatus.outData,jdbcType=BIGINT},</if>
+            <if test="portStatus.des != null">des = #{portStatus.des,jdbcType=VARCHAR},</if>
+            <if test="portStatus.status != null">status = #{portStatus.status,jdbcType=INTEGER}</if>
         </set>
-		WHERE switch_port = #{portStatus.switchPort,jdbcType=VARCHAR}
+        WHERE switch_port = #{portStatus.switchPort,jdbcType=VARCHAR}
     </update>
 
     <update id="updateVlan">
         UPDATE port_status
         <set>
-            <if test="portStatus.cvlan != null"> cvlan = #{portStatus.cvlan,jdbcType=INTEGER},</if>
-            <if test="portStatus.pvlan != null"> pvlan = #{portStatus.pvlan,jdbcType=INTEGER},</if>
+            <if test="portStatus.cvlan != null">cvlan = #{portStatus.cvlan,jdbcType=INTEGER},</if>
+            <if test="portStatus.pvlan != null">pvlan = #{portStatus.pvlan,jdbcType=INTEGER},</if>
         </set>
         WHERE id = #{portStatus.id,jdbcType=VARCHAR}
     </update>
@@ -161,7 +161,7 @@
         port_id = CASE switch_port
         <foreach collection="portStatuses" item="portStatus" index="index">
             <if test="portStatus.portId != null">
-            WHEN #{portStatus.switchPort,jdbcType=VARCHAR} THEN #{portStatus.portId,jdbcType=INTEGER}
+                WHEN #{portStatus.switchPort,jdbcType=VARCHAR} THEN #{portStatus.portId,jdbcType=INTEGER}
             </if>
         </foreach>
         END,
@@ -206,14 +206,15 @@
         </foreach>
         END
         WHERE switch_port
-                IN
-                    <foreach collection="portStatuses" item="portStatus" index="index" separator="," open="(" close=")">
-                        #{portStatus.switchPort,jdbcType=VARCHAR}
-                    </foreach>
+        IN
+        <foreach collection="portStatuses" item="portStatus" index="index" separator="," open="(" close=")">
+            #{portStatus.switchPort,jdbcType=VARCHAR}
+        </foreach>
     </update>
 
     <delete id="delete">
-        DELETE FROM port_status
+        DELETE
+        FROM port_status
         WHERE switch_port = #{portStatus.switchPort,jdbcType=VARCHAR}
     </delete>
 
@@ -252,43 +253,36 @@
     </select>
 
     <select id="selectByIP" resultMap="PortResultMap">
-        SELECT
-            port_status.in_data,
-            port_status.out_data,
-            port_status.des,
-            port_speed.in_speed,
-            port_speed.out_speed,
-            port_status.`name`,
-            port_status.`status`,
-            port_status.up_time,
-            port_status.speed,
-            port_status.port_index,
-            port_status.cvlan,
-            port_status.pvlan
-        FROM
-            switches_list
-                INNER JOIN port_status ON switches_list.id = port_status.switch_id
-                INNER JOIN port_speed ON port_status.switch_id = port_speed.switch_id AND port_status.port_index = port_speed.port_index
-        WHERE
-            switches_list.ip = #{ip,jdbcType=VARCHAR}
-        ORDER BY
-            port_status.port_index ASC
+        SELECT port_status.in_data,
+               port_status.out_data,
+               port_status.des,
+               port_speed.in_speed,
+               port_speed.out_speed,
+               port_status.`name`,
+               port_status.`status`,
+               port_status.up_time,
+               port_status.speed,
+               port_status.port_index,
+               port_status.cvlan,
+               port_status.pvlan
+        FROM switches_list
+                 INNER JOIN port_status ON switches_list.id = port_status.switch_id
+                 INNER JOIN port_speed ON port_status.switch_id = port_speed.switch_id AND
+                                          port_status.port_index = port_speed.port_index
+        WHERE switches_list.ip = #{ip,jdbcType=VARCHAR}
+        ORDER BY port_status.port_index ASC
     </select>
 
     <select id="selectVlanOrigin" resultMap="VlanResultMap">
-        SELECT
-            switches_list.ip,
-            port_status.port_id,
-            port_status.id
-        FROM
-            switches_list ,
-            port_status
-        WHERE
-            port_status.port_id > 0 AND
-            port_status.switch_id = switches_list.id
-        ORDER BY
-            switches_list.id ASC,
-            port_status.port_id ASC
+        SELECT switches_list.ip,
+               port_status.port_id,
+               port_status.id
+        FROM switches_list,
+             port_status
+        WHERE port_status.port_id > 0
+          AND port_status.switch_id = switches_list.id
+        ORDER BY switches_list.id ASC,
+                 port_status.port_id ASC
     </select>
 
     <select id="fetchPort" resultType="string">

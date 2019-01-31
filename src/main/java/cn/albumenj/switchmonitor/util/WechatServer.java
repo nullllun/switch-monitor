@@ -1,16 +1,13 @@
 package cn.albumenj.switchmonitor.util;
 
-import cn.albumenj.switchmonitor.dto.LoginCodeDto;
 import cn.albumenj.switchmonitor.dto.MessageReturnDto;
 import cn.albumenj.switchmonitor.dto.MessageSubmitDto;
 import cn.albumenj.switchmonitor.dto.TokenDto;
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cglib.beans.BeanMap;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -92,8 +88,8 @@ public class WechatServer {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("access_token", token);
 
-        Map<String,String> text = new HashMap<>();
-        text.put("content",msg);
+        Map<String, String> text = new HashMap<>(16);
+        text.put("content", msg);
 
         MessageSubmitDto messageSubmitDto = new MessageSubmitDto();
         messageSubmitDto.setTouser("@all");
@@ -108,10 +104,10 @@ public class WechatServer {
                 new HttpEntity<Map<String, String>>(BeanMap.create(messageSubmitDto), headers);
 
         URI code2Session = HttpUtil.getURIwithParams(code2SessionUrl, params);
-        String resultJson = restTemplate.exchange(code2Session,HttpMethod.POST, requestEntity,String.class).getBody();
+        String resultJson = restTemplate.exchange(code2Session, HttpMethod.POST, requestEntity, String.class).getBody();
         MessageReturnDto messageReturn = JSONUtil.jsonString2Object(resultJson, MessageReturnDto.class);
 
-        switch (messageReturn.getErrcode()){
+        switch (messageReturn.getErrcode()) {
             case 0:
                 return true;
             case 40014:

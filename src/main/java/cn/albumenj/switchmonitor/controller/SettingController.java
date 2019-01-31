@@ -35,9 +35,9 @@ public class SettingController {
 
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping("/api/reboot_scan_process")
-    public String rebootScan(UsernamePasswordAuthenticationToken authentication, HttpServletRequest request){
+    public String rebootScan(UsernamePasswordAuthenticationToken authentication, HttpServletRequest request) {
         Log log = new Log(LogConst.WARN,
-                LogConst.USER,authentication.getName(),
+                LogConst.USER, authentication.getName(),
                 "Restart Scan Process", IpUtil.getIpAddr(request));
         logService.insert(log);
 
@@ -48,8 +48,8 @@ public class SettingController {
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping("/api/setting/update_vlan")
     public String updateVlan(UsernamePasswordAuthenticationToken authentication, HttpServletRequest request) {
-        Log log = new Log(LogConst.WARN,LogConst.USER,
-                authentication.getName(),"Update Device VLAN Information", IpUtil.getIpAddr(request));
+        Log log = new Log(LogConst.WARN, LogConst.USER,
+                authentication.getName(), "Update Device VLAN Information", IpUtil.getIpAddr(request));
         logService.insert(log);
 
         portStatusService.updateVlan();
@@ -59,8 +59,8 @@ public class SettingController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @RequestMapping("/api/setting/permission")
     public PageCodeDto test(UsernamePasswordAuthenticationToken authentication, HttpServletRequest request) {
-        Log log = new Log(LogConst.INFO,LogConst.USER,
-                authentication.getName(),"Enter Setting", IpUtil.getIpAddr(request));
+        Log log = new Log(LogConst.INFO, LogConst.USER,
+                authentication.getName(), "Enter Setting", IpUtil.getIpAddr(request));
         logService.insert(log);
 
         return new PageCodeDto(PageCodeEnum.PERMISSION_ACCEPT);
@@ -70,7 +70,7 @@ public class SettingController {
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping("/api/setting/update_reach")
     public String updateReach(UsernamePasswordAuthenticationToken authentication, HttpServletRequest request) {
-        Log log = new Log(LogConst.WARN,LogConst.USER,authentication.getName(),
+        Log log = new Log(LogConst.WARN, LogConst.USER, authentication.getName(),
                 "Update Device Reachable Information", IpUtil.getIpAddr(request));
         logService.insert(log);
 

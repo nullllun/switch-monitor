@@ -25,7 +25,7 @@ public class Log {
         this.ip = "";
     }
 
-    public Log(Integer level, Integer type, String openId, String operation ,String ip) {
+    public Log(Integer level, Integer type, String openId, String operation, String ip) {
         this.level = level;
         this.type = type;
         this.openId = openId;

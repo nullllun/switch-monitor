@@ -15,8 +15,9 @@ import java.util.List;
 public class SwitchListTest {
     @Autowired
     SwitchesListService switchesListService;
+
     @Test
-    public void test(){
+    public void test() {
     }
 
     public void insert() {
@@ -28,27 +29,27 @@ public class SwitchListTest {
         switchesListService.insert(switchesList);
     }
 
-    public void select(){
+    public void select() {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
-        for(SwitchesList s:switchesLists){
+        for (SwitchesList s : switchesLists) {
             System.out.println(s.getId() + " " + s.getModel() + " " + s.getBuilding() + " " + s.getDescription());
         }
     }
 
-    public void update(){
+    public void update() {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
-        for(SwitchesList s:switchesLists){
-            if(s.getBuilding().compareTo("TEST1")==0){
+        for (SwitchesList s : switchesLists) {
+            if (s.getBuilding().compareTo("TEST1") == 0) {
                 s.setBuilding("TEST2");
                 switchesListService.update(s);
             }
         }
     }
 
-    public void delete(){
+    public void delete() {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
-        for(SwitchesList s:switchesLists){
-            if(s.getBuilding().compareTo("TEST2")==0){
+        for (SwitchesList s : switchesLists) {
+            if (s.getBuilding().compareTo("TEST2") == 0) {
                 switchesListService.delete(s);
             }
         }

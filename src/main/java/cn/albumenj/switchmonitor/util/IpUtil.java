@@ -20,9 +20,10 @@ public class IpUtil {
 
     public static String getSegment(String ip, int reg) {
         String[] ips = ip.split("\\.");
+        int length = 4;
         if (ip.endsWith(SUFFIX)) {
             return ip;
-        } else if (ips.length != 4) {
+        } else if (ips.length != length) {
             logger.warn("IP地址格式错误");
             return "";
         } else {
@@ -60,12 +61,13 @@ public class IpUtil {
 
         String returnMsg = "";
         String line = "";
+        String flagLinux = "100% packet loss";
         try {
             while ((line = returnData.readLine()) != null) {
                 returnMsg += line;
             }
 
-            if (returnMsg.contains("100% packet loss")) {
+            if (returnMsg.contains(flagLinux)) {
                 networkUseable = false;
             } else {
                 networkUseable = true;
@@ -116,7 +118,8 @@ public class IpUtil {
             }
         }
         // 多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-        if (ip != null && ip.length() > 15) {
+        int length = 15;
+        if (ip != null && ip.length() > length) {
             String separator = ",";
             if (ip.indexOf(separator) > 0) {
                 ip = ip.substring(0, ip.indexOf(","));

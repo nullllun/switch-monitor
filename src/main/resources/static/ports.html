@@ -21,13 +21,13 @@
     <link href="/static/global.css" rel="stylesheet">
 
     <script>
-        $(document).ready(function(){
-            $.getJSON("/api/ports",function(data){
-                table_html="";
+        $(document).ready(function () {
+            $.getJSON("/api/ports", function (data) {
+                table_html = "";
                 console.log(data);
-                for(var port in data){
-                    d=data[port].split(",");
-                    table_html+="<tr><td>"+d[0]+"</td><td><a href='/port.html?ip="+d[0]+"&port="+d[1].replace(/\//g, '_')+"' target='_blank'>"+d[1]+"</td><td>"+d[2]+"</a></td></tr>";
+                for (var port in data) {
+                    d = data[port].split(",");
+                    table_html += "<tr><td>" + d[0] + "</td><td><a href='/port.html?ip=" + d[0] + "&port=" + d[1].replace(/\//g, '_') + "' target='_blank'>" + d[1] + "</td><td>" + d[2] + "</a></td></tr>";
                 }
                 $("#port_info_tbody").html(table_html);
             });

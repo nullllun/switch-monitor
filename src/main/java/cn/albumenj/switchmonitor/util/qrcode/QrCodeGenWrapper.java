@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.util.QrCode;
+package cn.albumenj.switchmonitor.util.qrcode;
 
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -40,7 +40,7 @@ public class QrCodeGenWrapper {
         private static final MatrixToImageConfig DEFAULT_CONFIG = new MatrixToImageConfig();
 
         /**
-         * The message to put into QrCode
+         * The message to put into qrcode
          */
         private String msg;
 
@@ -182,8 +182,9 @@ public class QrCodeGenWrapper {
                 return 0;
             }
 
-            if (padding > 4) {
-                return 4;
+            int i = 4;
+            if (padding > i) {
+                return i;
             }
 
             return padding;

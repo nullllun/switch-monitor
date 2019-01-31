@@ -18,7 +18,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 @Configuration
 public class ScheduleConfig {
     /**
-     *  配置任务
+     * 配置任务
+     *
      * @return
      */
     @Bean(name = "updateJob")
@@ -101,11 +102,12 @@ public class ScheduleConfig {
 
     /**
      * 定时触发器
+     *
      * @param updateJob 任务
      * @return
      */
     @Bean(name = "updateJobTrigger")
-    public CronTriggerFactoryBean updateJobTrigger(JobDetail updateJob){
+    public CronTriggerFactoryBean updateJobTrigger(JobDetail updateJob) {
 
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
         tigger.setJobDetail(updateJob);
@@ -117,7 +119,7 @@ public class ScheduleConfig {
     }
 
     @Bean(name = "checkReachableJobTrigger")
-    public CronTriggerFactoryBean checkReachableJobTrigger(JobDetail checkReachableJob){
+    public CronTriggerFactoryBean checkReachableJobTrigger(JobDetail checkReachableJob) {
 
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
         tigger.setJobDetail(checkReachableJob);
@@ -129,7 +131,7 @@ public class ScheduleConfig {
     }
 
     @Bean(name = "briefFetchJobTrigger")
-    public CronTriggerFactoryBean briefFetchJobTrigger(JobDetail briefFetchJob){
+    public CronTriggerFactoryBean briefFetchJobTrigger(JobDetail briefFetchJob) {
 
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
         tigger.setJobDetail(briefFetchJob);
@@ -141,7 +143,7 @@ public class ScheduleConfig {
     }
 
     @Bean(name = "cleanHistoryJobTrigger")
-    public CronTriggerFactoryBean cleanHistoryJobTrigger(JobDetail cleanHistoryJob){
+    public CronTriggerFactoryBean cleanHistoryJobTrigger(JobDetail cleanHistoryJob) {
 
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
         tigger.setJobDetail(cleanHistoryJob);
@@ -179,6 +181,7 @@ public class ScheduleConfig {
 
     /**
      * 调度工厂
+     *
      * @param updateJobTrigger 触发器
      * @return
      */

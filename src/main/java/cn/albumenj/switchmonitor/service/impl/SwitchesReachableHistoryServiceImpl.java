@@ -14,7 +14,7 @@ import java.util.List;
  * @author Albumen
  */
 @Service
-public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHistoryService{
+public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHistoryService {
     @Value("${history.switch-reachable-saveTime}")
     Integer switchReachableSaveTime;
 
@@ -22,12 +22,12 @@ public class SwitchesReachableHistoryServiceImpl implements SwitchesReachableHis
     private SwitchesReachableHistoryMapper switchesReachableHistoryMapper;
 
     @Override
-    public int insert(SwitchesReachableHistory switchesReachableHistory){
+    public int insert(SwitchesReachableHistory switchesReachableHistory) {
         return switchesReachableHistoryMapper.insert(switchesReachableHistory);
     }
 
     @Override
-    public int insertList(List<SwitchesReachableHistory> switchesReachableHistorys){
+    public int insertList(List<SwitchesReachableHistory> switchesReachableHistorys) {
         int ret = switchesReachableHistoryMapper.insertList(switchesReachableHistorys);
         if (ret != switchesReachableHistorys.size()) {
             for (SwitchesReachableHistory switchesReachableHistory : switchesReachableHistorys) {

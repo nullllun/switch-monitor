@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface SwitchesStatusService{
+public interface SwitchesStatusService {
 
     /**
      * 插入单条数据

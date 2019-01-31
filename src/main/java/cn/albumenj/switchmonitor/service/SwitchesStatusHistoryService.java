@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface SwitchesStatusHistoryService{
+public interface SwitchesStatusHistoryService {
 
     /**
      * 插入单条数据

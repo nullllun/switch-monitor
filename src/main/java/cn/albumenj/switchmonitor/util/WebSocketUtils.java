@@ -26,7 +26,7 @@ public class WebSocketUtils {
      * 模拟存储 websocket session 使用
      */
     public static Map<String, SessionDto> livingSessionsCache = new ConcurrentHashMap<>();
-    public static Map<Session,String> livingSessionsCacheN = new ConcurrentHashMap<>();
+    public static Map<Session, String> livingSessionsCacheN = new ConcurrentHashMap<>();
 
     public static void sendMessageAll(String message) {
         livingSessionsCache.forEach((sessionId, session) -> sendMessage(session.getSession(), message));
@@ -56,11 +56,11 @@ public class WebSocketUtils {
     /**
      * 发送给指定用户消息
      *
-     * @param uuid 用户 session uuid
+     * @param uuid    用户 session uuid
      * @param message 发送内容
      */
     public static void sendMessage(String uuid, String message) {
-        sendMessage(livingSessionsCache.get(uuid).getSession(),message);
+        sendMessage(livingSessionsCache.get(uuid).getSession(), message);
     }
 
     public void close() {

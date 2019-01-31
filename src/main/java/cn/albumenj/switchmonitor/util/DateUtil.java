@@ -13,11 +13,11 @@ import java.util.TimeZone;
  */
 public class DateUtil {
     public static Date beforeNowDate(Integer day) {
-        Date date=new Date();
+        Date date = new Date();
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
-        calendar.add(Calendar.DATE,-day);
-        date=calendar.getTime();
+        calendar.add(Calendar.DATE, -day);
+        date = calendar.getTime();
 
         return date;
     }

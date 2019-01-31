@@ -10,21 +10,21 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        switch_id,
-        cpu_load,
-        memory_used,
-        temp,
-        time_stamp
+            switch_id,
+            cpu_load,
+            memory_used,
+            temp,
+            time_stamp
     </sql>
 
     <insert id="insert">
         INSERT INTO switches_status_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="switchesStatusHistory.switchId!=null"> switch_id,</if>
-            <if test="switchesStatusHistory.cpuLoad!=null"> cpu_load,</if>
-            <if test="switchesStatusHistory.memoryUsed!=null"> memory_used,</if>
-            <if test="switchesStatusHistory.temp!=null"> temp,</if>
-            <if test="switchesStatusHistory.timeStamp!=null"> time_stamp,</if>
+            <if test="switchesStatusHistory.switchId!=null">switch_id,</if>
+            <if test="switchesStatusHistory.cpuLoad!=null">cpu_load,</if>
+            <if test="switchesStatusHistory.memoryUsed!=null">memory_used,</if>
+            <if test="switchesStatusHistory.temp!=null">temp,</if>
+            <if test="switchesStatusHistory.timeStamp!=null">time_stamp,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -43,11 +43,11 @@
 
     <insert id="insertList">
         INSERT INTO switches_status_history (
-            switch_id,
-            cpu_load,
-            memory_used,
-            temp,
-            time_stamp
+        switch_id,
+        cpu_load,
+        memory_used,
+        temp,
+        time_stamp
         )VALUES
         <foreach collection="switchesStatusHistorys" item="switchesStatusHistory" index="index" separator=",">
             (
@@ -61,33 +61,30 @@
     </insert>
 
     <select id="select" resultMap="BaseResultMap">
-        SELECT  id,
-                switch_id,
-                cpu_load,
-                memory_used,
-                temp,
-                time_stamp
+        SELECT id,
+               switch_id,
+               cpu_load,
+               memory_used,
+               temp,
+               time_stamp
         FROM switches_status_history
     </select>
 
 
     <select id="selectBySwitch" resultMap="BaseResultMap">
-        SELECT
-            switches_status_history.cpu_load,
-            switches_status_history.memory_used,
-            switches_status_history.temp,
-            switches_status_history.time_stamp
-        FROM
-            switches_list
-                INNER JOIN switches_status_history ON switches_list.id = switches_status_history.switch_id
-        WHERE
-            switches_list.ip = #{ip}
-        ORDER BY
-            switches_status_history.time_stamp ASC
+        SELECT switches_status_history.cpu_load,
+               switches_status_history.memory_used,
+               switches_status_history.temp,
+               switches_status_history.time_stamp
+        FROM switches_list
+                 INNER JOIN switches_status_history ON switches_list.id = switches_status_history.switch_id
+        WHERE switches_list.ip = #{ip}
+        ORDER BY switches_status_history.time_stamp ASC
     </select>
 
     <delete id="delete">
-        DELETE FROM switches_status_history
+        DELETE
+        FROM switches_status_history
         WHERE time_stamp &lt;= #{switchesStatusHistory.timeStamp,jdbcType=TIMESTAMP}
     </delete>
 </mapper>

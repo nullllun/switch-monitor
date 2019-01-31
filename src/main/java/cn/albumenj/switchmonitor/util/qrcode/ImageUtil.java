@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.util.QrCode;
+package cn.albumenj.switchmonitor.util.qrcode;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -21,23 +21,24 @@ public class ImageUtil {
      * @throws IOException
      */
     public static void insertLogo(BufferedImage qrCode, String logo, QrCodeOptions.LogoStyle logoStyle) throws IOException {
-        int QRCODE_WIDTH = qrCode.getWidth();
-        int QRCODE_HEIGHT = qrCode.getHeight();
+        int qrCodeWidth = qrCode.getWidth();
+        int qrCodeHeight = qrCode.getHeight();
 
         // 获取logo图片
         BufferedImage bf = getImageByPath(logo);
-        int size = bf.getWidth() > QRCODE_WIDTH * 2 / 10 ? QRCODE_WIDTH * 2 / 50 : bf.getWidth() / 5;
-        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, Color.BLUE); // 边距为二维码图片的1/10
+        int size = bf.getWidth() > qrCodeWidth * 2 / 10 ? qrCodeWidth * 2 / 50 : bf.getWidth() / 5;
+        // 边距为二维码图片的1/10
+        bf = ImageUtil.makeRoundBorder(bf, logoStyle, size, Color.BLUE);
 
         // logo的宽高
-        int w = bf.getWidth() > QRCODE_WIDTH * 2 / 10 ? QRCODE_WIDTH * 2 / 10 : bf.getWidth();
-        int h = bf.getHeight() > QRCODE_HEIGHT * 2 / 10 ? QRCODE_HEIGHT * 2 / 10 : bf.getHeight();
+        int w = bf.getWidth() > qrCodeWidth * 2 / 10 ? qrCodeWidth * 2 / 10 : bf.getWidth();
+        int h = bf.getHeight() > qrCodeHeight * 2 / 10 ? qrCodeHeight * 2 / 10 : bf.getHeight();
 
         // 插入LOGO
         Graphics2D graph = qrCode.createGraphics();
 
-        int x = (QRCODE_WIDTH - w) / 2;
-        int y = (QRCODE_HEIGHT - h) / 2;
+        int x = (qrCodeWidth - w) / 2;
+        int y = (qrCodeHeight - h) / 2;
 
         graph.drawImage(bf, x, y, w, h, null);
         graph.dispose();
@@ -53,12 +54,19 @@ public class ImageUtil {
      * @throws IOException
      */
     public static BufferedImage getImageByPath(String path) throws IOException {
-        if (path.startsWith("http")) { // 从网络获取logo
+        String http = "http";
+        String start = "/";
+        // 从网络获取logo
+        if (path.startsWith(http)) {
             return ImageIO.read(new URL(path));
-            //return ImageIO.read(HttpUtil.downFile(path));
-        } else if (path.startsWith("/")) { // 绝对地址获取logo
+
+        }
+        // 绝对地址获取logo
+        else if (path.startsWith(start)) {
             return ImageIO.read(new File(path));
-        } else { // 从资源目录下获取logo
+        }
+        // 从资源目录下获取logo
+        else {
             return ImageIO.read(ImageUtil.class.getClassLoader().getResourceAsStream(path));
         }
     }
@@ -66,13 +74,13 @@ public class ImageUtil {
 
     /**
      * fixme 边框的计算需要根据最终生成logo图片的大小来定义，这样才不会出现不同的logo原图，导致边框不一致的问题
-     *
+     * <p>
      * 生成圆角图片 & 圆角边框
      *
-     * @param image        原图
+     * @param image     原图
      * @param logoStyle 圆角的角度
-     * @param size         边框的边距
-     * @param color        边框的颜色
+     * @param size      边框的边距
+     * @param color     边框的颜色
      * @return 返回带边框的圆角图
      */
     public static BufferedImage makeRoundBorder(BufferedImage image, QrCodeOptions.LogoStyle logoStyle, int size, Color color) {

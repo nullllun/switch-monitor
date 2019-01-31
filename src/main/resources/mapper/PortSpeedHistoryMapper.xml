@@ -18,18 +18,18 @@
     <sql id="Base_Column_List">
             id,
             switch_port,
-        in_speed,
-        out_speed,
-        time_stamp
+            in_speed,
+            out_speed,
+            time_stamp
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeedHistory.id">
         INSERT INTO port_speed_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="portSpeedHistory.switchPort!=null">switch_port,</if>
-            <if test="portSpeedHistory.inSpeed!=null"> in_speed,</if>
-            <if test="portSpeedHistory.outSpeed!=null"> out_speed,</if>
-            <if test="portSpeedHistory.timeStamp!=null"> time_stamp,</if>
+            <if test="portSpeedHistory.inSpeed!=null">in_speed,</if>
+            <if test="portSpeedHistory.outSpeed!=null">out_speed,</if>
+            <if test="portSpeedHistory.timeStamp!=null">time_stamp,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -47,9 +47,9 @@
     <insert id="insertList">
         INSERT INTO port_speed_history (
         switch_port,
-            in_speed,
-            out_speed,
-            time_stamp
+        in_speed,
+        out_speed,
+        time_stamp
         )VALUES
         <foreach collection="portSpeedHistorys" item="portSpeedHistory" index="index" separator=",">
             (
@@ -62,18 +62,17 @@
     </insert>
 
     <select id="select" resultMap="FlowResultMap">
-        SELECT
-            port_speed_history.in_speed,
-            port_speed_history.out_speed,
-            port_speed_history.time_stamp
+        SELECT port_speed_history.in_speed,
+               port_speed_history.out_speed,
+               port_speed_history.time_stamp
         FROM port_speed_history
         WHERE port_speed_history.switch_port = #{switchPort,jdbcType=VARCHAR}
-        ORDER BY
-            port_speed_history.time_stamp ASC
+        ORDER BY port_speed_history.time_stamp ASC
     </select>
 
     <delete id="delete">
-        DELETE FROM port_speed_history
+        DELETE
+        FROM port_speed_history
         WHERE time_stamp &lt;= #{portSpeedHistory.timeStamp,jdbcType=TIMESTAMP}
     </delete>
 </mapper>

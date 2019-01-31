@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.util.QrCode;
+package cn.albumenj.switchmonitor.util.qrcode;
 
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -53,9 +53,14 @@ public class QrCodeOptions {
      */
     private String picType;
 
-
     public enum LogoStyle {
+        /**
+         * 周围
+         */
         ROUND,
+        /**
+         * 普通
+         */
         NORMAL;
     }
 

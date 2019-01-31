@@ -64,7 +64,7 @@ public interface WechatUserMapper {
     WechatUser selectName(@Param("wechatUser") WechatUser wechatUser);
 
     /**
-     *  删除数据
+     * 删除数据
      *
      * @param wechatUser
      * @return

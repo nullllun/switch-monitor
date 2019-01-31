@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Albumen
  */
-public interface SwitchesListService{
+public interface SwitchesListService {
 
     /**
      * 插入单条数据

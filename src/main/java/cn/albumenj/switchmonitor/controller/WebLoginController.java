@@ -44,7 +44,9 @@ public class WebLoginController {
     }
 
     @OnClose
-    //当前的Session 移除
+    /**
+     * 当前的Session 移除
+     */
     public void onClose(Session session) {
         String uuid = livingSessionsCacheN.get(session);
         if (uuid != null) {

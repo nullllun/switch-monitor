@@ -11,7 +11,7 @@ public class MessageSubmitDto {
     private String touser;
     private String msgtype;
     private String agentid;
-    private Map<String,String> text;
+    private Map<String, String> text;
 
     public String getTouser() {
         return touser;

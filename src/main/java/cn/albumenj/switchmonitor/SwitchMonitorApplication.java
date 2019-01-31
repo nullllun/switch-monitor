@@ -25,12 +25,12 @@ public class SwitchMonitorApplication {
      * 注册 ServerEndpointExporter Bean对象（因为Springboot没有自动注册，所以得手动注册）
      */
     @Bean
-    public ServerEndpointExporter serverEndpointExporter(){
+    public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }
 
     @Bean
-    public CustomEndpointConfigure customEndpointConfigure(){
+    public CustomEndpointConfigure customEndpointConfigure() {
         return new CustomEndpointConfigure();
     }
 
@@ -38,7 +38,7 @@ public class SwitchMonitorApplication {
      * 注册 端点对象
      */
     @Bean
-    public WebLoginController webLoginController(){
+    public WebLoginController webLoginController() {
         return new WebLoginController();
     }
 }

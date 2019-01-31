@@ -108,7 +108,7 @@
         }
 
         function getLocalTime(t) {
-            var date = new Date((t + 28800)*1000); //东八区
+            var date = new Date((t + 28800) * 1000); //东八区
             Y = date.getFullYear() + '-';
             M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
             D = date.getDate() + ' ';

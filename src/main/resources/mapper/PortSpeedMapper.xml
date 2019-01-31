@@ -11,25 +11,25 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,
-        switch_id,
-        port_index,
-        switch_port,
-        in_speed,
-        out_speed,
-        time_stamp
+            id,
+            switch_id,
+            port_index,
+            switch_port,
+            in_speed,
+            out_speed,
+            time_stamp
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeed.id">
         INSERT INTO port_speed
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="portSpeed.id!=null"> id,</if>
-            <if test="portSpeed.switchId!=null"> switch_id,</if>
-            <if test="portSpeed.portIndex!=null"> port_index,</if>
-            <if test="portSpeed.switchPort!=null"> switch_port,</if>
-            <if test="portSpeed.inSpeed!=null"> in_speed,</if>
-            <if test="portSpeed.outSpeed!=null"> out_speed,</if>
-            <if test="portSpeed.timeStamp!=null"> time_stamp,</if>
+            <if test="portSpeed.id!=null">id,</if>
+            <if test="portSpeed.switchId!=null">switch_id,</if>
+            <if test="portSpeed.portIndex!=null">port_index,</if>
+            <if test="portSpeed.switchPort!=null">switch_port,</if>
+            <if test="portSpeed.inSpeed!=null">in_speed,</if>
+            <if test="portSpeed.outSpeed!=null">out_speed,</if>
+            <if test="portSpeed.timeStamp!=null">time_stamp,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -39,7 +39,7 @@
             </if>
             <if test="portSpeed.portIndex!=null">#{portSpeed.portIndex,jdbcType=INTEGER},
             </if>
-            <if test="portSpeed.switchPort!=null"> #{portSpeed.switchPort,jdbcType=VARCHAR},
+            <if test="portSpeed.switchPort!=null">#{portSpeed.switchPort,jdbcType=VARCHAR},
             </if>
             <if test="portSpeed.inSpeed!=null">#{portSpeed.inSpeed,jdbcType=BIGINT},
             </if>
@@ -52,13 +52,13 @@
 
     <insert id="insertList">
         INSERT INTO port_speed (
-            id,
-            switch_id,
-            port_index,
-            switch_port,
-            in_speed,
-            out_speed,
-            time_stamp
+        id,
+        switch_id,
+        port_index,
+        switch_port,
+        in_speed,
+        out_speed,
+        time_stamp
         )VALUES
         <foreach collection="portSpeeds" item="portSpeed" index="index" separator=",">
             (
@@ -76,12 +76,12 @@
     <update id="update">
         UPDATE port_speed
         <set>
-            <if test="portSpeed.id != null"> id = #{portSpeed.id,jdbcType=VARCHAR},</if>
-            <if test="portSpeed.switchId != null"> switch_id= #{portSpeed.switchId,jdbcType=INTEGER},</if>
-            <if test="portSpeed.portIndex != null"> port_index= #{portSpeed.portIndex,jdbcType=INTEGER},</if>
-            <if test="portSpeed.inSpeed != null"> in_speed= #{portSpeed.inSpeed,jdbcType=BIGINT},</if>
-            <if test="portSpeed.outSpeed != null"> out_speed= #{portSpeed.outSpeed,jdbcType=BIGINT},</if>
-            <if test="portSpeed.timeStamp != null"> time_stamp= #{portSpeed.timeStamp,jdbcType=TIMESTAMP}</if>
+            <if test="portSpeed.id != null">id = #{portSpeed.id,jdbcType=VARCHAR},</if>
+            <if test="portSpeed.switchId != null">switch_id= #{portSpeed.switchId,jdbcType=INTEGER},</if>
+            <if test="portSpeed.portIndex != null">port_index= #{portSpeed.portIndex,jdbcType=INTEGER},</if>
+            <if test="portSpeed.inSpeed != null">in_speed= #{portSpeed.inSpeed,jdbcType=BIGINT},</if>
+            <if test="portSpeed.outSpeed != null">out_speed= #{portSpeed.outSpeed,jdbcType=BIGINT},</if>
+            <if test="portSpeed.timeStamp != null">time_stamp= #{portSpeed.timeStamp,jdbcType=TIMESTAMP}</if>
         </set>
         WHERE switch_port = #{portSpeed.switchPort,jdbcType=VARCHAR}
 
@@ -121,10 +121,10 @@
         </foreach>
         END
         WHERE switch_port
-                IN
-                    <foreach collection="portSpeeds" item="portSpeed" index="index" separator="," open="(" close=")">
-                        #{portSpeed.switchPort,jdbcType=VARCHAR}
-                    </foreach>
+        IN
+        <foreach collection="portSpeeds" item="portSpeed" index="index" separator="," open="(" close=")">
+            #{portSpeed.switchPort,jdbcType=VARCHAR}
+        </foreach>
     </update>
 
     <select id="selectBySwitch" resultMap="BaseResultMap">

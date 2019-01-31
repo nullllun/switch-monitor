@@ -88,13 +88,13 @@
     </delete>
 
     <select id="selectByLevel">
-        select level,type,open_id,operator,operation,time_stamp,ip
+        select level, type, open_id, operator, operation, time_stamp, ip
         from log
         where level = #{log.level,jdbcType=INTEGER}
     </select>
 
     <select id="selectByType">
-        select level,type,open_id,operator,operation,time_stamp,ip
+        select level, type, open_id, operator, operation, time_stamp, ip
         from log
         where type = #{log.type ,jdbcType=INTEGER}
     </select>

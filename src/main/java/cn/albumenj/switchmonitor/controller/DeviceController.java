@@ -24,12 +24,12 @@ public class DeviceController {
     SwitchesStatusHistoryService statusHistoryService;
 
     @RequestMapping("/api/devices/{ip}")
-    public DevicePortDto device(@PathVariable("ip") String ip){
+    public DevicePortDto device(@PathVariable("ip") String ip) {
         return portStatusService.selectByIP(ip);
     }
 
     @RequestMapping("/api/history/{ip}")
-    public List<DeviceHistoryDto> history(@PathVariable("ip") String ip){
+    public List<DeviceHistoryDto> history(@PathVariable("ip") String ip) {
         return statusHistoryService.selectDevice(ip);
     }
 }

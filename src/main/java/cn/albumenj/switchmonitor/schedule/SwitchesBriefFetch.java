@@ -151,7 +151,7 @@ public class SwitchesBriefFetch {
                 warning.addAll(list);
                 reach.addAll(list);
 
-                for(WarningDto warningDto:list){
+                for (WarningDto warningDto : list) {
                     String msg = "Device Down " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
                             warningDto.getBuilding() + " Down Time: " + warningDto.getDownTime();
                     submitLog(msg);

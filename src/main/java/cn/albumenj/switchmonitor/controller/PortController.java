@@ -20,8 +20,8 @@ public class PortController {
     PortSpeedHistoryService portSpeedHistoryService;
 
     @RequestMapping("/api/flow_history/{ip}/{port}")
-    public List<PortFlowDto> flowHistory(@PathVariable("ip") String ip, @PathVariable("port") String port){
-        port = port.replaceAll("_","/");
-        return portSpeedHistoryService.selectFlow(ip,port);
+    public List<PortFlowDto> flowHistory(@PathVariable("ip") String ip, @PathVariable("port") String port) {
+        port = port.replaceAll("_", "/");
+        return portSpeedHistoryService.selectFlow(ip, port);
     }
 }

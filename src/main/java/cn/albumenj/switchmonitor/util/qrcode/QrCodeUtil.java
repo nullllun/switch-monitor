@@ -1,4 +1,4 @@
-package cn.albumenj.switchmonitor.util.QrCode;
+package cn.albumenj.switchmonitor.util.qrcode;
 
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -135,7 +135,8 @@ public class QrCodeUtil {
 
         int scale = expectSize / qrCodeSize;
         int abs = expectSize - scale * qrCodeSize;
-        if (abs < expectSize * 0.15) {
+        double size = 0.15;
+        if (abs < expectSize * size) {
             return 0;
         }
 

@@ -54,27 +54,27 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,
-        switch_id,
-        up_time,
-        name,
-        cpu_load,
-        memory_used,
-        temp,
-        time_stamp
+            id,
+            switch_id,
+            up_time,
+            name,
+            cpu_load,
+            memory_used,
+            temp,
+            time_stamp
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="switchesStatus.id">
         INSERT INTO switches_status
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="switchesStatus.id!=null"> id,</if>
-            <if test="switchesStatus.switchId!=null"> switch_id,</if>
-            <if test="switchesStatus.upTime!=null"> up_time,</if>
-            <if test="switchesStatus.name!=null"> name,</if>
-            <if test="switchesStatus.cpuLoad!=null"> cpu_load,</if>
-            <if test="switchesStatus.memoryUsed!=null"> memory_used,</if>
-            <if test="switchesStatus.temp!=null"> temp,</if>
-            <if test="switchesStatus.timeStamp!=null"> time_stamp,</if>
+            <if test="switchesStatus.id!=null">id,</if>
+            <if test="switchesStatus.switchId!=null">switch_id,</if>
+            <if test="switchesStatus.upTime!=null">up_time,</if>
+            <if test="switchesStatus.name!=null">name,</if>
+            <if test="switchesStatus.cpuLoad!=null">cpu_load,</if>
+            <if test="switchesStatus.memoryUsed!=null">memory_used,</if>
+            <if test="switchesStatus.temp!=null">temp,</if>
+            <if test="switchesStatus.timeStamp!=null">time_stamp,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -99,14 +99,14 @@
 
     <insert id="insertList">
         INSERT INTO switches_status (
-            id,
-            switch_id,
-            up_time,
-            name,
-            cpu_load,
-            memory_used,
-            temp,
-            time_stamp
+        id,
+        switch_id,
+        up_time,
+        name,
+        cpu_load,
+        memory_used,
+        temp,
+        time_stamp
         )VALUES
         <foreach collection="switchesStatuss" item="switchesStatus" index="index" separator=",">
             (
@@ -125,14 +125,15 @@
     <update id="update">
         UPDATE switches_status
         <set>
-            <if test="switchesStatus.id != null"> id= #{switchesStatus.id,jdbcType=VARCHAR},</if>
-            <if test="switchesStatus.switchId != null"> switch_id= #{switchesStatus.switchId,jdbcType=INTEGER},</if>
-            <if test="switchesStatus.upTime != null"> up_time= #{switchesStatus.upTime,jdbcType=VARCHAR},</if>
-            <if test="switchesStatus.name != null"> name= #{switchesStatus.name,jdbcType=VARCHAR},</if>
-            <if test="switchesStatus.cpuLoad != null"> cpu_load= #{switchesStatus.cpuLoad,jdbcType=INTEGER},</if>
-            <if test="switchesStatus.memoryUsed != null"> memory_used= #{switchesStatus.memoryUsed,jdbcType=INTEGER},</if>
-            <if test="switchesStatus.temp != null"> temp= #{switchesStatus.temp,jdbcType=INTEGER},</if>
-            <if test="switchesStatus.timeStamp != null"> time_stamp= #{switchesStatus.timeStamp,jdbcType=TIMESTAMP}</if>
+            <if test="switchesStatus.id != null">id= #{switchesStatus.id,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.switchId != null">switch_id= #{switchesStatus.switchId,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.upTime != null">up_time= #{switchesStatus.upTime,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.name != null">name= #{switchesStatus.name,jdbcType=VARCHAR},</if>
+            <if test="switchesStatus.cpuLoad != null">cpu_load= #{switchesStatus.cpuLoad,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.memoryUsed != null">memory_used= #{switchesStatus.memoryUsed,jdbcType=INTEGER},
+            </if>
+            <if test="switchesStatus.temp != null">temp= #{switchesStatus.temp,jdbcType=INTEGER},</if>
+            <if test="switchesStatus.timeStamp != null">time_stamp= #{switchesStatus.timeStamp,jdbcType=TIMESTAMP}</if>
         </set>
         WHERE switch_id = #{switchesStatus.switchId,jdbcType=INTEGER}
     </update>
@@ -208,71 +209,71 @@
     </select>
 
     <delete id="delete">
-        DELETE FROM switches_status
+        DELETE
+        FROM switches_status
         WHERE switch_id = #{switchesStatus.switchId,jdbcType=INTEGER}
     </delete>
 
     <select id="selectSome" resultMap="BaseResultMap">
         SELECT
-               id,switch_id
-                <if test="switchesStatus.cpuLoad != null"> ,cpu_load </if>
-                <if test="switchesStatus.memoryUsed != null"> ,memory_used </if>
-                <if test="switchesStatus.temp != null"> ,temp </if>
+        id,switch_id
+        <if test="switchesStatus.cpuLoad != null">,cpu_load</if>
+        <if test="switchesStatus.memoryUsed != null">,memory_used</if>
+        <if test="switchesStatus.temp != null">,temp</if>
         FROM switches_status
     </select>
 
     <select id="selectDetail" resultMap="DetailResultMap">
-        SELECT
-            switches_status.id,
-            switches_status.switch_id,
-            switches_status.`name`,
-            switches_status.cpu_load,
-            switches_status.memory_used,
-            switches_status.temp,
-            switches_status.time_stamp,
-            list.ip           AS ip_origin,
-            list.model,
-            list.building,
-            reach.reachable,
-            reach.down_time,
-            speed.in_speed,
-            speed.out_speed,
-            speed.time_stamp  AS speed_time,
-            speed.port_index,
-            port_status.speed AS speed_max,
-            port_status.name  AS port_name,
-            port_status.cvlan,
-            port_status.pvlan
-        FROM
-            switches_status
-                INNER JOIN switches_list AS list ON switches_status.switch_id = list.id
-                INNER JOIN switches_reachable AS reach ON switches_status.switch_id = reach.switch_id
-                LEFT JOIN port_speed AS speed ON switches_status.switch_id = speed.switch_id
-                LEFT JOIN port_status ON speed.switch_id = port_status.switch_id AND speed.port_index = port_status.port_index
+        SELECT switches_status.id,
+               switches_status.switch_id,
+               switches_status.`name`,
+               switches_status.cpu_load,
+               switches_status.memory_used,
+               switches_status.temp,
+               switches_status.time_stamp,
+               list.ip           AS ip_origin,
+               list.model,
+               list.building,
+               reach.reachable,
+               reach.down_time,
+               speed.in_speed,
+               speed.out_speed,
+               speed.time_stamp  AS speed_time,
+               speed.port_index,
+               port_status.speed AS speed_max,
+               port_status.name  AS port_name,
+               port_status.cvlan,
+               port_status.pvlan
+        FROM switches_status
+                 INNER JOIN switches_list AS list ON switches_status.switch_id = list.id
+                 INNER JOIN switches_reachable AS reach ON switches_status.switch_id = reach.switch_id
+                 LEFT JOIN port_speed AS speed ON switches_status.switch_id = speed.switch_id
+                 LEFT JOIN port_status
+                           ON speed.switch_id = port_status.switch_id AND speed.port_index = port_status.port_index
         order by list.id asc
     </select>
 
     <select id="selectByBuilding" resultMap="BuildingResultMap">
         SELECT
-            switches_status.up_time,
+        switches_status.up_time,
         unix_timestamp(switches_reachable.down_time) as down_time,
-            switches_reachable.reachable,
-            switches_list.ip,
-            switches_list.model,
-            switches_status.cpu_load,
-            switches_status.memory_used,
-            switches_status.temp,
-            unix_timestamp(switches_status.time_stamp) AS info_time,
-            switches_status.`name`,
-            switches_list.description
+        switches_reachable.reachable,
+        switches_list.ip,
+        switches_list.model,
+        switches_status.cpu_load,
+        switches_status.memory_used,
+        switches_status.temp,
+        unix_timestamp(switches_status.time_stamp) AS info_time,
+        switches_status.`name`,
+        switches_list.description
         FROM
-            switches_list
-                INNER JOIN switches_status ON switches_list.id = switches_status.switch_id
-                INNER JOIN switches_reachable ON switches_list.id = switches_reachable.switch_id
+        switches_list
+        INNER JOIN switches_status ON switches_list.id = switches_status.switch_id
+        INNER JOIN switches_reachable ON switches_list.id = switches_reachable.switch_id
 
         <if test="switchesList.building != null">
-        WHERE
-          switches_list.building = #{switchesList.building,jdbcType=VARCHAR}
+            WHERE
+            switches_list.building = #{switchesList.building,jdbcType=VARCHAR}
         </if>
     </select>
 </mapper>

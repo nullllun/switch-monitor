@@ -31,7 +31,7 @@ public class LogServiceImpl implements LogService {
     @Override
     @Async
     public Integer insert(Log log) {
-        if("".equals(log.getOperator())) {
+        if ("".equals(log.getOperator())) {
             log.setOperator(wechatUserService.selectName(log.getOpenId()));
         }
         return logMapper.insert(log);

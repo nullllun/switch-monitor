@@ -32,11 +32,11 @@ public class WalkTest {
     SwitchesListService switchesListService;
 
     @Test
-    public void test(){
+    public void test() {
         List<SwitchesList> switchesLists = switchesListService.select(new SwitchesList());
 
         ExecutorService executorService = Executors.newCachedThreadPool();
-        for(SwitchesList s:switchesLists){
+        for (SwitchesList s : switchesLists) {
 
         }
 
