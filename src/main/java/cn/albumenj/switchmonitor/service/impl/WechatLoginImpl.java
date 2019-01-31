@@ -205,4 +205,25 @@ public class WechatLoginImpl implements WechatLogin {
     public void setRequest(HttpServletRequest request) {
         this.request = request;
     }
+
+    /**
+     * 网页登陆返回Token
+     *
+     * @param openId
+     * @return Token
+     */
+    @Override
+    public LoginStatusDto webLogin(String openId) {
+        WechatUser wechatUser = wechatUserService.auth(openId);
+        LoginStatusDto loginStatusDto = new LoginStatusDto();
+        if (wechatUser != null) {
+            loginStatusDto = fillUser(wechatUser);
+            Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "Web Login", IpUtil.getIpAddr(request));
+            logService.insert(log);
+        } else {
+            loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+        }
+        return loginStatusDto;
+    }
 }

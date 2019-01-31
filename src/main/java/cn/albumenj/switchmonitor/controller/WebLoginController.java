@@ -23,7 +23,7 @@ import static cn.albumenj.switchmonitor.util.WebSocketUtils.livingSessionsCacheN
  * @since 2018/6/26 0026
  */
 @RestController
-@ServerEndpoint(value = "/auth/weblogin/",configurator= CustomEndpointConfigure.class)
+@ServerEndpoint(value = "/auth/weblogin/", configurator = CustomEndpointConfigure.class)
 public class WebLoginController {
     private static final Logger log = LoggerFactory.getLogger(WebLoginController.class);
     @Autowired
@@ -44,11 +44,15 @@ public class WebLoginController {
     }
 
     @OnClose
+    //当前的Session 移除
     public void onClose(Session session) {
-        //当前的Session 移除
-        livingSessionsCache.remove(livingSessionsCacheN.get(session));
-        livingSessionsCacheN.remove(session);
-        log.info("close");
+        String uuid = livingSessionsCacheN.get(session);
+        if (uuid != null) {
+            livingSessionsCache.remove(livingSessionsCacheN.get(session));
+            livingSessionsCacheN.remove(session);
+            webLogin.cleanToken(uuid);
+        }
+        log.info("Close Session");
         try {
             session.close();
         } catch (IOException e) {

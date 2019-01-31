@@ -1,6 +1,10 @@
 package cn.albumenj.switchmonitor.util;
 
 import cn.albumenj.switchmonitor.dto.SessionDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
@@ -12,7 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Levin
  * @since 2018/6/26 0026
  */
-public final class WebSocketUtils {
+@Component
+public class WebSocketUtils {
+    private final static Logger logger = LoggerFactory.getLogger(WebSocketUtils.class);
+
+    @Value("${security.webLoginExp}")
+    Integer webLoginExp;
     /**
      * 模拟存储 websocket session 使用
      */
@@ -40,7 +49,7 @@ public final class WebSocketUtils {
         try {
             basic.sendText(message);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warn(e.toString());
         }
     }
 
@@ -52,5 +61,17 @@ public final class WebSocketUtils {
      */
     public static void sendMessage(String uuid, String message) {
         sendMessage(livingSessionsCache.get(uuid).getSession(),message);
+    }
+
+    public void close() {
+        livingSessionsCache.forEach((sessionId, session) -> {
+            if (System.currentTimeMillis() - session.getTime() > webLoginExp) {
+                try {
+                    session.getSession().close();
+                } catch (IOException e) {
+                    logger.warn(e.toString());
+                }
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 package cn.albumenj.switchmonitor.config;
 
 import cn.albumenj.switchmonitor.schedule.*;
+import cn.albumenj.switchmonitor.util.WebSocketUtils;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.springframework.context.annotation.Bean;
@@ -85,6 +86,19 @@ public class ScheduleConfig {
         return jobDetail;
     }
 
+    @Bean(name = "closeWebSocketJob")
+    public MethodInvokingJobDetailFactoryBean closeWebSocketJob(WebSocketUtils webSocketUtils) {
+        MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
+
+        jobDetail.setConcurrent(false);
+        jobDetail.setName("closeWebSocketJob");
+        jobDetail.setGroup("closeWebSocketGroup");
+        jobDetail.setTargetObject(webSocketUtils);
+        jobDetail.setTargetMethod("close");
+
+        return jobDetail;
+    }
+
     /**
      * 定时触发器
      * @param updateJob 任务
@@ -138,6 +152,18 @@ public class ScheduleConfig {
         return tigger;
     }
 
+    @Bean(name = "closeWebSocketJobTrigger")
+    public CronTriggerFactoryBean closeWebSocketJobTrigger(JobDetail closeWebSocketJob) {
+
+        CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
+        tigger.setJobDetail(closeWebSocketJob);
+
+        //cron表达式，每1分钟执行一次
+        tigger.setCronExpression("0/1 * * * * ?");
+        tigger.setName("closeWebSocketTrigger");
+        return tigger;
+    }
+
     @Bean(name = "wechatReachCheckJobTrigger")
     public CronTriggerFactoryBean wechatReachCheckJobTrigger(JobDetail wechatReachCheckJob) {
 
@@ -160,7 +186,8 @@ public class ScheduleConfig {
     public SchedulerFactoryBean schedulerFactory(Trigger updateJobTrigger,
                                                  Trigger cleanHistoryJobTrigger,
                                                  Trigger checkReachableJobTrigger,
-                                                 Trigger wechatReachCheckJobTrigger) {
+                                                 Trigger wechatReachCheckJobTrigger,
+                                                 Trigger closeWebSocketJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 
@@ -172,7 +199,7 @@ public class ScheduleConfig {
 
         // 注册触发器
         factoryBean.setTriggers(updateJobTrigger, cleanHistoryJobTrigger,
-                checkReachableJobTrigger, wechatReachCheckJobTrigger);
+                checkReachableJobTrigger, wechatReachCheckJobTrigger, closeWebSocketJobTrigger);
         /*factoryBean.setTriggers(checkReachableJobTrigger, briefFetchJobTrigger);*/
         return factoryBean;
     }

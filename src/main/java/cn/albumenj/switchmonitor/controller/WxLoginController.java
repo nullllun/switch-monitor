@@ -2,11 +2,14 @@ package cn.albumenj.switchmonitor.controller;
 
 import cn.albumenj.switchmonitor.bean.WechatUser;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
+import cn.albumenj.switchmonitor.dto.WebLoginInfoDto;
 import cn.albumenj.switchmonitor.service.LogService;
+import cn.albumenj.switchmonitor.service.WebLogin;
 import cn.albumenj.switchmonitor.service.WechatLogin;
 import cn.albumenj.switchmonitor.service.WechatUserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +29,8 @@ public class WxLoginController {
     WechatUserService wechatUserService;
     @Autowired
     LogService logService;
+    @Autowired
+    WebLogin webLogin;
 
     @RequestMapping(path = "/auth/loginfresh", method = RequestMethod.GET)
     public LoginStatusDto loginFresh(@Param("code") String code, HttpServletRequest request) {
@@ -57,4 +62,17 @@ public class WxLoginController {
         return wechatLogin.tokenSubmit(token, code);
     }
 
+    @RequestMapping(path = "/api/qrscan_login_check", method = RequestMethod.GET)
+    public WebLoginInfoDto qrScanCheck(@Param("code") String code, HttpServletRequest request) {
+        webLogin.setRequest(request);
+        return webLogin.fetchInformation(code);
+    }
+
+    @RequestMapping(path = "/api/qrscan_login", method = RequestMethod.GET)
+    public String qrScanLogin(@Param("code") String code, HttpServletRequest request,
+                              UsernamePasswordAuthenticationToken authentication) {
+        webLogin.setRequest(request);
+        webLogin.confirmLogin(code, authentication.getName());
+        return "服务器已收到信息";
+    }
 }

@@ -1,20 +1,23 @@
 package cn.albumenj.switchmonitor.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * 网页登录信息
  *
  * @author albumen
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class WebLoginInfoDto {
-    private String ip;
+    private boolean contain;
     private Long timeStamp;
 
-    public String getIp() {
-        return ip;
+    public boolean isContain() {
+        return contain;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setContain(boolean contain) {
+        this.contain = contain;
     }
 
     public Long getTimeStamp() {

@@ -1,7 +1,6 @@
 package cn.albumenj.switchmonitor.dto;
 
 import javax.websocket.Session;
-import java.util.Date;
 
 /**
  * 长连接Session状态维护
@@ -10,11 +9,11 @@ import java.util.Date;
  */
 public class SessionDto {
     private Session session;
-    private Date time;
+    private Long time;
 
     public SessionDto(Session session) {
         this.session = session;
-        this.time = new Date();
+        this.time = System.currentTimeMillis();
     }
 
     public Session getSession() {
@@ -25,11 +24,11 @@ public class SessionDto {
         this.session = session;
     }
 
-    public Date getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 }

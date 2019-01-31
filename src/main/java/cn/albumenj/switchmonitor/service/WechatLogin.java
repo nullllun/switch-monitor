@@ -43,4 +43,12 @@ public interface WechatLogin {
      * @param request
      */
     void setRequest(HttpServletRequest request);
+
+    /**
+     * 网页登陆返回Token
+     *
+     * @param openId
+     * @return Token
+     */
+    LoginStatusDto webLogin(String openId);
 }

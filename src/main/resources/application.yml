@@ -47,6 +47,7 @@ server:
 security:
   jwtDefaultExp: 60000
   jwtLoginExp: 2592000
+  webLoginExp: 3000000
 
 sync:
   port: 60000
