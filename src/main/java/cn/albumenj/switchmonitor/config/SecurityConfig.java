@@ -39,7 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/druid/**").antMatchers("/auth/**");
+        web.ignoring().antMatchers("/druid/**")
+                .antMatchers("/auth/**")
+                .antMatchers("/")
+                .antMatchers("/index.html")
+                .antMatchers("/web/**");
     }
 
     @Override

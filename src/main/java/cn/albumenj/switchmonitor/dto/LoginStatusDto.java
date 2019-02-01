@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class LoginStatusDto {
     boolean success;
     String token;
+    String pic;
+    String name;
 
     public boolean isSuccess() {
         return success;
@@ -26,5 +28,21 @@ public class LoginStatusDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

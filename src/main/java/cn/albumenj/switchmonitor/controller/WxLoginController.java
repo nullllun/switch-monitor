@@ -44,6 +44,12 @@ public class WxLoginController {
         return wechatLogin.loginOld(code);
     }
 
+    @RequestMapping(path = "/auth/logout", method = RequestMethod.GET)
+    public LoginStatusDto logout(@Param("code") String code, HttpServletRequest request) {
+        wechatLogin.setRequest(request);
+        return wechatLogin.logout(code);
+    }
+
     @RequestMapping(path = "/auth/tokenverify", method = RequestMethod.GET)
     public WechatUser tokenVerify(@Param("token") String token) {
         WechatUser wechatUser = wechatUserService.checkToken(token);
@@ -63,9 +69,10 @@ public class WxLoginController {
     }
 
     @RequestMapping(path = "/api/qrscan_login_check", method = RequestMethod.GET)
-    public WebLoginInfoDto qrScanCheck(@Param("code") String code, HttpServletRequest request) {
+    public WebLoginInfoDto qrScanCheck(@Param("code") String code, HttpServletRequest request,
+                                       UsernamePasswordAuthenticationToken authentication) {
         webLogin.setRequest(request);
-        return webLogin.fetchInformation(code);
+        return webLogin.fetchInformation(code, authentication.getName());
     }
 
     @RequestMapping(path = "/api/qrscan_login", method = RequestMethod.GET)

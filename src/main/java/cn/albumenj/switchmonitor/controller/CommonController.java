@@ -18,11 +18,11 @@ public class CommonController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String homePost() {
-        return "redirect:/home_page.html";
+        return "redirect:/web/index.html";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String homeGet() {
-        return "redirect:/home_page.html";
+        return "redirect:/web/index.html";
     }
 }

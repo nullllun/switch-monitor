@@ -51,4 +51,12 @@ public interface WechatLogin {
      * @return Token
      */
     LoginStatusDto webLogin(String openId);
+
+    /**
+     * 登出
+     *
+     * @param code
+     * @return
+     */
+    LoginStatusDto logout(String code);
 }

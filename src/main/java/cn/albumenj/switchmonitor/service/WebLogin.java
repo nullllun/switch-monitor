@@ -24,7 +24,7 @@ public interface WebLogin {
      * @param code
      * @return
      */
-    WebLoginInfoDto fetchInformation(String code);
+    WebLoginInfoDto fetchInformation(String code, String openId);
 
     /**
      * 确认登录

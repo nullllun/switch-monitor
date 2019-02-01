@@ -1,8 +1,10 @@
 package cn.albumenj.switchmonitor.service.impl;
 
+import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 import cn.albumenj.switchmonitor.dto.WebLoginInfoDto;
 import cn.albumenj.switchmonitor.service.WebLogin;
 import cn.albumenj.switchmonitor.service.WechatLogin;
+import cn.albumenj.switchmonitor.service.WechatUserService;
 import cn.albumenj.switchmonitor.util.JwtUtil;
 import cn.albumenj.switchmonitor.util.RedisUtil;
 import cn.albumenj.switchmonitor.util.WebSocketUtils;
@@ -30,6 +32,8 @@ public class WebLoginImpl implements WebLogin {
     JwtUtil jwtUtil;
     @Autowired
     WechatLogin wechatLogin;
+    @Autowired
+    WechatUserService wechatUserService;
 
     private HttpServletRequest request;
 
@@ -52,7 +56,10 @@ public class WebLoginImpl implements WebLogin {
                     .setBgColor(0xffffffff)
                     .setPadding(0)
                     .asString();
-            WebSocketUtils.sendMessage(uuid, qrCode);
+            LoginStatusDto loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+            loginStatusDto.setPic(qrCode);
+            WebSocketUtils.sendMessage(uuid, JSON.toJSONString(loginStatusDto));
         } catch (Exception e) {
             logger.warn(e.toString());
         }
@@ -65,12 +72,19 @@ public class WebLoginImpl implements WebLogin {
      * @return
      */
     @Override
-    public WebLoginInfoDto fetchInformation(String code) {
+    public WebLoginInfoDto fetchInformation(String code, String openId) {
         String uuid = redisUtil.get(code);
         WebLoginInfoDto webLoginInfoDto = new WebLoginInfoDto();
         if (uuid != null) {
             webLoginInfoDto.setContain(true);
             webLoginInfoDto.setTimeStamp(WebSocketUtils.livingSessionsCache.get(uuid).getTime());
+
+            String name = wechatUserService.selectName(openId);
+            LoginStatusDto loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+            loginStatusDto.setName(name);
+            WebSocketUtils.sendMessage(uuid, JSON.toJSONString(loginStatusDto));
+
         } else {
             webLoginInfoDto.setContain(false);
         }

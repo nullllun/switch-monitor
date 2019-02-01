@@ -169,6 +169,9 @@ public class WechatLoginImpl implements WechatLogin {
      */
     @Override
     public LoginStatusDto loginOld(String code) {
+        if (code == null) {
+            return null;
+        }
         String openId = jwtUtil.getName(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
         String[] claim = jwtUtil.verify(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
 
@@ -190,6 +193,33 @@ public class WechatLoginImpl implements WechatLogin {
             }
         } else {
             loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+        }
+        return loginStatusDto;
+    }
+
+    /**
+     * 登出
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public LoginStatusDto logout(String code) {
+        LoginStatusDto loginStatusDto = new LoginStatusDto();
+        if (code == null) {
+            loginStatusDto.setSuccess(false);
+            return loginStatusDto;
+        }
+
+        String openId = jwtUtil.getName(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
+        String[] claim = jwtUtil.verify(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
+
+        if (redisUtil.get(claim[0]) != null) {
+            redisUtil.delete(claim[0]);
+            Log log = new Log(LogConst.INFO, LogConst.USER, openId, "Web Logout", IpUtil.getIpAddr(request));
+            loginStatusDto.setSuccess(true);
+        } else {
             loginStatusDto.setSuccess(false);
         }
         return loginStatusDto;
