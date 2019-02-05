@@ -30,4 +30,26 @@ public class CustomExecutors {
             logger.warn("ExecutorService Interrupted!");
         }
     }
+
+    /**
+     * 等待指定时间后结束进程池
+     *
+     * @param executorService
+     * @param second
+     * @return 是否在指定时间内已结束
+     */
+    public static boolean waitExecutor(ExecutorService executorService, int second) {
+        executorService.shutdown();
+        try {
+            executorService.awaitTermination(second, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            logger.warn("ExecutorService Interrupted!");
+        }
+        if (!executorService.isTerminated()) {
+            executorService.shutdownNow();
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

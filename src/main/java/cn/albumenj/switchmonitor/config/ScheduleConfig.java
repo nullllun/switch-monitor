@@ -125,7 +125,7 @@ public class ScheduleConfig {
         tigger.setJobDetail(checkReachableJob);
 
         //cron表达式，每1分钟执行一次
-        tigger.setCronExpression("30 0/1 * * * ?");
+        tigger.setCronExpression("45 0/1 * * * ?");
         tigger.setName("checkReachableTrigger");
         return tigger;
     }
@@ -149,7 +149,7 @@ public class ScheduleConfig {
         tigger.setJobDetail(cleanHistoryJob);
 
         //cron表达式，每1分钟执行一次
-        tigger.setCronExpression("30 * * * * ?");
+        tigger.setCronExpression("50 * * * * ?");
         tigger.setName("cleanHistoryTrigger");
         return tigger;
     }

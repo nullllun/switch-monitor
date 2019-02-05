@@ -2,10 +2,7 @@ package cn.albumenj.switchmonitor.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.snmp4j.CommunityTarget;
-import org.snmp4j.PDU;
-import org.snmp4j.Snmp;
-import org.snmp4j.TransportMapping;
+import org.snmp4j.*;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
@@ -15,6 +12,7 @@ import org.snmp4j.util.TreeUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,26 +25,29 @@ import java.util.Map;
  */
 @Component
 public class SnmpUtil {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(SnmpUtil.class);
 
     private static final int VERSION = SnmpConstants.version2c;
     private static final String PROTOCOL = "udp";
     private static final int PORT = 161;
 
-    private Snmp snmp = null;
+    private static Snmp snmp = null;
     private CommunityTarget target = null;
-    private TransportMapping transport = null;
+    private static TransportMapping transport = null;
     private TreeUtils treeUtils;
 
-    public SnmpUtil() {
+    static {
         try {
             transport = new DefaultUdpTransportMapping();
+            ((DefaultUdpTransportMapping) transport).setSocketTimeout(30 * 1000);
             snmp = new Snmp(transport);
             transport.listen();
-            treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
         } catch (Exception e) {
-            logger.warn("SNMP walk Exception: " + e);
+            logger.warn("SNMP init Exception: " + e);
         }
+    }
+
+    public SnmpUtil() {
     }
 
     public Map<Integer, String> walk(String ip, String community, String targetOid) {
@@ -55,6 +56,7 @@ public class SnmpUtil {
     }
 
     public Map<Integer, String> walk(String ip, String community, String targetOid, Map<Integer, String> result) {
+        treeUtils = new TreeUtils(snmp, new DefaultPDUFactory());
         String address = PROTOCOL + ":" + ip + "/" + PORT;
         target = createCommunityTarget(address, community, VERSION, 1500, 2);
 
@@ -100,6 +102,14 @@ public class SnmpUtil {
                 continue;
             }
 
+            Object obj = event.getSource();
+            Field field = obj.getClass().getDeclaredField("target");
+            field.setAccessible(true);
+            Target targetRes = (Target) field.get(obj);
+            if (event.getStatus() != 0) {
+                System.out.println(event.getStatus());
+            }
+
             VariableBinding[] varBindings = event.getVariableBindings();
             if (varBindings == null || varBindings.length == 0) {
                 continue;
@@ -113,6 +123,7 @@ public class SnmpUtil {
             }
 
         }
+
         return result;
     }
 
@@ -161,7 +172,7 @@ public class SnmpUtil {
      * @param retry
      * @return CommunityTarget
      */
-    public static CommunityTarget createCommunityTarget(Address targetAddress, String community, int version, long timeOut, int retry) {
+    private CommunityTarget createCommunityTarget(Address targetAddress, String community, int version, long timeOut, int retry) {
         CommunityTarget target = new CommunityTarget();
         target.setCommunity(new OctetString(community));
         target.setAddress(targetAddress);
@@ -182,7 +193,7 @@ public class SnmpUtil {
      * @param retry
      * @return CommunityTarget
      */
-    public static CommunityTarget createCommunityTarget(String address, String community, int version, long timeOut, int retry) {
+    private CommunityTarget createCommunityTarget(String address, String community, int version, long timeOut, int retry) {
         Address targetAddress = GenericAddress.parse(address);
         return createCommunityTarget(targetAddress, community, version,
                 timeOut, retry);

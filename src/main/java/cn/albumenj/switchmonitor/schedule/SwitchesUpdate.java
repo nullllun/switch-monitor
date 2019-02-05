@@ -8,8 +8,10 @@ import cn.albumenj.switchmonitor.util.CustomExecutors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -35,6 +37,10 @@ public class SwitchesUpdate {
     PortSpeedHistoryService portSpeedHistoryService;
     @Autowired
     LogService logService;
+    @Value("${sync.initInformationThread}")
+    Integer syncThread;
+
+    static List<Integer> historyTime = new LinkedList<Integer>();
 
     public void execute() {
         Long time = System.currentTimeMillis();
@@ -59,13 +65,14 @@ public class SwitchesUpdate {
             return;
         }
 
-        executorService = CustomExecutors.newFixExecutorService(switchesLists.size());
+        //executorService = CustomExecutors.newFixExecutorService(switchesLists.size());
+        executorService = CustomExecutors.newFixExecutorService(syncThread);
         for (SwitchesList s : switchesLists) {
             executorService.execute(() -> {
                 switchUpdate.submit(s);
             });
         }
-        CustomExecutors.waitExecutor(executorService);
+        boolean ret = CustomExecutors.waitExecutor(executorService, 55);
 
         synchronized (SwitchUpdate.getSwitchesStatusHistories()) {
             if (SwitchUpdate.getSwitchesStatusHistories().size() > 0) {
@@ -79,6 +86,7 @@ public class SwitchesUpdate {
             }
             SwitchUpdate.getSwitchesStatuses().clear();
         }
+        dynamicAdjust(ret, System.currentTimeMillis() - time);
 
         Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
                 "Switches Information Update End Using " + (System.currentTimeMillis() - time) + "ms", "");
@@ -86,4 +94,31 @@ public class SwitchesUpdate {
         logService.insert(log);
     }
 
+    private void dynamicAdjust(boolean finished, Long usedTime) {
+        if (finished) {
+            historyTime.add((int) (usedTime / 1000));
+            int calculateCount = 10;
+            int upTime = 50;
+            if (historyTime.size() > calculateCount) {
+                Integer max = historyTime.stream().max((a, b) -> {
+                    return a > b ? a : b;
+                }).get();
+                if (max < upTime) {
+                    syncThread -= 5;
+                    Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
+                            "Switches Information Update Thread Count Change To " + syncThread, "");
+                    log.setOperator("System");
+                    logService.insert(log);
+                }
+                historyTime.clear();
+            }
+        } else {
+            historyTime.clear();
+            syncThread += 20;
+            Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
+                    "Switches Information Update Thread Count Change To " + syncThread, "");
+            log.setOperator("System");
+            logService.insert(log);
+        }
+    }
 }
