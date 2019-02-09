@@ -2,6 +2,8 @@ package cn.albumenj.switchmonitor.service;
 
 import cn.albumenj.switchmonitor.bean.WechatUser;
 
+import java.util.List;
+
 /**
  * 微信用户
  *
@@ -61,4 +63,28 @@ public interface WechatUserService {
      * @return
      */
     String selectName(String openId);
+
+    /**
+     * 删除数据
+     *
+     * @param no
+     * @return
+     */
+    int delete(String no);
+
+    /**
+     * 查找所有
+     *
+     * @return
+     */
+    List<WechatUser> selectAll();
+
+    /**
+     * 修改单条数据
+     * 用户名为索引
+     *
+     * @param wechatUser
+     * @return
+     */
+    int update(WechatUser wechatUser);
 }

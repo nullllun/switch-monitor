@@ -51,12 +51,21 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public List<Log> selectByLevel(Log log) {
+    public List<Log> selectByLevel(Integer level) {
+        Log log = new Log();
+        log.setLevel(level);
         return logMapper.selectByLevel(log);
     }
 
     @Override
-    public List<Log> selectByType(Log log) {
+    public List<Log> selectByType(Integer type) {
+        Log log = new Log();
+        log.setType(type);
         return logMapper.selectByType(log);
+    }
+
+    @Override
+    public List<Log> selectAll() {
+        return logMapper.selectAll();
     }
 }

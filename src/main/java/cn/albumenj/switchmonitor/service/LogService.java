@@ -38,16 +38,23 @@ public interface LogService {
     /**
      * 获取数据
      *
-     * @param log 以级别为筛选
+     * @param level 以级别为筛选
      * @return
      */
-    List<Log> selectByLevel(Log log);
+    List<Log> selectByLevel(Integer level);
 
     /**
      * 获取数据
      *
-     * @param log 以类型为筛选
+     * @param type 以类型为筛选
      * @return
      */
-    List<Log> selectByType(Log log);
+    List<Log> selectByType(Integer type);
+
+    /**
+     * 获取数据（所有）
+     *
+     * @return 已处理逆序
+     */
+    List<Log> selectAll();
 }

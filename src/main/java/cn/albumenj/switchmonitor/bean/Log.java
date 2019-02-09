@@ -1,10 +1,13 @@
 package cn.albumenj.switchmonitor.bean;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * 日志记录
  *
  * @author albumen
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Log {
     private Long id;
     private Integer level;

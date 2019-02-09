@@ -41,7 +41,7 @@ public interface LogMapper {
      * 获取数据
      *
      * @param log 以级别为筛选
-     * @return
+     * @return 已处理逆序
      */
     List<Log> selectByLevel(@Param("log") Log log);
 
@@ -49,7 +49,14 @@ public interface LogMapper {
      * 获取数据
      *
      * @param log 以类型为筛选
-     * @return
+     * @return 已处理逆序
      */
     List<Log> selectByType(@Param("log") Log log);
+
+    /**
+     * 获取数据（所有）
+     *
+     * @return 已处理逆序
+     */
+    List<Log> selectAll();
 }

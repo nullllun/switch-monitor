@@ -145,7 +145,7 @@ public class SwitchesBriefFetch {
                 reach.add(warningDto);
 
                 String msg = "Device Down " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
-                        warningDto.getBuilding() + " Down Time: " + warningDto.getDownTime();
+                        warningDto.getBuilding();
                 submitLog(msg);
             } else {
                 warning.addAll(list);
@@ -153,7 +153,7 @@ public class SwitchesBriefFetch {
 
                 for (WarningDto warningDto : list) {
                     String msg = "Device Down " + warningDto.getIp() + " (" + warningDto.getModel() + ") " +
-                            warningDto.getBuilding() + " Down Time: " + warningDto.getDownTime();
+                            warningDto.getBuilding();
                     submitLog(msg);
                 }
             }

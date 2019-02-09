@@ -87,16 +87,27 @@
         where time_stamp &lt;= #{log.timeStamp,jdbcType=BIGINT}
     </delete>
 
-    <select id="selectByLevel">
+    <select id="selectByLevel" resultMap="BaseResultMap">
         select level, type, open_id, operator, operation, time_stamp, ip
         from log
         where level = #{log.level,jdbcType=INTEGER}
+        ORDER BY log.id DESC
+        limit 1000
     </select>
 
-    <select id="selectByType">
+    <select id="selectByType" resultMap="BaseResultMap">
         select level, type, open_id, operator, operation, time_stamp, ip
         from log
         where type = #{log.type ,jdbcType=INTEGER}
+        ORDER BY log.id DESC
+        limit 1000
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select level, type, open_id, operator, operation, time_stamp, ip
+        from log
+        ORDER BY log.id DESC
+        limit 1000
     </select>
 </mapper>
 

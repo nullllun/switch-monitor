@@ -6,6 +6,7 @@ import cn.albumenj.switchmonitor.service.WechatUserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 微信用户
@@ -121,5 +122,40 @@ public class WechatUserServiceImpl implements WechatUserService {
         WechatUser wechatUser = new WechatUser();
         wechatUser.setOpenId(openId);
         return wechatUserMapper.selectName(wechatUser).getUsername();
+    }
+
+    /**
+     * 删除数据
+     *
+     * @param no
+     * @return
+     */
+    @Override
+    public int delete(String no) {
+        WechatUser wechatUser = new WechatUser();
+        wechatUser.setNo(no);
+        return wechatUserMapper.delete(wechatUser);
+    }
+
+    /**
+     * 查找所有
+     *
+     * @return
+     */
+    @Override
+    public List<WechatUser> selectAll() {
+        return wechatUserMapper.selectAll();
+    }
+
+    /**
+     * 修改单条数据
+     * 用户名为索引
+     *
+     * @param wechatUser
+     * @return
+     */
+    @Override
+    public int update(WechatUser wechatUser) {
+        return wechatUserMapper.update(wechatUser);
     }
 }
