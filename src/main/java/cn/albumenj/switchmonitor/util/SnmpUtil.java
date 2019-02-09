@@ -52,7 +52,12 @@ public class SnmpUtil {
 
     public Map<Integer, String> walk(String ip, String community, String targetOid) {
         Map<Integer, String> result = new HashMap<>(16);
-        return walk(ip, community, targetOid, result);
+        Map<Integer, String> ret = walk(ip, community, targetOid, result);
+        if (ret.size() == 0) {
+            return walk(ip, community, targetOid, result);
+        } else {
+            return ret;
+        }
     }
 
     public Map<Integer, String> walk(String ip, String community, String targetOid, Map<Integer, String> result) {
