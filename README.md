@@ -19,9 +19,9 @@
 - Mysql
 
 ## 配套项目
-- eoLinker
-- 微信小程序
-- 网页前端
+- [eoLinker](https://www.eolinker.com/#/share/index?shareCode=sbxgIs)
+- [微信小程序](https://github.com/AlbumenJ/switch-minitor-mpvue)
+- [网页前端](https://github.com/AlbumenJ/switch-monitor-web)
 
 ## 性能
 - i7 8700 轮询动态调整到50s，java约占用10% CPU，MySQL视调优情况
