@@ -20,7 +20,7 @@
 
 ## 配套项目
 - [eoLinker](https://www.eolinker.com/#/share/index?shareCode=sbxgIs)
-- [微信小程序](https://github.com/AlbumenJ/switch-minitor-mpvue)
+- [微信小程序](https://github.com/AlbumenJ/switch-monitor-mpvue)
 - [网页前端](https://github.com/AlbumenJ/switch-monitor-web)
 
 ## 性能
