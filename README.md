@@ -10,7 +10,7 @@
 - 偶见数据库死锁现象（几率低于1%）
 
 ## 部分未实现功能
-- 交换机重启功能（OID已写入OIDList可直接使用，SNMP的write团体也已实现）
+- 交换机重启功能（OID已写入文件可直接使用，SNMP的write团体也已实现）
 - 数据使用MongoDB存储
 
 ## 项目环境
@@ -26,7 +26,12 @@
 ## 性能
 - i7 8700 轮询动态调整到50s，java约占用10% CPU，MySQL视调优情况
 
-### 使用到的技术
+## 项目配置
+  &nbsp;&nbsp;&nbsp;&nbsp;由于配置文件涉及敏感数据以及系统环境不同，故使用了ulisesbocchio进行加密，进行编译时需在resources目录下自行新建一个application-encrypt.yml的文件。<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;内容包括 jasypt.encryptor.password 以及 system.os (1为Linux 2为Win)
+
+
+## 使用到的技术
 1. SpringBoot
 2. MySQL
 3. Mybatis
@@ -37,3 +42,5 @@
 8. JWT
 9. SpringSecurity
 10. Zxing（二维码生成）
+11. ulisesbocchio
+    
