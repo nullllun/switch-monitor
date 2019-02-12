@@ -40,6 +40,8 @@ public class WechatServer {
     String corpId;
     @Value("${wechat.debugSecret}")
     String debugSecret;
+    @Value("${wechat.warnSecret}")
+    String warnSecret;
     @Autowired
     RedisUtil redisUtil;
 
@@ -81,9 +83,15 @@ public class WechatServer {
     }
 
     public boolean sendDebugMessage(String msg) {
+        return sendMessage(debugSecret, "2", msg);
+    }
 
-        String token = accessToken(debugSecret);
+    public boolean sendWarnMessage(String msg) {
+        return sendMessage(warnSecret, "6", msg);
+    }
 
+    public boolean sendMessage(String agentSecret, String agentId, String msg) {
+        String token = accessToken(agentSecret);
         String code2SessionUrl = "https://qyapi.weixin.qq.com/cgi-bin/message/send";
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("access_token", token);
@@ -94,7 +102,7 @@ public class WechatServer {
         MessageSubmitDto messageSubmitDto = new MessageSubmitDto();
         messageSubmitDto.setTouser("@all");
         messageSubmitDto.setMsgtype("text");
-        messageSubmitDto.setAgentid("2");
+        messageSubmitDto.setAgentid(agentId);
         messageSubmitDto.setText(text);
 
         HttpHeaders headers = new HttpHeaders();
@@ -111,11 +119,11 @@ public class WechatServer {
             case 0:
                 return true;
             case 40014:
-                redisUtil.delete(debugSecret);
-                logger.info(messageReturn.getErrmsg());
+                redisUtil.delete(agentSecret);
+                logger.warn(messageReturn.getErrmsg());
                 return sendDebugMessage(msg);
             default:
-                logger.info(messageReturn.getErrmsg());
+                logger.warn(messageReturn.getErrmsg());
                 return false;
         }
     }

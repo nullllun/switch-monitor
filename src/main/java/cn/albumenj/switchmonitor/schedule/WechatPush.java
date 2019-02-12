@@ -43,31 +43,33 @@ public class WechatPush {
 
         manageReachable();
 
+        if (pushRecovery.size() > 0) {
+            pushRecovery.add("当前还有 " + reachSend.size() + "台交换机 / 网段仍未恢复");
+        }
+
         push(pushBroke, "[监控消息]交换机炸了！");
         push(pushRecovery, "[监控消息]交换机上线了！");
 
     }
 
     private void push(List<String> stringList, String head) {
+        String newLine = "\r\n";
         StringBuilder stringBuilder = new StringBuilder();
         if (stringList.size() > 0) {
-            stringBuilder.append(head + "\r\n\r\n");
+            stringBuilder.append(head + newLine);
             for (String str : stringList) {
+                stringBuilder.append(newLine);
                 stringBuilder.append(str);
                 if (stringBuilder.length() > 400) {
-                    wechatServer.sendDebugMessage(stringBuilder.toString());
+                    wechatServer.sendWarnMessage(stringBuilder.toString());
                     System.out.println(stringBuilder.toString());
                     stringBuilder.setLength(0);
-                    stringBuilder.append(head + "\r\n\r\n");
-                } else {
-                    stringBuilder.append("\r\n");
+                    stringBuilder.append(head + newLine);
                 }
             }
-            if (stringBuilder.length() > 0) {
-                wechatServer.sendDebugMessage(stringBuilder.toString());
+            if (stringBuilder.length() > 0 && stringBuilder.compareTo(new StringBuilder(head + newLine)) != 0) {
+                wechatServer.sendWarnMessage(stringBuilder.toString());
                 System.out.println(stringBuilder.toString());
-                stringBuilder.setLength(0);
-                stringBuilder.append(head + "\r\n\r\n");
             }
         }
     }

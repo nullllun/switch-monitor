@@ -58,3 +58,4 @@ wechat:
   appSecret: ENC(iqQZaIBMb3BvJzG28NPBmzIMBO5qGDar2Pwm1mKAXwnhCxfCi04SVCU2U1kPNspr)
   corpId: ENC(SyGmyVQ6KdoFkTfcdNzpqh07i81BdmQN/VibBAtu1y8=)
   debugSecret: ENC(zP0PudNLv7ay+3i7/TndZfGHXTlG9AGPfnFjS0p4pLy5qJ9EsxQv9I6RlLVJxGzv20mFcBYGulA=)
+  warnSecret: ENC(CzRX4q/KiXcY7TjPZkG3fE3VQyVxtT5xaoAvKp4gLq13YAH8N71XIvEYy8w0u2rRnyQxzm69zXo=)
