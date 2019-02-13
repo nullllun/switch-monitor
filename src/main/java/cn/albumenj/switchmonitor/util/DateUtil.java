@@ -49,7 +49,7 @@ public class DateUtil {
         } else if (calendar.get(Calendar.DAY_OF_MONTH) - 1 > 0) {
             result.append(calendar.get(Calendar.DAY_OF_MONTH) - 1).append("日 ");
         }
-        result.append(calendar.get(Calendar.HOUR)).append("时");
+        result.append(calendar.get(Calendar.HOUR_OF_DAY)).append("时");
         result.append(calendar.get(Calendar.MINUTE)).append("分");
         result.append(calendar.get(Calendar.SECOND)).append("秒");
 
