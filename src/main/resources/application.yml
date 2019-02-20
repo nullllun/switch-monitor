@@ -7,6 +7,9 @@ spring:
       password: ENC(sYpdQW6HInjnCeZNHzAW1w==)
       initial-size: 20
       max-active: 200
+      stat-view-servlet:
+        login-username: ENC(N2i+KUyBPZJTGv55OXGQ5w==)
+        login-password: ENC(sYpdQW6HInjnCeZNHzAW1w==)
   main:
     allow-bean-definition-overriding: true
   profiles:
