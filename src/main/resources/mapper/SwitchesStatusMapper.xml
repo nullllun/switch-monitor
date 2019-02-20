@@ -50,7 +50,7 @@
         <result column="down_time" property="downTime" jdbcType="BIGINT"/>
         <result column="up_time" property="upTime" jdbcType="VARCHAR"/>
         <result column="model" property="model" jdbcType="VARCHAR"/>
-        <result column="describe" property="desc" jdbcType="VARCHAR"/>
+        <result column="description" property="desc" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
