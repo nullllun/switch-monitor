@@ -38,6 +38,11 @@
         <result column="pvlan" property="pvlan" jdbcType="BIGINT"/>
     </resultMap>
 
+    <resultMap id="VlanSearchMap" type="cn.albumenj.switchmonitor.dto.VlanSearchDto">
+        <result column="ip" property="ip" jdbcType="VARCHAR"/>
+        <result column="name" property="portName" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
             id,
             switch_id,
@@ -283,6 +288,17 @@
           AND port_status.switch_id = switches_list.id
         ORDER BY switches_list.id ASC,
                  port_status.port_id ASC
+    </select>
+
+    <select id="selectVlan" resultMap="VlanSearchMap">
+        SELECT switches_list.ip,
+               port_status.name
+        FROM switches_list,
+             port_status
+        WHERE port_status.cvlan = #{portStatus.cvlan,jdbcType=INTEGER}
+          AND port_status.pvlan = #{portStatus.pvlan,jdbcType=INTEGER}
+          AND port_status.switch_id = switches_list.id
+        LIMIT 1
     </select>
 
     <select id="fetchPort" resultType="string">

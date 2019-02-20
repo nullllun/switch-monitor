@@ -2,6 +2,7 @@ package cn.albumenj.switchmonitor.service;
 
 import cn.albumenj.switchmonitor.bean.PortStatus;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
+import cn.albumenj.switchmonitor.dto.VlanSearchDto;
 
 import java.util.List;
 
@@ -90,4 +91,13 @@ public interface PortStatusService {
      * @return
      */
     String fetchPort(String ip, String port);
+
+    /**
+     * 通过 VLAN 查找
+     *
+     * @param cvlan
+     * @param pvlan
+     * @return
+     */
+    VlanSearchDto selectVlan(Integer cvlan, Integer pvlan);
 }

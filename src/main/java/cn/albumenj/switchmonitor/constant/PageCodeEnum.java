@@ -28,35 +28,39 @@ public enum PageCodeEnum {
     /**
      * 权限不足
      */
-    PERMISSION_DENIED(2002, "权限不足"),
+    PERMISSION_DENIED(2002, "普通权限"),
     /**
      * 系统错误
      */
     SYSTEM_ERROR(2003, "系统错误"),
     /**
-     * 系统错误
+     * 添加成功
      */
     ADD_SUCCESS(3001, "添加成功"),
     /**
-     * 系统错误
+     * 添加失败
      */
     ADD_FAILED(3002, "添加失败"),
     /**
-     * 系统错误
+     * 修改成功
      */
     MODIFY_SUCCESS(3002, "修改成功"),
     /**
-     * 系统错误
+     * 修改失败
      */
     MODIFY_FAILED(3002, "修改失败"),
     /**
-     * 系统错误
+     * 删除成功
      */
     DELETE_SUCCESS(3002, "删除成功"),
     /**
-     * 系统错误
+     * 删除失败
      */
     DELETE_FAILED(3002, "删除失败"),
+    /**
+     * 输入有误
+     */
+    INPUT_ERROR(2004, "输入有误"),
     ;
 
     private Integer code;

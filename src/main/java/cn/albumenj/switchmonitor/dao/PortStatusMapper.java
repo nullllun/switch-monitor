@@ -3,6 +3,7 @@ package cn.albumenj.switchmonitor.dao;
 import cn.albumenj.switchmonitor.bean.PortStatus;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
 import cn.albumenj.switchmonitor.dto.VlanDto;
+import cn.albumenj.switchmonitor.dto.VlanSearchDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -107,4 +108,12 @@ public interface PortStatusMapper {
      * @return
      */
     String fetchPort(@Param("ip") String ip, @Param("port") String port);
+
+    /**
+     * 通过 VLAN 查找
+     *
+     * @param portStatus
+     * @return
+     */
+    VlanSearchDto selectVlan(@Param("portStatus") PortStatus portStatus);
 }

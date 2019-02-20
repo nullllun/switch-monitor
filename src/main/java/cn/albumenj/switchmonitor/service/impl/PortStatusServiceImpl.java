@@ -5,6 +5,7 @@ import cn.albumenj.switchmonitor.bean.SwitchesList;
 import cn.albumenj.switchmonitor.dao.PortStatusMapper;
 import cn.albumenj.switchmonitor.dto.DevicePortDto;
 import cn.albumenj.switchmonitor.dto.PortStatusDto;
+import cn.albumenj.switchmonitor.dto.VlanSearchDto;
 import cn.albumenj.switchmonitor.service.PortStatusService;
 import cn.albumenj.switchmonitor.service.SwitchesListService;
 import cn.albumenj.switchmonitor.util.CustomThreadFactory;
@@ -204,5 +205,20 @@ public class PortStatusServiceImpl implements PortStatusService {
         } else {
             return str;
         }
+    }
+
+    /**
+     * 通过 VLAN 查找
+     *
+     * @param cvlan
+     * @param pvlan
+     * @return
+     */
+    @Override
+    public VlanSearchDto selectVlan(Integer cvlan, Integer pvlan) {
+        PortStatus portStatus = new PortStatus();
+        portStatus.setCvlan(cvlan);
+        portStatus.setPvlan(pvlan);
+        return portStatusMapper.selectVlan(portStatus);
     }
 }

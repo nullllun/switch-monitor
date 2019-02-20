@@ -40,7 +40,7 @@ threshold:
   mem: 80
   temp: 60
   speed: 95
-  reach: 5
+  reach: 10
   pushRecovery: 2
 
 server:
