@@ -50,7 +50,7 @@ public class RsaKeyUtil {
 
 
     private void loadPublicKey() throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/pem")));
+        BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("/jwtKey")));
         Security.addProvider(new BouncyCastleProvider());
         KeyPair kp = (KeyPair) new PEMReader(br).readObject();
 
