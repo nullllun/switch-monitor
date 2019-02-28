@@ -174,10 +174,16 @@ public class WechatLoginImpl implements WechatLogin {
         }
         String openId = jwtUtil.getName(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
         String[] claim = jwtUtil.verify(code.substring(HttpConst.AUTHORIZATION_PREFIX.length()));
+        LoginStatusDto loginStatusDto;
+
+        if (openId == null || claim == null) {
+            loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+            return loginStatusDto;
+        }
 
         String token = redisUtil.get(claim[0]);
 
-        LoginStatusDto loginStatusDto;
         if (token != null) {
             redisUtil.delete(claim[0]);
             WechatUser wechatUser = wechatUserService.auth(openId);
