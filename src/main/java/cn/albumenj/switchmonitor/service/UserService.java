@@ -39,7 +39,7 @@ public interface UserService {
      * 验证登陆是否有效
      *
      * @param user
-     * @return 验证成功返回对应用户数据；验证失败返回 null
+     * @return 验证成功返回 true ；验证失败返回 false
      */
-    User check(User user);
+    boolean check(User user);
 }

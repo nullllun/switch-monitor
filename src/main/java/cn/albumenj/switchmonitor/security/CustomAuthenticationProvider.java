@@ -42,10 +42,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         user.setUsername(name);
         user.setPassword(password);
         // 认证逻辑
-        user = userService.check(user);
-        if (null != user) {
+        boolean success = userService.check(user);
+        if (success) {
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-            for (Integer i = Integer.parseInt(user.getPermission()); i <= PermissionConst.PERMISSION.size(); i++) {
+            for (Integer i = 3; i <= PermissionConst.PERMISSION.size(); i++) {
                 authorities.add(new GrantedAuthorityImpl(PermissionConst.PERMISSION.get(i)));
             }
 

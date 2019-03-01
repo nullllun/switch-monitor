@@ -1,5 +1,6 @@
 package cn.albumenj.switchmonitor.controller;
 
+import cn.albumenj.switchmonitor.bean.User;
 import cn.albumenj.switchmonitor.bean.WechatUser;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 import cn.albumenj.switchmonitor.dto.WebLoginInfoDto;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Albumen
  */
 @RestController
-public class WxLoginController {
+public class RestLoginController {
     @Autowired
     WechatLogin wechatLogin;
     @Autowired
@@ -36,6 +37,12 @@ public class WxLoginController {
     public LoginStatusDto loginFresh(@Param("code") String code, HttpServletRequest request) {
         wechatLogin.setRequest(request);
         return wechatLogin.loginFresh(code);
+    }
+
+    @RequestMapping(path = "/auth/commonlogin", method = RequestMethod.GET)
+    public LoginStatusDto loginFresh(User user, HttpServletRequest request) {
+        wechatLogin.setRequest(request);
+        return wechatLogin.webLogin(user);
     }
 
     @RequestMapping(path = "/auth/loginold", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package cn.albumenj.switchmonitor.service.impl;
 
 import cn.albumenj.switchmonitor.bean.Log;
+import cn.albumenj.switchmonitor.bean.User;
 import cn.albumenj.switchmonitor.bean.WechatUser;
 import cn.albumenj.switchmonitor.constant.HttpConst;
 import cn.albumenj.switchmonitor.constant.LogConst;
@@ -9,6 +10,7 @@ import cn.albumenj.switchmonitor.dto.LoginCodeDto;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 import cn.albumenj.switchmonitor.security.CustomLoginHandler;
 import cn.albumenj.switchmonitor.service.LogService;
+import cn.albumenj.switchmonitor.service.UserService;
 import cn.albumenj.switchmonitor.service.WechatLogin;
 import cn.albumenj.switchmonitor.service.WechatUserService;
 import cn.albumenj.switchmonitor.util.*;
@@ -37,6 +39,8 @@ public class WechatLoginImpl implements WechatLogin {
     WechatUserService wechatUserService;
     @Autowired
     LogService logService;
+    @Autowired
+    UserService userService;
 
     private HttpServletRequest request;
 
@@ -251,7 +255,7 @@ public class WechatLoginImpl implements WechatLogin {
     @Override
     public LoginStatusDto webLogin(String openId) {
         WechatUser wechatUser = wechatUserService.auth(openId);
-        LoginStatusDto loginStatusDto = new LoginStatusDto();
+        LoginStatusDto loginStatusDto;
         if (wechatUser != null) {
             loginStatusDto = fillUser(wechatUser);
             Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "Web Login", IpUtil.getIpAddr(request));
@@ -261,5 +265,28 @@ public class WechatLoginImpl implements WechatLogin {
             loginStatusDto.setSuccess(false);
         }
         return loginStatusDto;
+    }
+
+    /**
+     * 网页普通登陆返回Token
+     *
+     * @param user
+     * @return Token
+     */
+    @Override
+    public LoginStatusDto webLogin(User user) {
+        boolean success = userService.check(user);
+        LoginStatusDto loginStatusDto;
+        if (success) {
+            WechatUser wechatUser = wechatUserService.auth("CommonUser");
+            loginStatusDto = fillUser(wechatUser);
+            Log log = new Log(LogConst.INFO, LogConst.USER, wechatUser.getOpenId(), "Web Login", IpUtil.getIpAddr(request));
+            logService.insert(log);
+        } else {
+            loginStatusDto = new LoginStatusDto();
+            loginStatusDto.setSuccess(false);
+        }
+        return loginStatusDto;
+
     }
 }

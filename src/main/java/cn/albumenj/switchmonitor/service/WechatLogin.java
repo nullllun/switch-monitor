@@ -1,5 +1,6 @@
 package cn.albumenj.switchmonitor.service;
 
+import cn.albumenj.switchmonitor.bean.User;
 import cn.albumenj.switchmonitor.dto.LoginStatusDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,4 +60,12 @@ public interface WechatLogin {
      * @return
      */
     LoginStatusDto logout(String code);
+
+    /**
+     * 网页普通登陆返回Token
+     *
+     * @param user
+     * @return Token
+     */
+    LoginStatusDto webLogin(User user);
 }
