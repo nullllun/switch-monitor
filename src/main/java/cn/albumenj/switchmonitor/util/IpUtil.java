@@ -52,7 +52,7 @@ public class IpUtil {
         boolean networkUseable = false;
         Process process = null;
         try {
-            process = Runtime.getRuntime().exec("ping -c 3 -W 1 " + deviceIp);
+            process = Runtime.getRuntime().exec("ping -c 5 -W 1 " + deviceIp);
         } catch (IOException e1) {
             logger.error("System error: ", e1);
         }
@@ -86,9 +86,6 @@ public class IpUtil {
             } catch (IOException e) {
                 logger.error("System error: ", e);
             }
-        }
-        if (!networkUseable) {
-            networkUseable = execPingCommand(deviceIp);
         }
         return networkUseable;
     }
