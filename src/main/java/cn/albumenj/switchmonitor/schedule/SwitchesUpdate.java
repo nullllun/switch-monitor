@@ -114,7 +114,10 @@ public class SwitchesUpdate {
             }
         } else {
             historyTime.clear();
-            syncThread += 5;
+            int maxThread = 400;
+            if (syncThread < maxThread) {
+                syncThread += 5;
+            }
             Log log = new Log(LogConst.DEBUG, LogConst.SYSTEM, "System",
                     "Switches Information Update Thread Count Change To " + syncThread, "");
             log.setOperator("System");
