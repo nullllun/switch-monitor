@@ -87,6 +87,9 @@ public class IpUtil {
                 logger.error("System error: ", e);
             }
         }
+        if (!networkUseable) {
+            networkUseable = execPingCommand(deviceIp);
+        }
         return networkUseable;
     }
 
