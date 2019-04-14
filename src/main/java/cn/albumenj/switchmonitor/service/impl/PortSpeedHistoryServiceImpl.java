@@ -78,8 +78,8 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
             }
             for (Long i = portSpeedHistoryBlank.getTimeStart().getTime(); i <= portSpeedHistoryBlank.getTimeEnd().getTime(); i += portTime) {
                 PortFlowDto portFlowDto = new PortFlowDto();
-                portFlowDto.setIn(0);
-                portFlowDto.setOut(0);
+                portFlowDto.setIn(0L);
+                portFlowDto.setOut(0L);
                 portFlowDto.setTimestamp(i);
                 portFlowDtos.add(portFlowDto);
             }

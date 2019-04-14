@@ -8,8 +8,8 @@ package cn.albumenj.switchmonitor.dto;
  */
 public class PortFlowDto {
     private Long timestamp;
-    private Integer in;
-    private Integer out;
+    private Long in;
+    private Long out;
 
     public Long getTimestamp() {
         return timestamp;
@@ -19,19 +19,19 @@ public class PortFlowDto {
         this.timestamp = timestamp;
     }
 
-    public Integer getIn() {
+    public Long getIn() {
         return in;
     }
 
-    public void setIn(Integer in) {
+    public void setIn(Long in) {
         this.in = in;
     }
 
-    public Integer getOut() {
+    public Long getOut() {
         return out;
     }
 
-    public void setOut(Integer out) {
+    public void setOut(Long out) {
         this.out = out;
     }
 }

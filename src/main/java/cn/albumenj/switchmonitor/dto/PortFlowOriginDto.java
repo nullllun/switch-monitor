@@ -10,8 +10,8 @@ import java.util.Date;
  */
 public class PortFlowOriginDto {
     private Date timestamp;
-    private Integer in;
-    private Integer out;
+    private Long in;
+    private Long out;
 
     public Date getTimestamp() {
         return timestamp;
@@ -21,19 +21,19 @@ public class PortFlowOriginDto {
         this.timestamp = timestamp;
     }
 
-    public Integer getIn() {
+    public Long getIn() {
         return in;
     }
 
-    public void setIn(Integer in) {
+    public void setIn(Long in) {
         this.in = in;
     }
 
-    public Integer getOut() {
+    public Long getOut() {
         return out;
     }
 
-    public void setOut(Integer out) {
+    public void setOut(Long out) {
         this.out = out;
     }
 }
