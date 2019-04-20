@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,6 +97,8 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
                 portFlowDtos.add(portFlowDto);
             }
         }
+
+        portFlowDtos.sort(Comparator.comparing(PortFlowDto::getTimestamp));
         return portFlowDtos;
     }
 }
