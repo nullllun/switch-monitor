@@ -36,9 +36,9 @@ commit:
   switchesReachableHistories-insert: 50
 
 threshold:
-  cpu: 80
-  mem: 80
-  temp: 60
+  cpu: 95
+  mem: 85
+  temp: 64
   speed: 95
   reach: 10
   pushRecovery: 2
