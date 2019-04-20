@@ -87,7 +87,12 @@ public class WechatPush {
                             !(recoveryMessage.containsKey(prefix) || reachSend.containsKey(prefix));
                     if (flag) {
                         reachSend.put(warningDto.getIp(), warningDto);
-                        String msg = warningDto.getBuilding() + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")";
+
+                        String time = DateUtil.getTime(System.currentTimeMillis() - warningDto.getDownTime());
+
+                        String msg = warningDto.getBuilding()
+                                + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")" +
+                                "\r\n 下线时间：" + time;
                         pushBroke.add(msg);
 
                         logger.info(msg);
