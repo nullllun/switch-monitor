@@ -32,7 +32,7 @@ public class DateUtil {
         return date;
     }
 
-    public static String getTime(Long milliseconds) {
+    public static String getTillTime(Long milliseconds) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(milliseconds));
         calendar.setTimeZone((TimeZone.getTimeZone("GMT+0:00")));
@@ -48,6 +48,30 @@ public class DateUtil {
             result.append(calendar.get(Calendar.DAY_OF_MONTH) - 1).append("日 ");
         } else if (calendar.get(Calendar.DAY_OF_MONTH) - 1 > 0) {
             result.append(calendar.get(Calendar.DAY_OF_MONTH) - 1).append("日 ");
+        }
+        result.append(calendar.get(Calendar.HOUR_OF_DAY)).append("时");
+        result.append(calendar.get(Calendar.MINUTE)).append("分");
+        result.append(calendar.get(Calendar.SECOND)).append("秒");
+
+        return result.toString();
+    }
+
+    public static String getTime(Long milliseconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(milliseconds));
+        calendar.setTimeZone((TimeZone.getTimeZone("GMT+8:00")));
+
+        StringBuffer result = new StringBuffer();
+        int yearStart = 1970;
+        if ((calendar.get(Calendar.YEAR) - yearStart) > 0) {
+            result.append(calendar.get(Calendar.YEAR)).append("年");
+            result.append(calendar.get(Calendar.MONTH) + 1).append("月");
+            result.append(calendar.get(Calendar.DAY_OF_MONTH)).append("日 ");
+        } else if (calendar.get(Calendar.MONTH) > 0) {
+            result.append(calendar.get(Calendar.MONTH) + 1).append("月");
+            result.append(calendar.get(Calendar.DAY_OF_MONTH)).append("日 ");
+        } else if (calendar.get(Calendar.DAY_OF_MONTH) - 1 > 0) {
+            result.append(calendar.get(Calendar.DAY_OF_MONTH)).append("日 ");
         }
         result.append(calendar.get(Calendar.HOUR_OF_DAY)).append("时");
         result.append(calendar.get(Calendar.MINUTE)).append("分");

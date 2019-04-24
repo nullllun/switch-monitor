@@ -88,7 +88,7 @@ public class WechatPush {
                     if (flag) {
                         reachSend.put(warningDto.getIp(), warningDto);
 
-                        String time = DateUtil.getTime(System.currentTimeMillis() - warningDto.getDownTime());
+                        String time = DateUtil.getTime(warningDto.getDownTime());
 
                         String msg = warningDto.getBuilding()
                                 + " " + warningDto.getIp() + " (" + warningDto.getModel() + ")" +
@@ -118,7 +118,7 @@ public class WechatPush {
                         entry.getValue().getTime().getTime() < DateUtil.beforeNowMinute(pushRecoveryTime).getTime()) {
                     recoveryMessage.remove(entry.getKey());
 
-                    String time = DateUtil.getTime(System.currentTimeMillis() -
+                    String time = DateUtil.getTillTime(System.currentTimeMillis() -
                             entry.getValue().getWarningDto().getDownTime());
 
                     String msg = entry.getValue().getWarningDto().getBuilding() + " " +
