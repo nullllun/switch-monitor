@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.net.InetAddress;
+import java.net.*;
 
 /**
  * IP地址工具类
@@ -42,10 +42,8 @@ public class IpUtil {
     }
 
     /**
-     * @param @param deviceIp
+     * @param deviceIp 设备IP
      * @return boolean true-能ping通，false-不能ping通
-     * @throws
-     * @Title: execPingCommand
      * @Description: 执行ping命令，查看设备是否可用 仅Linux平台
      */
     public static boolean execPingCommand(String deviceIp) {
@@ -126,5 +124,46 @@ public class IpUtil {
             }
         }
         return ip;
+    }
+
+    /**
+     * 检测主机可达性
+     *
+     * @param deviceIp 主机IP
+     * @return 连接情况
+     */
+    public static boolean checkReachable(String deviceIp, int times) {
+        String reachable = "Connection refused";
+        boolean ret;
+        if (times <= 0) {
+            return false;
+        }
+        Socket sck = new Socket();
+        ;
+        try {
+            sck.connect(new InetSocketAddress(deviceIp, 999), 1000);
+            ret = true;
+        } catch (ConnectException e) {
+            ret = e.getMessage().contains(reachable);
+            if (!ret) {
+                logger.info((deviceIp + e.getMessage()));
+            }
+        } catch (SocketTimeoutException e) {
+            ret = false;
+            logger.info(deviceIp + e.getMessage());
+        } catch (IOException e) {
+            ret = false;
+            logger.error("Socket Error");
+        }
+        try {
+            sck.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (ret) {
+            return true;
+        } else {
+            return checkReachable(deviceIp, times - 1);
+        }
     }
 }

@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.InetAddress;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,36 +102,24 @@ public class SwitchesCheckReach {
     }
 
     private void check(SwitchesList switchesList) {
-        try {
-            boolean reachable;
-            if (systemConst.isLinux()) {
-                reachable = IpUtil.execPingCommand(switchesList.getIp());
-            } else {
-                InetAddress inetAddress = InetAddress.getByName(switchesList.getIp());
-                reachable = inetAddress.isReachable(50);
-                reachable = reachable || inetAddress.isReachable(50);
-                reachable = reachable || inetAddress.isReachable(50);
-            }
-            SwitchesReachable switchesReachable = new SwitchesReachable();
-            if (reachable) {
-                switchesReachable.setSwitchId(switchesList.getId());
-                switchesReachable.setReachable(1);
+        boolean reachable = IpUtil.checkReachable(switchesList.getIp(), 3);
+        SwitchesReachable switchesReachable = new SwitchesReachable();
+        if (reachable) {
+            switchesReachable.setSwitchId(switchesList.getId());
+            switchesReachable.setReachable(1);
 
-                switchesReachables.add(switchesReachable);
+            switchesReachables.add(switchesReachable);
+        } else {
+            switchesReachable.setSwitchId(switchesList.getId());
+            switchesReachable.setReachable(0);
+            SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
+            if (switchesReachableOld.getReachable() == null || switchesReachableOld.getReachable() == 1) {
+                switchesReachable.setDownTime(new Date());
             } else {
-                switchesReachable.setSwitchId(switchesList.getId());
-                switchesReachable.setReachable(0);
-                SwitchesReachable switchesReachableOld = switchesReachableService.selectBySwitch(switchesReachable);
-                if (switchesReachableOld.getReachable() == null || switchesReachableOld.getReachable() == 1) {
-                    switchesReachable.setDownTime(new Date());
-                } else {
-                    switchesReachable.setDownTime(switchesReachableOld.getDownTime());
-                }
-
-                switchesReachables.add(switchesReachable);
+                switchesReachable.setDownTime(switchesReachableOld.getDownTime());
             }
-        } catch (IOException e) {
-            logger.warn("Check " + e.toString());
+
+            switchesReachables.add(switchesReachable);
         }
     }
 
