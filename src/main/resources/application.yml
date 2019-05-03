@@ -2,7 +2,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/switch_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC&useSSL=false
+      url: jdbc:mysql://localhost:3306/switch_monitor?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
       username: sw
       password: ENC(5HNurmobk1dlde3JU7iUtuqDGaZe96iH)
       initial-size: 20
