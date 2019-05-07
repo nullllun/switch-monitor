@@ -3,6 +3,7 @@ package cn.albumenj.switchmonitor.schedule;
 import cn.albumenj.switchmonitor.bean.*;
 import cn.albumenj.switchmonitor.service.*;
 import cn.albumenj.switchmonitor.util.OidList;
+import cn.albumenj.switchmonitor.util.PortConvert;
 import cn.albumenj.switchmonitor.util.SnmpUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -239,7 +240,8 @@ public class SwitchUpdate {
 
     private PortSpeedHistoryBlank initBlank(String switchPort) {
         PortSpeedHistoryBlank portSpeedHistoryBlank = new PortSpeedHistoryBlank();
-        portSpeedHistoryBlank.setSwitchPort(switchPort);
+        portSpeedHistoryBlank.setSwitchId(PortConvert.getSwitchId(switchPort));
+        portSpeedHistoryBlank.setPortIndex(PortConvert.getPortIndex(switchPort));
         portSpeedHistoryBlank.setTimeStart(new Date());
         portSpeedHistoryBlank.setTimeEnd(new Date());
         portSpeedHistoryBlank.setLatest(1);
@@ -308,7 +310,9 @@ public class SwitchUpdate {
         List<PortSpeedHistoryBlank> portSpeedHistoryBlankOld = portSpeedHistoryBlankService.select();
         portSpeedHistoryBlankConcurrentHashMap.clear();
         for (PortSpeedHistoryBlank portSpeedHistoryBlank : portSpeedHistoryBlankOld) {
-            portSpeedHistoryBlankConcurrentHashMap.put(portSpeedHistoryBlank.getSwitchPort(), portSpeedHistoryBlank);
+            portSpeedHistoryBlankConcurrentHashMap.put(
+                    PortConvert.complex(portSpeedHistoryBlank.getSwitchId(), portSpeedHistoryBlank.getPortIndex()),
+                    portSpeedHistoryBlank);
         }
     }
 

@@ -9,7 +9,8 @@ import java.util.Date;
  */
 public class PortSpeedHistoryBlank {
     private Long id;
-    private String switchPort;
+    private Integer switchId;
+    private Integer portIndex;
     private Date timeStart;
     private Date timeEnd;
     private Integer latest;
@@ -30,12 +31,20 @@ public class PortSpeedHistoryBlank {
         this.id = id;
     }
 
-    public String getSwitchPort() {
-        return switchPort;
+    public Integer getSwitchId() {
+        return switchId;
     }
 
-    public void setSwitchPort(String switchPort) {
-        this.switchPort = switchPort;
+    public void setSwitchId(Integer switchId) {
+        this.switchId = switchId;
+    }
+
+    public Integer getPortIndex() {
+        return portIndex;
+    }
+
+    public void setPortIndex(Integer portIndex) {
+        this.portIndex = portIndex;
     }
 
     public Date getTimeStart() {

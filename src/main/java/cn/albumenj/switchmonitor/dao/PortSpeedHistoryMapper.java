@@ -39,8 +39,9 @@ public interface PortSpeedHistoryMapper {
     /**
      * 获取端口数据
      *
-     * @param switchPort
+     * @param switchId
+     * @param portIndex
      * @return
      */
-    List<PortFlowOriginDto> select(@Param("switchPort") String switchPort);
+    List<PortFlowOriginDto> select(@Param("switchId") Integer switchId, @Param("portIndex") Integer portIndex);
 }

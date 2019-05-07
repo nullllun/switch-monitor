@@ -3,7 +3,8 @@
 <mapper namespace="cn.albumenj.switchmonitor.dao.PortSpeedHistoryMapper">
     <resultMap id="BaseResultMap" type="cn.albumenj.switchmonitor.bean.PortSpeedHistory">
         <result column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="switch_port" property="switchPort" jdbcType="VARCHAR"/>
+        <result column="switch_id" property="switchId" javaType="INTEGER"/>
+        <result column="port_index" property="portIndex" javaType="INTEGER"/>
         <result column="in_speed" property="inSpeed" jdbcType="BIGINT"/>
         <result column="out_speed" property="outSpeed" jdbcType="BIGINT"/>
         <result column="time_stamp" property="timeStamp" jdbcType="TIMESTAMP"/>
@@ -16,8 +17,8 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-            id,
-            switch_port,
+            switch_id,
+            port_index,
             in_speed,
             out_speed,
             time_stamp
@@ -26,7 +27,8 @@
     <insert id="insert" useGeneratedKeys="true" keyProperty="portSpeedHistory.id">
         INSERT INTO port_speed_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="portSpeedHistory.switchPort!=null">switch_port,</if>
+            <if test="portSpeedHistory.switchId!=null">switch_id,</if>
+            <if test="portSpeedHistory.portIndex!=null">port_index,</if>
             <if test="portSpeedHistory.inSpeed!=null">in_speed,</if>
             <if test="portSpeedHistory.outSpeed!=null">out_speed,</if>
             <if test="portSpeedHistory.timeStamp!=null">time_stamp,</if>
@@ -34,6 +36,8 @@
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="portSpeedHistory.switchId!=null">#{portSpeedHistory.switchId,jdbcType=INTEGER},
+            </if>
+            <if test="portSpeedHistory.portIndex!=null">#{portSpeedHistory.portIndex,jdbcType=INTEGER},
             </if>
             <if test="portSpeedHistory.inSpeed!=null">#{portSpeedHistory.inSpeed,jdbcType=BIGINT},
             </if>
@@ -46,14 +50,16 @@
 
     <insert id="insertList">
         INSERT INTO port_speed_history (
-        switch_port,
+        switch_id,
+        port_index,
         in_speed,
         out_speed,
         time_stamp
         )VALUES
         <foreach collection="portSpeedHistorys" item="portSpeedHistory" index="index" separator=",">
             (
-            #{portSpeedHistory.switchPort,jdbcType=VARCHAR},
+            #{portSpeedHistory.switchId,jdbcType=INTEGER} ,
+            #{portSpeedHistory.portIndex,jdbcType=INTEGER} ,
             #{portSpeedHistory.inSpeed,jdbcType=BIGINT},
             #{portSpeedHistory.outSpeed,jdbcType=BIGINT},
             #{portSpeedHistory.timeStamp,jdbcType=TIMESTAMP}
@@ -66,7 +72,8 @@
                port_speed_history.out_speed,
                port_speed_history.time_stamp
         FROM port_speed_history
-        WHERE port_speed_history.switch_port = #{switchPort,jdbcType=VARCHAR}
+        WHERE port_speed_history.switch_id = #{switchId,jdbcType=INTEGER}
+          and port_speed_history.port_index = #{portIndex,jdbcType=INTEGER}
         ORDER BY port_speed_history.time_stamp ASC
     </select>
 

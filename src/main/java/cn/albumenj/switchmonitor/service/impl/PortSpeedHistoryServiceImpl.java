@@ -9,6 +9,7 @@ import cn.albumenj.switchmonitor.service.PortSpeedHistoryBlankService;
 import cn.albumenj.switchmonitor.service.PortSpeedHistoryService;
 import cn.albumenj.switchmonitor.service.PortStatusService;
 import cn.albumenj.switchmonitor.util.DateUtil;
+import cn.albumenj.switchmonitor.util.PortConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,7 @@ public class PortSpeedHistoryServiceImpl implements PortSpeedHistoryService {
     @Override
     public List<PortFlowDto> selectFlow(String ip, String name) {
         String switchPort = portStatusService.fetchPort(ip, name);
-        List<PortFlowOriginDto> portFlowOriginDtos = portSpeedHistoryMapper.select(switchPort);
+        List<PortFlowOriginDto> portFlowOriginDtos = portSpeedHistoryMapper.select(PortConvert.getSwitchId(switchPort), PortConvert.getPortIndex(switchPort));
         List<PortSpeedHistoryBlank> portSpeedHistoryBlanks = portSpeedHistoryBlankService.selectByPort(switchPort);
         List<PortFlowDto> portFlowDtos = new LinkedList<>();
 

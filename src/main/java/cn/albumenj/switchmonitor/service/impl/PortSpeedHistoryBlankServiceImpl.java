@@ -4,6 +4,7 @@ import cn.albumenj.switchmonitor.bean.PortSpeedHistoryBlank;
 import cn.albumenj.switchmonitor.dao.PortSpeedHistoryBlankMapper;
 import cn.albumenj.switchmonitor.service.PortSpeedHistoryBlankService;
 import cn.albumenj.switchmonitor.util.DateUtil;
+import cn.albumenj.switchmonitor.util.PortConvert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,8 @@ public class PortSpeedHistoryBlankServiceImpl implements PortSpeedHistoryBlankSe
     @Override
     public List<PortSpeedHistoryBlank> selectByPort(String switchPort) {
         PortSpeedHistoryBlank portSpeedHistoryBlank = new PortSpeedHistoryBlank();
-        portSpeedHistoryBlank.setSwitchPort(switchPort);
+        portSpeedHistoryBlank.setSwitchId(PortConvert.getSwitchId(switchPort));
+        portSpeedHistoryBlank.setPortIndex(PortConvert.getPortIndex(switchPort));
         return portSpeedHistoryBlankMapper.selectByPort(portSpeedHistoryBlank);
     }
 
