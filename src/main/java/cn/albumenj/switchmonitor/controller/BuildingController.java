@@ -34,6 +34,6 @@ public class BuildingController {
 
     @RequestMapping("/api/ports")
     public String ports() {
-        return "[\"172.16.101.7,GigabitEthernet1/0/49,172.16.101.7上联口\", \"172.16.101.253,XGigabitEthernet0/0/1,东一汇聚上联口\", \"172.16.254.1,Eth-Trunk1,东区Trunk\", \"172.16.254.1,Eth-Trunk2,西区Trunk\", \"172.16.254.1,Eth-Trunk3,生活区Trunk\", \"172.16.254.1,Eth-Trunk10,生活区Trunk\"]";
+        return "[\"172.16.254.1,Eth-Trunk1,东区Trunk\", \"172.16.254.1,Eth-Trunk2,西区Trunk\", \"172.16.254.1,Eth-Trunk3,大学城生活区Trunk\", \"172.16.254.1,Eth-Trunk10,大学城生活区Trunk\", \"172.16.254.5,Eth-Trunk10,龙洞Trunk\", \"172.16.254.9,Eth-Trunk10,东风路Trunk\"]";
     }
 }
