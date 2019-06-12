@@ -54,7 +54,7 @@ security:
 
 sync:
   port: 60000
-  initInformationThread: 100
+  initInformationThread: 200
 
 wechat:
   appid: ENC(eOr8TLUhfO8bIfuc8Vfdtbog/C2tmmZOGdZ/f6rpPAM=)
