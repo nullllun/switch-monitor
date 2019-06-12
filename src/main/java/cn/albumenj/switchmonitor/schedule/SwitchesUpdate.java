@@ -65,7 +65,6 @@ public class SwitchesUpdate {
             return;
         }
 
-        //executorService = CustomExecutors.newFixExecutorService(switchesLists.size());
         executorService = CustomExecutors.newFixExecutorService(syncThread);
         for (SwitchesList s : switchesLists) {
             executorService.execute(() -> {
@@ -123,5 +122,13 @@ public class SwitchesUpdate {
             log.setOperator("System");
             logService.insert(log);
         }
+    }
+
+    public Integer getSyncThread() {
+        return syncThread;
+    }
+
+    public void setSyncThread(Integer syncThread) {
+        this.syncThread = syncThread;
     }
 }

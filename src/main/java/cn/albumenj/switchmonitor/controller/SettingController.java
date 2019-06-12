@@ -185,4 +185,15 @@ public class SettingController {
             return new PageCodeDto(PageCodeEnum.ADD_FAILED);
         }
     }
+
+    @RequestMapping(value = "/api/setting/thread_count")
+    public String fetchSyncThread() {
+        return switchesUpdate.getSyncThread().toString();
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @RequestMapping(value = "/api/setting/set_count")
+    public void setSyncThread(@Param("count") Integer count) {
+        switchesUpdate.setSyncThread(count);
+    }
 }
