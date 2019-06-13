@@ -141,7 +141,7 @@ public class IpUtil {
         Socket sck = new Socket();
         ;
         try {
-            sck.connect(new InetSocketAddress(deviceIp, 999), 1000);
+            sck.connect(new InetSocketAddress(deviceIp, 999), 5000);
             ret = true;
         } catch (ConnectException e) {
             ret = e.getMessage().contains(reachable);
