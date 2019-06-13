@@ -2,6 +2,7 @@ package cn.albumenj.switchmonitor.schedule;
 
 import cn.albumenj.switchmonitor.bean.*;
 import cn.albumenj.switchmonitor.service.*;
+import cn.albumenj.switchmonitor.util.DateUtil;
 import cn.albumenj.switchmonitor.util.OidList;
 import cn.albumenj.switchmonitor.util.PortConvert;
 import cn.albumenj.switchmonitor.util.SnmpUtil;
@@ -67,7 +68,7 @@ public class SwitchUpdate {
 
         switchesStatus.setSwitchId(s.getId());
 
-        switchesStatus.setUpTime(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getUpTime())));
+        switchesStatus.setUpTime(DateUtil.getTillTime(Long.valueOf(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getUpTime()))) * 10));
         switchesStatus.setName(getStringData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getNAME())));
         switchesStatus.setCpuLoad(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getCpuLoad())));
         switchesStatus.setMemoryUsed(getIntegerData(snmpUtil.walk(s.getIp(), s.getReadKey(), oidList.getMemUsed())));
@@ -138,7 +139,7 @@ public class SwitchUpdate {
             portStatus.setName((String) getData(String.class, entry.getValue()));
             portStatus.setInData((Long) getData(Long.class, portIn.get(entry.getKey())));
             portStatus.setOutData((Long) getData(Long.class, portOut.get(entry.getKey())));
-            portStatus.setUpTime((String) getData(String.class, portUptime.get(entry.getKey())));
+            portStatus.setUpTime(DateUtil.getTillTime(Long.valueOf((String) getData(String.class, portUptime.get(entry.getKey()))) * 10));
             portStatus.setDes((String) getData(String.class, portDesc.get(entry.getKey())));
             portStatus.setSpeed((Integer) getData(Integer.class, portSpeed.get(entry.getKey())));
             portStatus.setStatus((Integer) getData(Integer.class, portStatusG.get(entry.getKey())));
